@@ -10,8 +10,6 @@ public class HoldSpear : MonoBehaviour
     public float throwForce;
     public int stabRange;
 
-    public float fishHungerUp;
-
     private bool holding;
     private int mask;
 
@@ -30,13 +28,13 @@ public class HoldSpear : MonoBehaviour
     void Start()
     {
 
-        PlayerPrefs.SetInt("HasSpear", 0);//Temporary for testing (will always start with spear)
+        PlayerPrefs.SetInt("HasSpear", 1);//Temporary for testing (will always start with spear)
 
         //Find Essential things
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
 
-        mask = LayerMask.GetMask("Interactable");
+        mask = LayerMask.GetMask("Interractable");
         holdPos = new Vector3(0.4f, 0.1f, 0.4f);
 
         if (PlayerPrefs.HasKey("HasSpear"))
@@ -69,8 +67,7 @@ public class HoldSpear : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
-                // Throw();
-                Debug.Log("Throwing is removed btw");
+                Throw();
 
             }
         }
@@ -117,19 +114,13 @@ public class HoldSpear : MonoBehaviour
     {
         Debug.Log("Stabbing");
         RaycastHit hit;
-
+        
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, mask))
         {
 
             if (hit.transform.tag == "Fish")
-            {                
-                float hunger = PlayerPrefs.GetFloat("Hunger");
-                hunger += fishHungerUp;
-                if(hunger > 100)
-                {
-                    hunger = 100f;
-                }
-                PlayerPrefs.SetFloat("Hunger", hunger);
+            {
+                Debug.Log("struck a " + hit.transform.gameObject.name);
                 Destroy(hit.transform.gameObject);
             }
             else

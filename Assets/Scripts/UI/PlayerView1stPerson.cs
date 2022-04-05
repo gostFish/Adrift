@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class PlayerView1stPerson : MonoBehaviour
 {
     //UI Objects
-    public GameObject journal;
-    private bool journalOpen;
+    // public GameObject fishingLabel;
 
     //Player variables
     public float moveSpeed;
@@ -19,7 +18,8 @@ public class PlayerView1stPerson : MonoBehaviour
     private float mouseY;
 
     //Script variables
-
+    private RaycastHit hit;
+    private Rigidbody rb;
 
     void Start()
     {
@@ -74,7 +74,7 @@ public class PlayerView1stPerson : MonoBehaviour
 
         mouseY += Input.GetAxis("Mouse X") * lookSpeed;
 
-        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view
+        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 50 && //Limit view
             (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > - 50)
         {
             
@@ -105,21 +105,6 @@ public class PlayerView1stPerson : MonoBehaviour
         if (Input.GetKey("p"))
         {
             gameObject.GetComponent<Pick>().PickLog();
-        }
-
-        if (Input.GetKey("j"))
-        {
-            Debug.Log("Journal opened");
-            if (journalOpen)
-            {
-                journal.SetActive(false);
-                journalOpen = false;
-            }
-            else
-            {
-                journal.SetActive(true);
-                journalOpen = true;
-            }
         }
 
 
