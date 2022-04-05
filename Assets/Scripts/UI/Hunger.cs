@@ -30,15 +30,17 @@ public class Hunger : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        time += Time.deltaTime;
+        time += Time.deltaTime;         
 
         if (time > updateRate)
         {
+            hunger = PlayerPrefs.GetFloat("Hunger"); //Update the hunger
+            hunger -= hungerRate;
             gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
             time = 0;
         }
 
-        hunger -= (hungerRate / 100);
+        
     }
 }
