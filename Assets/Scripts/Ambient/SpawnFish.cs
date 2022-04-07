@@ -14,7 +14,7 @@ public class SpawnFish : MonoBehaviour
     public int maxTotal;
     public float spawntime;
     public float spawnProbability;
-
+    public GameObject raft;
     private float time;
 
     private void Start()
