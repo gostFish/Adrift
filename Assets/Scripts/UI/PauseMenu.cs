@@ -6,6 +6,8 @@ public class PauseMenu : MonoBehaviour
 {
     private static bool GameIsPaused = false;
 
+    private bool settingsOpen;
+
     private GameObject player;
 
     public GameObject pauseMenuUI;
@@ -35,16 +37,20 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        pauseMenuUI.SetActive(false);
-        journalUI.SetActive(false);
-        playerUI.SetActive(true);        
+        if (!settingsOpen)
+        {
+            pauseMenuUI.SetActive(false);
+            journalUI.SetActive(false);
+            playerUI.SetActive(true);
 
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        AudioListener.pause = false;
+            Time.timeScale = 1f;
+            GameIsPaused = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            AudioListener.pause = false;
 
-        player.GetComponent<PlayerView1stPerson>().enabled = true;
+            player.GetComponent<PlayerView1stPerson>().enabled = true;
+        }
+        
     }
 
     public void Pause()
@@ -63,10 +69,18 @@ public class PauseMenu : MonoBehaviour
     public void OpenSettings()
     {
         settingsMenuUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+        journalUI.SetActive(false);
+
+        settingsOpen = true;
     }
     public void CloseSettings()
     {
         settingsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        journalUI.SetActive(true);
+
+        settingsOpen = false;
     }
     public void QuitGame()
     {
