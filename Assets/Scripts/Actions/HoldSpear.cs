@@ -30,6 +30,8 @@ public class HoldSpear : MonoBehaviour
     private bool holding;
     private int fishMask;
     private int waterMask;
+    //private int fishRaftMask;
+    private int raftMask;
 
 
     //Game Objects
@@ -56,6 +58,7 @@ public class HoldSpear : MonoBehaviour
     public Texture greyCH;
     public Texture redCH;
     public Texture greenCH;
+    public Texture orangeCH;
 
     private float stabAnimTime;
     private bool stabbing;
@@ -71,7 +74,10 @@ public class HoldSpear : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
 
         fishMask = LayerMask.GetMask("Interactable"); //Engore everything except fish
+        //fishRaftMask = LayerMask.GetMask("Interactable", "Raft");
         waterMask = LayerMask.GetMask("Water");
+        raftMask = LayerMask.GetMask("Raft");
+
         holdPos = new Vector3(0.4f, 0.1f, 0.4f);  //Position spear to view in 1st person
         stabDrawBackPos = new Vector3(0.4f, 0.25f, -0.5f);
         stabPoint = new Vector3(0.4f, 0, 1f);
@@ -86,18 +92,18 @@ public class HoldSpear : MonoBehaviour
             if (hasSpear == 1)
             {
                 RefreshSpear();
-                Debug.Log("Spear should be active");
+                // Debug.Log("Spear should be active");
             }
             else
             {
                 spear.SetActive(false);
-                Debug.Log("Spear should not be active");
+                // Debug.Log("Spear should not be active");
             }
         }
         else
         {
             PlayerPrefs.SetInt("HasSpear", 0); //Default, no spear
-        }        
+        }
         if (PlayerPrefs.HasKey("SpearHealth"))
         {
             spearHealth = PlayerPrefs.GetInt("spearHealth");
@@ -108,9 +114,9 @@ public class HoldSpear : MonoBehaviour
         }
         else
         {
-            PlayerPrefs.SetFloat("Hunger",100f);
+            PlayerPrefs.SetFloat("Hunger", 100f);
         }
-        
+
         RefreshUI();
     }
 
@@ -133,35 +139,61 @@ public class HoldSpear : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
-                              
+
                 stabbing = true;
                 stabAnimTime = 0;
             }
         }
-        if(stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
+        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
         {
             Strike();
         }
-        
+
         if (spear != null) //reposition spear if exists
-        {           
+        {
             spear.transform.localPosition = holdPos;
             spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(15, 15, 0);
             spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(0, 90, 10);
 
+
             if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
             {
-                crosshair.texture = greenCH;
+                if (PlayerPrefs.GetInt("HasSpear") == 1)
+                {
+                    crosshair.texture = greenCH;
+                }
+                else
+                {
+                    crosshair.texture = greyCH;
+                }
+
+            }
+
+            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
+            {
+
+                if (PlayerPrefs.GetInt("HasSpear") == 0)
+                {
+                    crosshair.texture = orangeCH;
+                    player.GetComponent<PlayerView1stPerson>().canPickLog = true;
+                }
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = true;
+
             }
             else
             {
                 crosshair.texture = greyCH;
-            }//To add shark
+                player.GetComponent<PlayerView1stPerson>().canPickLog = false;
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = false;
+            } 
+
         }
+        
+    
+
 
         if(stabbing == true)
-        {
-            
+        {            
 
             if (stabAnimTime < 1)
             {
@@ -264,7 +296,7 @@ public class HoldSpear : MonoBehaviour
     private void RefreshUI()
     {        
 
-        Debug.Log("Updating with health == " + spearHealth);
+        //Debug.Log("Updating with health == " + spearHealth);
 
         if (spearHealth == 0)
         {

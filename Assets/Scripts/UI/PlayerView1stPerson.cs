@@ -24,6 +24,9 @@ public class PlayerView1stPerson : MonoBehaviour
 
     //Script variables
 
+    public bool canPickLog;
+    public bool lookingAtLog;
+
     private RaycastHit hit;
     private int raftMask;
 
@@ -41,7 +44,7 @@ public class PlayerView1stPerson : MonoBehaviour
     {
 
         // rb = gameObject.GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
 
         mainCam = Camera.main;
         mainCam.transform.parent = gameObject.transform;
@@ -83,28 +86,27 @@ public class PlayerView1stPerson : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+
         Cursor.lockState = CursorLockMode.Locked;
 
         mouseY += Input.GetAxis("Mouse X") * lookSpeed;
 
         if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view
-            (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > - 50)
-        {
-            
-            mouseX -= Input.GetAxis("Mouse Y") * lookSpeed;
-        }        
+            (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > -50)
+        {           
+            mouseX -= Input.GetAxis("Mouse Y") * lookSpeed;            
+        }
 
         gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
         mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
 
         transform.position = new Vector3(transform.position.x, raft.transform.position.y + 1f, transform.position.z);
         if (Input.GetKey("up") || Input.GetKey("w"))
-        {            
-            from = (forwardStop.transform.position) + new Vector3(0,1,0);
+        {
+            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
             to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
-            
-            if(Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+
+            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
             && hit.transform.tag == "Raft")
             {
                 Debug.Log("In raftMask");
@@ -113,7 +115,7 @@ public class PlayerView1stPerson : MonoBehaviour
             else if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to)))
             {
                 Debug.Log("Saw a " + hit.transform.tag);
-            }            
+            }
         }
 
         if (Input.GetKey("down") || Input.GetKey("s"))
@@ -126,7 +128,7 @@ public class PlayerView1stPerson : MonoBehaviour
             {
                 gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
             }
-            
+
         }
         if (Input.GetKey("left") || Input.GetKey("a"))
         {
@@ -137,7 +139,7 @@ public class PlayerView1stPerson : MonoBehaviour
             && hit.transform.tag == "Raft")
             {
                 gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
-            }            
+            }
         }
         if (Input.GetKey("right") || Input.GetKey("d"))
         {
@@ -148,26 +150,28 @@ public class PlayerView1stPerson : MonoBehaviour
             && hit.transform.tag == "Raft")
             {
                 gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
-            }            
+            }
         }
 
-        if (Input.GetKey("p"))
+        if (Input.GetKey("p") && canPickLog)
         {
             gameObject.GetComponent<Pick>().PickLog();
         }
 
-        if (Input.GetKey("j"))
+        if (Input.GetKeyDown("j"))
         {
             Debug.Log("Journal opened");
             if (journalOpen)
             {
                 journal.SetActive(false);
                 journalOpen = false;
+                Cursor.lockState = CursorLockMode.None;
             }
             else
             {
                 journal.SetActive(true);
                 journalOpen = true;
+                Cursor.lockState = CursorLockMode.Confined;
             }
         }
     }
