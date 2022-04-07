@@ -6,8 +6,19 @@ public class PauseMenu : MonoBehaviour
 {
     private static bool GameIsPaused = false;
 
+    private bool settingsOpen;
+
+    private GameObject player;
+
     public GameObject pauseMenuUI;
     public GameObject settingsMenuUI;
+    public GameObject playerUI;
+    public GameObject journalUI;
+
+    void Start()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");    
+    }
 
     void Update()
     {
@@ -26,29 +37,50 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        pauseMenuUI.SetActive(false);
-        Time.timeScale = 1f;
-        GameIsPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        AudioListener.pause = false;
+        if (!settingsOpen)
+        {
+            pauseMenuUI.SetActive(false);
+            journalUI.SetActive(false);
+            playerUI.SetActive(true);
+
+            Time.timeScale = 1f;
+            GameIsPaused = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            AudioListener.pause = false;
+
+            player.GetComponent<PlayerView1stPerson>().enabled = true;
+        }
+        
     }
 
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
+        journalUI.SetActive(true);
+        playerUI.SetActive(false);
         Time.timeScale = 0f;
         GameIsPaused = true;
         Cursor.lockState = CursorLockMode.None;
         AudioListener.pause = true;
+
+        player.GetComponent<PlayerView1stPerson>().enabled = false;
     }
 
     public void OpenSettings()
     {
         settingsMenuUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+        journalUI.SetActive(false);
+
+        settingsOpen = true;
     }
     public void CloseSettings()
     {
         settingsMenuUI.SetActive(false);
+        pauseMenuUI.SetActive(true);
+        journalUI.SetActive(true);
+
+        settingsOpen = false;
     }
     public void QuitGame()
     {

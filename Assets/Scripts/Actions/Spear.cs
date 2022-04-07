@@ -9,6 +9,7 @@ public class Spear : MonoBehaviour
 
     private Rigidbody rb;
     private GameObject throwSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,6 @@ public class Spear : MonoBehaviour
         if (thrown)
         {
             //transform.Translate(Vector3.forward * speed);
-
             GetComponent<BoxCollider>().enabled = true;
             rb.isKinematic = false;
             rb.useGravity = true;

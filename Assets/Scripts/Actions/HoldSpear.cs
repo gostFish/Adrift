@@ -1,141 +1,298 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HoldSpear : MonoBehaviour
 {
     //Variables
+
     public int hasSpear;
+
+    private RaycastHit hit;
+    private int spearHealth;
+
+    private Vector3 holdPos;
+    private Vector3 stabDrawBackPos;
+    private Vector3 stabPoint;
+
+    //Throwing / stabbing
+
     public float despawnDist;
     public float throwForce;
+
     public int stabRange;
+    public int maxSpearHits;
 
     public float fishHungerUp;
+    private float hunger;
 
     private bool holding;
-    private int mask;
+    private int fishMask;
+    private int waterMask;
 
-    public Vector3 holdPos;
 
     //Game Objects
 
     private GameObject player;
-
-    public GameObject spearPrefab;
-    private GameObject spear; //Refers to instance in script
-
     private Camera mainCam;
 
+    public GameObject splash;
+
+    public GameObject spearPrefab;
+    public GameObject spear; //As an instance
+
+    public RawImage spearUI;
+
+    public Texture transparent;
+    public Texture spear1;
+    public Texture spear2;
+    public Texture spear3;
+    public Texture spear4;
+    public Texture spear5;
+
+    public RawImage crosshair;
+
+    public Texture greyCH;
+    public Texture redCH;
+    public Texture greenCH;
+
+    private float stabAnimTime;
+    private bool stabbing;
 
     void Start()
     {
-
-        PlayerPrefs.SetInt("HasSpear", 0);//Temporary for testing (will always start with spear)
+        //Temporary for testing (will always start with spear)
+        PlayerPrefs.SetInt("HasSpear", 0);
+        PlayerPrefs.SetFloat("Hunger", 100);
 
         //Find Essential things
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
 
-        mask = LayerMask.GetMask("Interactable");
-        holdPos = new Vector3(0.4f, 0.1f, 0.4f);
+        fishMask = LayerMask.GetMask("Interactable"); //Engore everything except fish
+        waterMask = LayerMask.GetMask("Water");
+        holdPos = new Vector3(0.4f, 0.1f, 0.4f);  //Position spear to view in 1st person
+        stabDrawBackPos = new Vector3(0.4f, 0.25f, -0.5f);
+        stabPoint = new Vector3(0.4f, 0, 1f);
 
+        stabAnimTime = 3;
+        GetSpear();
+
+        //Remember when last playing
         if (PlayerPrefs.HasKey("HasSpear"))
         {
-            hasSpear = PlayerPrefs.GetInt("HasSpear"); //If 0, no spear, if 1 there is a spear            
+            hasSpear = PlayerPrefs.GetInt("HasSpear"); //If 0, no spear, if 1 there is a spear
+            if (hasSpear == 1)
+            {
+                RefreshSpear();
+                Debug.Log("Spear should be active");
+            }
+            else
+            {
+                spear.SetActive(false);
+                Debug.Log("Spear should not be active");
+            }
         }
         else
         {
             PlayerPrefs.SetInt("HasSpear", 0); //Default, no spear
-        }
-        if (PlayerPrefs.GetInt("HasSpear") == 1)
+        }        
+        if (PlayerPrefs.HasKey("SpearHealth"))
         {
-            GetSpear();
+            spearHealth = PlayerPrefs.GetInt("spearHealth");
         }
-        //Temporary default values
-        throwForce = 50f;
-        despawnDist = 50;
-        holdPos = new Vector3(0.4f, 0.1f, 0.4f);
-
+        if (PlayerPrefs.HasKey("Hunger"))
+        {
+            hunger = PlayerPrefs.GetFloat("Hunger");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("Hunger",100f);
+        }
+        
+        RefreshUI();
     }
-
 
 
     void FixedUpdate()
     {
-        Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
+        //Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
 
-        //if (Input.GetMouseButtonDown(0)) {
-        if (Input.GetKey("t")) //Throw
+        if (Input.GetKey("t")) //Throwing spear
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
                 // Throw();
                 Debug.Log("Throwing is removed btw");
-
             }
         }
 
-        if (Input.GetKey("space")) //stab
+        //if (Input.GetMouseButtonDown(0)) //stab
+        if (Input.GetKey("space") && !stabbing) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
-                Stab();
+                              
+                stabbing = true;
+                stabAnimTime = 0;
             }
         }
-
-        if (spear != null)
+        if(stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
         {
-            if (Vector3.Distance(spear.transform.position, player.transform.position) > despawnDist)
-            {
-                Destroy(spear);
-            }
-            else if (holding)
-            {
-                spear.transform.localPosition = holdPos;
-                spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(15, 15, 0);
-                spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(0, 90, 10);
-            }
+            Strike();
         }
-    }
+        
+        if (spear != null) //reposition spear if exists
+        {           
+            spear.transform.localPosition = holdPos;
+            spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(15, 15, 0);
+            spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(0, 90, 10);
 
-    public void GetSpear()
-    {
-        PlayerPrefs.SetInt("HasSpear", 1);
-        spear = Instantiate(spearPrefab);
-        spear.transform.parent = player.transform;
-        spear.transform.parent = mainCam.transform;
-        spear.transform.localPosition = holdPos;
-        //spear.transform.rotation = Quaternion.Euler(15, 15, 0);
-        //spear.transform.rotation = Quaternion.Euler(0, 90, 10);
-        spear.GetComponent<Rigidbody>().isKinematic = true;
-        spear.GetComponent<Rigidbody>().useGravity = false;
-        spear.GetComponent<BoxCollider>().enabled = false;
-        holding = true;
-    }
-
-    private void Stab()
-    {
-        Debug.Log("Stabbing");
-        RaycastHit hit;
-
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, mask))
-        {
-
-            if (hit.transform.tag == "Fish")
-            {                
-                float hunger = PlayerPrefs.GetFloat("Hunger");
-                hunger += fishHungerUp;
-                if(hunger > 100)
-                {
-                    hunger = 100f;
-                }
-                PlayerPrefs.SetFloat("Hunger", hunger);
-                Destroy(hit.transform.gameObject);
+            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
+            {
+                crosshair.texture = greenCH;
             }
             else
             {
-                Debug.Log("struck a " + hit.transform.gameObject.name);
+                crosshair.texture = greyCH;
+            }//To add shark
+        }
+
+        if(stabbing == true)
+        {
+            
+
+            if (stabAnimTime < 1)
+            {
+                stabAnimTime += Time.deltaTime/0.4f;
+                //stabAnimTime += Time.deltaTime / 5f;
+                spear.transform.localPosition = Vector3.Lerp(holdPos, stabDrawBackPos, stabAnimTime);
             }
+            else if (stabAnimTime <= 2 && hit.point != null)
+            {
+                stabAnimTime += Time.deltaTime/0.2f;
+               // stabAnimTime += Time.deltaTime / 5f;
+                spear.transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime-1f);
+            }
+            else if (stabAnimTime <= 3)
+            {
+                stabAnimTime += Time.deltaTime / 0.5f;
+                //stabAnimTime += Time.deltaTime / 5f;
+                spear.transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
+            }
+            else
+            {
+                stabbing = false;
+            }            
+        }
+    }
+
+        
+
+    public void GetSpear() //Instantiate the spear
+    {
+        spear = Instantiate(spearPrefab);
+
+        spear.transform.parent = player.transform;
+        spear.transform.parent = mainCam.transform;
+        spear.transform.localPosition = holdPos;
+
+        spear.GetComponent<Rigidbody>().isKinematic = true;
+        spear.GetComponent<Rigidbody>().useGravity = false;
+        spear.GetComponent<BoxCollider>().enabled = false;
+
+        spear.SetActive(false);        
+        
+    }
+
+    public void RefreshSpear()
+    {
+        holding = true;
+
+        PlayerPrefs.SetInt("SpearHealth", maxSpearHits);
+        spearHealth = maxSpearHits;        
+        spear.SetActive(true);
+
+        RefreshUI();
+    }
+
+    private void Strike()
+    {
+        //Debug.Log("Stabbing with health: " + spearHealth);        
+
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
+        {
+            if (hit.transform.tag == "Fish")
+            {
+                hunger = PlayerPrefs.GetFloat("Hunger");
+                hunger += fishHungerUp;
+
+                if (hunger > 100)
+                {
+                    hunger = 100f;
+                }
+
+                spearHealth--;
+                PlayerPrefs.SetInt("SpearHealth", spearHealth);
+                PlayerPrefs.SetFloat("Hunger", hunger);
+                hit.transform.gameObject.active = false;
+
+                if (spearHealth == 0)
+                {
+                    spear.SetActive(false);
+                    PlayerPrefs.SetInt("HasSpear", 0);
+                }
+
+                RefreshUI();
+            }
+            else
+            {
+               // Debug.Log("struck a " + hit.transform.gameObject.name);
+            }
+        }
+        else if(Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
+        {
+            if (hit.transform.tag == "Water")
+            {                
+                Instantiate(splash, hit.point, Quaternion.identity);
+               // Debug.Log("Fish not hit, water hit instead");
+            }
+        }
+    }
+
+    private void RefreshUI()
+    {        
+
+        Debug.Log("Updating with health == " + spearHealth);
+
+        if (spearHealth == 0)
+        {
+            if(spear != null)
+            {
+                spearUI.texture = transparent;
+                spear.SetActive(false);
+            }            
+        }
+        else if (spearHealth == 1)
+        {
+            spearUI.texture = spear5;
+        }
+        else if (spearHealth == 2)
+        {
+            spearUI.texture = spear4;
+        }
+        else if (spearHealth == 3)
+        {
+            spearUI.texture = spear3;
+        }
+        else if (spearHealth == 4)
+        {
+            spearUI.texture = spear2;
+        }
+        else if (spearHealth == 5)
+        {
+            spearUI.texture = spear1;
         }
     }
 

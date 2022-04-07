@@ -12,6 +12,14 @@ public class Hunger : MonoBehaviour
     public float hungerRate; //Higher is quicker
     public float updateRate;
 
+    public RawImage hungerUI;
+
+    public Texture hunger1;
+    public Texture hunger2;
+    public Texture hunger3;
+    public Texture hunger4;
+    public Texture hunger5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +32,7 @@ public class Hunger : MonoBehaviour
             hunger = 100f;
             PlayerPrefs.SetFloat("Hunger", hunger);
         }
-        gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
+       // gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
     }
 
     // Update is called once per frame
@@ -36,9 +44,32 @@ public class Hunger : MonoBehaviour
         {
             hunger = PlayerPrefs.GetFloat("Hunger"); //Update the hunger
             hunger -= hungerRate;
-            gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
+            //gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
             time = 0;
+
+            Debug.Log("Hunger = " + hunger);
+            if (hunger <= 25)
+            {
+                hungerUI.texture = hunger5;
+            }
+            else if (hunger <= 50)
+            {
+                hungerUI.texture = hunger4;
+            }
+            else if (hunger <= 75)
+            {
+                hungerUI.texture = hunger3;
+            }
+            else if (hunger <= 99)
+            {
+                hungerUI.texture = hunger2;
+            }
+            else
+            {
+                hungerUI.texture = hunger1;
+            }
+
         }
 
         

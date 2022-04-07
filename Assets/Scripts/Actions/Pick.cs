@@ -27,23 +27,21 @@ public class Pick : MonoBehaviour
     public void PickLog()
     {
         if(logCount > minLogs && PlayerPrefs.GetInt("HasSpear") == 0)
-        {            
+        {
+            gameObject.GetComponent<HoldSpear>().RefreshSpear();
+            logCount--;
+            PlayerPrefs.SetInt("HasSpear",1);
+
             if (takeFront)
             {                
                 logs[frontCounter].SetActive(false);
-                frontCounter--;
-                logCount--;
-
-                gameObject.GetComponent<HoldSpear>().GetSpear();
-
+                frontCounter--;                
                 takeFront = false;
             }
             else
             {                
                 logs[backCounter].SetActive(false);
                 backCounter++;
-                logCount--;
-                gameObject.GetComponent<HoldSpear>().GetSpear();
                 takeFront = true;
             }
         }

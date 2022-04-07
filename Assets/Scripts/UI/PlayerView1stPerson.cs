@@ -18,8 +18,24 @@ public class PlayerView1stPerson : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+    //Other variables
+
+    private GameObject raft;
+
     //Script variables
 
+    private RaycastHit hit;
+    private int raftMask;
+
+    public GameObject forwardStop;
+    public GameObject backStop;
+    public GameObject leftStop;
+    public GameObject rightStop;
+
+    private Vector3 from;
+    private Vector3 to;
+
+    private Vector3 playerPos;
 
     void Start()
     {
@@ -32,6 +48,8 @@ public class PlayerView1stPerson : MonoBehaviour
         mainCam.transform.localPosition = new Vector3(0, 0, 0);
         mainCam.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
+        raftMask = LayerMask.GetMask("Raft");
+        raft = GameObject.FindGameObjectWithTag("Raft");
         StartCoroutine(CorrectView());
 
         //Get saved MoveSpeed
@@ -66,10 +84,6 @@ public class PlayerView1stPerson : MonoBehaviour
     void FixedUpdate()
     {
         
-       // Vector3 m_Input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //Debug.Log("m_Input = " + m_Input);
-        //rb.MovePosition(transform.position + m_Input * moveSpeed * Time.deltaTime);
-
         Cursor.lockState = CursorLockMode.Locked;
 
         mouseY += Input.GetAxis("Mouse X") * lookSpeed;
@@ -84,22 +98,52 @@ public class PlayerView1stPerson : MonoBehaviour
         gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
         mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
 
+        transform.position = new Vector3(transform.position.x, raft.transform.position.y + 1f, transform.position.z);
         if (Input.GetKey("up") || Input.GetKey("w"))
-        {
-            //rb.MovePosition(transform.position + (m_Input * Time.deltaTime * moveSpeed));
-            gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+        {            
+            from = (forwardStop.transform.position) + new Vector3(0,1,0);
+            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+            
+            if(Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+            && hit.transform.tag == "Raft")
+            {
+                gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+            }            
         }
+
         if (Input.GetKey("down") || Input.GetKey("s"))
         {
-            gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
+            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+            && hit.transform.tag == "Raft")
+            {
+                gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
+            }
+            
         }
         if (Input.GetKey("left") || Input.GetKey("a"))
         {
-            gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+            && hit.transform.tag == "Raft")
+            {
+                gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+            }            
         }
         if (Input.GetKey("right") || Input.GetKey("d"))
         {
-            gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
+            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+            && hit.transform.tag == "Raft")
+            {
+                gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
+            }            
         }
 
         if (Input.GetKey("p"))
@@ -121,21 +165,5 @@ public class PlayerView1stPerson : MonoBehaviour
                 journalOpen = true;
             }
         }
-
-
-        // if raycast hits, it checks if it hit an object with the tag Player
-        /*if (Physics.Raycast(mainCam.transform.position, transform.forward, out hit, 30) &&
-                    hit.collider.gameObject.CompareTag("Fish"))
-        {
-            fishingLabel.SetActive(true);
-            if (Input.GetKey("f"))
-            {
-                Debug.Log("Started fishing");
-            }
-        }
-        else
-        {
-            fishingLabel.SetActive(false);
-        }*/
     }
 }
