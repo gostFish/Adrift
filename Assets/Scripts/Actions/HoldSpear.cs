@@ -10,11 +10,8 @@ public class HoldSpear : MonoBehaviour
     public int hasSpear;
 
     private RaycastHit hit;
-    private int spearHealth;
-
-    private Vector3 holdPos;
-    private Vector3 stabDrawBackPos;
-    private Vector3 stabPoint;
+    private int spearHealth;    
+    public Vector3 holdPos;
 
     //Throwing / stabbing
 
@@ -57,8 +54,6 @@ public class HoldSpear : MonoBehaviour
     public Texture redCH;
     public Texture greenCH;
 
-    private float stabAnimTime;
-    private bool stabbing;
 
     void Start()
     {
@@ -73,10 +68,6 @@ public class HoldSpear : MonoBehaviour
         fishMask = LayerMask.GetMask("Interactable"); //Engore everything except fish
         waterMask = LayerMask.GetMask("Water");
         holdPos = new Vector3(0.4f, 0.1f, 0.4f);  //Position spear to view in 1st person
-        stabDrawBackPos = new Vector3(0.4f, 0.25f, -0.5f);
-        stabPoint = new Vector3(0.4f, 0, 1f);
-
-        stabAnimTime = 3;
         GetSpear();
 
         //Remember when last playing
@@ -117,7 +108,7 @@ public class HoldSpear : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
+        Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
 
         if (Input.GetKey("t")) //Throwing spear
         {
@@ -129,20 +120,14 @@ public class HoldSpear : MonoBehaviour
         }
 
         //if (Input.GetMouseButtonDown(0)) //stab
-        if (Input.GetKey("space") && !stabbing) //stab animation
+        if (Input.GetKey("space")) //stab
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
-                              
-                stabbing = true;
-                stabAnimTime = 0;
+                Stab();
             }
         }
-        if(stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
-        {
-            Strike();
-        }
-        
+
         if (spear != null) //reposition spear if exists
         {           
             spear.transform.localPosition = holdPos;
@@ -157,34 +142,7 @@ public class HoldSpear : MonoBehaviour
             {
                 crosshair.texture = greyCH;
             }//To add shark
-        }
 
-        if(stabbing == true)
-        {
-            
-
-            if (stabAnimTime < 1)
-            {
-                stabAnimTime += Time.deltaTime/0.4f;
-                //stabAnimTime += Time.deltaTime / 5f;
-                spear.transform.localPosition = Vector3.Lerp(holdPos, stabDrawBackPos, stabAnimTime);
-            }
-            else if (stabAnimTime <= 2 && hit.point != null)
-            {
-                stabAnimTime += Time.deltaTime/0.2f;
-               // stabAnimTime += Time.deltaTime / 5f;
-                spear.transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime-1f);
-            }
-            else if (stabAnimTime <= 3)
-            {
-                stabAnimTime += Time.deltaTime / 0.5f;
-                //stabAnimTime += Time.deltaTime / 5f;
-                spear.transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
-            }
-            else
-            {
-                stabbing = false;
-            }            
         }
     }
 
@@ -217,7 +175,7 @@ public class HoldSpear : MonoBehaviour
         RefreshUI();
     }
 
-    private void Strike()
+    private void Stab()
     {
         Debug.Log("Stabbing with health: " + spearHealth);
         
@@ -255,7 +213,7 @@ public class HoldSpear : MonoBehaviour
         else if(Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
             if (hit.transform.tag == "Water")
-            {                
+            {
                 Instantiate(splash, hit.point, Quaternion.identity);
                 Debug.Log("Fish not hit, water hit instead");
             }
