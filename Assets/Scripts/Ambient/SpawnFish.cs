@@ -54,7 +54,7 @@ public class SpawnFish : MonoBehaviour
                 }
             }
             time = 0f;
-            Debug.Log("There are currently " + currentFish + " fish nearby");
+            //Debug.Log("There are currently " + currentFish + " fish nearby");
         }
     }
 }

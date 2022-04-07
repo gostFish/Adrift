@@ -48,7 +48,7 @@ public class Hunger : MonoBehaviour
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
             time = 0;
 
-            Debug.Log("Hunger = " + hunger);
+            //Debug.Log("Hunger = " + hunger);
             if (hunger <= 25)
             {
                 hungerUI.texture = hunger5;

@@ -107,7 +107,12 @@ public class PlayerView1stPerson : MonoBehaviour
             if(Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
             && hit.transform.tag == "Raft")
             {
+                Debug.Log("In raftMask");
                 gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+            }
+            else if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to)))
+            {
+                Debug.Log("Saw a " + hit.transform.tag);
             }            
         }
 
