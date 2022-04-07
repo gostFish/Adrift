@@ -32,13 +32,13 @@ public class SettingsManager : MonoBehaviour
 
     public void UpdateSound()
     {
-        sound.GetComponentInChildren<Text>().text = "Volume " + Mathf.RoundToInt((sound.GetComponent<Slider>().value) * 100) + "%";
+        sound.GetComponentInChildren<Text>().text = "Volume " + Mathf.RoundToInt(((sound.GetComponent<Slider>().value) * 100)) + " %";
         AudioListener.volume = sound.GetComponent<Slider>().value;
         PlayerPrefs.SetFloat("volume", sound.GetComponent<Slider>().value);
     }
     public void UpdateMoveSpeed()
     {
-        moveSpeed.GetComponentInChildren<Text>().text = "Player speed: " + Mathf.RoundToInt(((moveSpeed.GetComponent<Slider>().value)-0.1f)*50) + "%";
+        moveSpeed.GetComponentInChildren<Text>().text = "Player speed: " + Mathf.RoundToInt(((moveSpeed.GetComponent<Slider>().value)-0.1f)*2.5f);
         PlayerPrefs.SetFloat("MoveSpeed", moveSpeed.GetComponent<Slider>().value);
 
         player = GameObject.FindGameObjectWithTag("Player");
@@ -50,7 +50,7 @@ public class SettingsManager : MonoBehaviour
 
     public void UpdateLookSpeed()
     {
-        lookSpeed.GetComponentInChildren<Text>().text = "Look speed: " + Mathf.RoundToInt(((lookSpeed.GetComponent<Slider>().value)-1)*5) + "%";
+        lookSpeed.GetComponentInChildren<Text>().text = "Look speed: " + Mathf.RoundToInt(((lookSpeed.GetComponent<Slider>().value)-1)/4);
         PlayerPrefs.SetFloat("LookSpeed", lookSpeed.GetComponent<Slider>().value);
 
         player = GameObject.FindGameObjectWithTag("Player");

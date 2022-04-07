@@ -219,8 +219,7 @@ public class HoldSpear : MonoBehaviour
 
     private void Strike()
     {
-        Debug.Log("Stabbing with health: " + spearHealth);
-        
+        //Debug.Log("Stabbing with health: " + spearHealth);        
 
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
         {
@@ -249,7 +248,7 @@ public class HoldSpear : MonoBehaviour
             }
             else
             {
-                Debug.Log("struck a " + hit.transform.gameObject.name);
+               // Debug.Log("struck a " + hit.transform.gameObject.name);
             }
         }
         else if(Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
@@ -257,7 +256,7 @@ public class HoldSpear : MonoBehaviour
             if (hit.transform.tag == "Water")
             {                
                 Instantiate(splash, hit.point, Quaternion.identity);
-                Debug.Log("Fish not hit, water hit instead");
+               // Debug.Log("Fish not hit, water hit instead");
             }
         }
     }

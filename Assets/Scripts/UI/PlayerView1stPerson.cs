@@ -18,6 +18,10 @@ public class PlayerView1stPerson : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+    //Other variables
+
+    private GameObject raft;
+
     //Script variables
 
     private RaycastHit hit;
@@ -31,6 +35,8 @@ public class PlayerView1stPerson : MonoBehaviour
     private Vector3 from;
     private Vector3 to;
 
+    private Vector3 playerPos;
+
     void Start()
     {
 
@@ -43,7 +49,7 @@ public class PlayerView1stPerson : MonoBehaviour
         mainCam.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
         raftMask = LayerMask.GetMask("Raft");
-
+        raft = GameObject.FindGameObjectWithTag("Raft");
         StartCoroutine(CorrectView());
 
         //Get saved MoveSpeed
@@ -78,10 +84,6 @@ public class PlayerView1stPerson : MonoBehaviour
     void FixedUpdate()
     {
         
-       // Vector3 m_Input = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        //Debug.Log("m_Input = " + m_Input);
-        //rb.MovePosition(transform.position + m_Input * moveSpeed * Time.deltaTime);
-
         Cursor.lockState = CursorLockMode.Locked;
 
         mouseY += Input.GetAxis("Mouse X") * lookSpeed;
@@ -96,6 +98,7 @@ public class PlayerView1stPerson : MonoBehaviour
         gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
         mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
 
+        transform.position = new Vector3(transform.position.x, raft.transform.position.y + 1f, transform.position.z);
         if (Input.GetKey("up") || Input.GetKey("w"))
         {            
             from = (forwardStop.transform.position) + new Vector3(0,1,0);
@@ -105,9 +108,9 @@ public class PlayerView1stPerson : MonoBehaviour
             && hit.transform.tag == "Raft")
             {
                 gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
-            }
-            
+            }            
         }
+
         if (Input.GetKey("down") || Input.GetKey("s"))
         {
             from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
