@@ -4,11 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Water
-  - Raft
   - Fish
-  - Log
+  - Raft
   - MoveMarker
+  - Water
+  - Log
+  - SceneManager
   layers:
   - Default
   - TransparentFX
@@ -16,10 +17,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Raft
-  - Log
-  - Fish
   - Interactable
+  - 
+  - 
+  - 
   - 
   - 
   - 

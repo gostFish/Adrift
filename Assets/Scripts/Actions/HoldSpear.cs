@@ -28,6 +28,8 @@ public class HoldSpear : MonoBehaviour
     private float hunger;
 
     private bool holding;
+    public bool clickToStab;
+
     private int fishMask;
     private int waterMask;
     //private int fishRaftMask;
@@ -92,6 +94,8 @@ public class HoldSpear : MonoBehaviour
             if (hasSpear == 1)
             {
                 RefreshSpear();
+                clickToStab = true;
+
                 // Debug.Log("Spear should be active");
             }
             else
@@ -103,6 +107,9 @@ public class HoldSpear : MonoBehaviour
         else
         {
             PlayerPrefs.SetInt("HasSpear", 0); //Default, no spear
+
+            clickToStab = false;
+
         }
         if (PlayerPrefs.HasKey("SpearHealth"))
         {
@@ -120,10 +127,11 @@ public class HoldSpear : MonoBehaviour
         RefreshUI();
     }
 
-
+    
     void FixedUpdate()
     {
         //Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
+
 
         if (Input.GetKey("t")) //Throwing spear
         {
@@ -144,6 +152,7 @@ public class HoldSpear : MonoBehaviour
                 stabAnimTime = 0;
             }
         }
+
         if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
         {
             Strike();
@@ -162,6 +171,7 @@ public class HoldSpear : MonoBehaviour
                 {
                     crosshair.texture = greenCH;
                 }
+
                 else
                 {
                     crosshair.texture = greyCH;
@@ -170,12 +180,21 @@ public class HoldSpear : MonoBehaviour
             }
 
             if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
+
+
+            }else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
+
             {
 
                 if (PlayerPrefs.GetInt("HasSpear") == 0)
                 {
                     crosshair.texture = orangeCH;
                     player.GetComponent<PlayerView1stPerson>().canPickLog = true;
+                }
+
+                else
+                {
+                    crosshair.texture = greyCH;
                 }
                 player.GetComponent<PlayerView1stPerson>().lookingAtLog = true;
 
@@ -186,10 +205,8 @@ public class HoldSpear : MonoBehaviour
                 player.GetComponent<PlayerView1stPerson>().canPickLog = false;
                 player.GetComponent<PlayerView1stPerson>().lookingAtLog = false;
             } 
-
-        }
-        
-    
+        }       
+        }        
 
 
         if(stabbing == true)
@@ -198,19 +215,16 @@ public class HoldSpear : MonoBehaviour
             if (stabAnimTime < 1)
             {
                 stabAnimTime += Time.deltaTime/0.4f;
-                //stabAnimTime += Time.deltaTime / 5f;
                 spear.transform.localPosition = Vector3.Lerp(holdPos, stabDrawBackPos, stabAnimTime);
             }
             else if (stabAnimTime <= 2 && hit.point != null)
             {
                 stabAnimTime += Time.deltaTime/0.2f;
-               // stabAnimTime += Time.deltaTime / 5f;
                 spear.transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime-1f);
             }
             else if (stabAnimTime <= 3)
             {
                 stabAnimTime += Time.deltaTime / 0.5f;
-                //stabAnimTime += Time.deltaTime / 5f;
                 spear.transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
             }
             else
@@ -220,7 +234,26 @@ public class HoldSpear : MonoBehaviour
         }
     }
 
-        
+    void Update()
+    {
+        if (Input.GetKey("t")) //Throwing spear
+        {
+            if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
+            {
+                // Throw();
+                Debug.Log("Throwing is removed btw");
+            }
+        }
+
+        if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab) //stab animation
+        {
+            if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
+            {
+                stabbing = true;
+                stabAnimTime = 0;
+            }
+        }
+    }
 
     public void GetSpear() //Instantiate the spear
     {
@@ -274,6 +307,7 @@ public class HoldSpear : MonoBehaviour
                 {
                     spear.SetActive(false);
                     PlayerPrefs.SetInt("HasSpear", 0);
+                    clickToStab = false;
                 }
 
                 RefreshUI();
