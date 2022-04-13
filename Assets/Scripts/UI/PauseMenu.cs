@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    private static bool GameIsPaused = false;
+    public bool menuOpen = false;
 
     private bool settingsOpen;
 
@@ -15,24 +15,71 @@ public class PauseMenu : MonoBehaviour
     public GameObject playerUI;
     public GameObject journalUI;
 
+    public GameObject closeJournal;
+
+    private bool journalOpen;
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");    
+        player = GameObject.FindGameObjectWithTag("Player");
+
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (menuOpen)
             {
                 Resume();
+                
             }
             else
             {
                 Pause();
+                Time.timeScale = 0f;
             }
         }
+        if (Input.GetKeyDown("j"))
+        {
+            Debug.Log("Journal opened");
+            if (journalOpen)
+            {                
+                CloseJournal();
+            }
+            else
+            {
+                Debug.Log("Opening Journal");
+                OpenJournal();
+            }
+        }
+    }
+    public void CloseJournal()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+
+        Cursor.visible = false;
+        player.GetComponent<PlayerView1stPerson>().enabled = true;
+        journalUI.GetComponent<Journal>().CloseJournal();
+        journalUI.SetActive(false);
+
+        closeJournal.SetActive(false); //Button to close Journal
+
+        journalOpen = false;
+    }
+
+    public void OpenJournal()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        player.GetComponent<PlayerView1stPerson>().enabled = false;
+        journalUI.SetActive(true);
+        journalUI.GetComponent<Journal>().openJournal.SetActive(false);
+        journalUI.GetComponent<Journal>().closeJournal.SetActive(false);
+        journalUI.GetComponent<Journal>().OpenJournal();        
+
+        closeJournal.SetActive(true);
+
+        journalOpen = true;
     }
 
     public void Resume()
@@ -42,15 +89,14 @@ public class PauseMenu : MonoBehaviour
             pauseMenuUI.SetActive(false);
             journalUI.SetActive(false);
             playerUI.SetActive(true);
-
-            Time.timeScale = 1f;
-            GameIsPaused = false;
+            
+            menuOpen = false;
             Cursor.lockState = CursorLockMode.Locked;
             AudioListener.pause = false;
 
             player.GetComponent<PlayerView1stPerson>().enabled = true;
-        }
-        
+            Time.timeScale = 1f;
+        }        
     }
 
     public void Pause()
@@ -58,8 +104,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         journalUI.SetActive(true);
         playerUI.SetActive(false);
-        Time.timeScale = 0f;
-        GameIsPaused = true;
+        
+        menuOpen = true;
         Cursor.lockState = CursorLockMode.None;
         AudioListener.pause = true;
 

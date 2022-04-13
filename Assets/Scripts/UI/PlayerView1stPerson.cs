@@ -6,9 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerView1stPerson : MonoBehaviour
 {
-    //UI Objects
-    public GameObject journal;
-    private bool journalOpen;
+    
+    
 
     //Player variables
     public float moveSpeed;
@@ -37,6 +36,11 @@ public class PlayerView1stPerson : MonoBehaviour
 
     private Vector3 playerPos;
 
+    private bool moveUp;
+    private bool moveBack;
+    private bool moveLeft;
+    private bool moveRight;
+
     void Start()
     {
 
@@ -59,8 +63,8 @@ public class PlayerView1stPerson : MonoBehaviour
         }
         else
         {
-            PlayerPrefs.SetFloat("MoveSpeed", 50); //Default value
-            moveSpeed = 50f;
+            PlayerPrefs.SetFloat("MoveSpeed", 1); //Default value
+            moveSpeed = 1f;
         }
 
         //Get saved LookSpeed
@@ -70,8 +74,8 @@ public class PlayerView1stPerson : MonoBehaviour
         }
         else
         {
-            PlayerPrefs.SetFloat("LookSpeed", 50); //Default value
-            lookSpeed = 50f;
+            PlayerPrefs.SetFloat("LookSpeed", 10); //Default value
+            lookSpeed = 10f;
         }
     }
 
@@ -81,27 +85,13 @@ public class PlayerView1stPerson : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 100, 0); //Default looking location
     }
 
-    void FixedUpdate()
+    void FixedUpdate() //Physics related processes
     {
-        
-        Cursor.lockState = CursorLockMode.Locked;
+        transform.localPosition = new Vector3(transform.localPosition.x, raft.transform.position.y, transform.localPosition.z);
 
-        mouseY += Input.GetAxis("Mouse X") * lookSpeed;
-
-        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view
-            (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > - 50)
+        if (moveUp)
         {
-            
-            mouseX -= Input.GetAxis("Mouse Y") * lookSpeed;
-        }        
-
-        gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
-        mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
-
-        transform.position = new Vector3(transform.position.x, raft.transform.position.y + 1f, transform.position.z);
-        if (Input.GetKey("up") || Input.GetKey("w"))
-        {            
-            from = (forwardStop.transform.position) + new Vector3(0,1,0);
+            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
             to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
             
             if(Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
@@ -111,22 +101,22 @@ public class PlayerView1stPerson : MonoBehaviour
             }            
         }
 
-        if (Input.GetKey("down") || Input.GetKey("s"))
+        if (moveBack)
         {
-            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+            from = (backStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((backStop.transform.position) + new Vector3(0, -1, 0)) - from;
 
             if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
             && hit.transform.tag == "Raft")
             {
                 gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
             }
-            
         }
-        if (Input.GetKey("left") || Input.GetKey("a"))
+
+        if (moveLeft)
         {
-            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+            from = (leftStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((leftStop.transform.position) + new Vector3(0, -1, 0)) - from;
 
             if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
             && hit.transform.tag == "Raft")
@@ -134,10 +124,11 @@ public class PlayerView1stPerson : MonoBehaviour
                 gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
             }            
         }
-        if (Input.GetKey("right") || Input.GetKey("d"))
+
+        if (moveRight)
         {
-            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+            from = (rightStop.transform.position) + new Vector3(0, 1, 0);
+            to = ((rightStop.transform.position) + new Vector3(0, -1, 0)) - from;
 
             if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
             && hit.transform.tag == "Raft")
@@ -146,24 +137,69 @@ public class PlayerView1stPerson : MonoBehaviour
             }            
         }
 
-        if (Input.GetKey("p"))
+    }
+
+    void Update() //Non pyhsics related processes
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+
+        mouseY += Input.GetAxis("Mouse X") * lookSpeed;
+        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view
+            (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > -50)
+        {           
+            mouseX -= Input.GetAxis("Mouse Y") * lookSpeed;            
+        }
+        gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
+        mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
+
+        
+        if (Input.GetKey("up") || Input.GetKey("w"))
         {
-            gameObject.GetComponent<Pick>().PickLog();
+            moveUp = true;
+        }
+        else
+        {
+            moveUp = false;
         }
 
-        if (Input.GetKey("j"))
+        if (Input.GetKey("down") || Input.GetKey("s"))
         {
-            Debug.Log("Journal opened");
-            if (journalOpen)
-            {
-                journal.SetActive(false);
-                journalOpen = false;
-            }
-            else
-            {
-                journal.SetActive(true);
-                journalOpen = true;
-            }
+            moveBack = true;
         }
+        else
+        {
+            moveBack = false;
+        }
+
+        if (Input.GetKey("left") || Input.GetKey("a"))
+        {
+            moveLeft = true;
+        }
+        else
+        {
+            moveLeft = false;
+        }
+
+        if (Input.GetKey("right") || Input.GetKey("d"))
+        {
+            moveRight = true;
+        }
+        else
+        {
+            moveRight = false;
+        }
+
+        if (Input.GetMouseButtonDown(0) && canPickLog) //Was previously "p"
+        {
+            gameObject.GetComponent<Pick>().PickLog();
+            StartCoroutine(PickDelay());
+        }
+    }
+
+    IEnumerator PickDelay()
+    {
+        yield return new WaitForSeconds(1);
+        gameObject.GetComponent<HoldSpear>().clickToStab = true;
+
     }
 }

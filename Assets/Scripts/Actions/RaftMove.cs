@@ -29,7 +29,7 @@ public class RaftMove : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         //Every 8 seconds look for new markers
         time += Time.deltaTime;
@@ -50,7 +50,7 @@ public class RaftMove : MonoBehaviour
             if(markerList.Count > 0)
             {
                 nextPos = markerList[0].GetComponent<MoveMarker>().pos;
-                Debug.Log("next marker = " + markerList[0].name);
+               // Debug.Log("next marker = " + markerList[0].name);
             }            
         }
         if(markerList.Count > 0)

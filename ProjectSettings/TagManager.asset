@@ -9,6 +9,7 @@ TagManager:
   - MoveMarker
   - Water
   - Log
+  - SceneManager
   layers:
   - Default
   - TransparentFX
