@@ -9,6 +9,7 @@ public class Journal : MonoBehaviour
     //Pages
 
     public List<GameObject> pages;
+    public List<Texture> pageTextures;
 
     public GameObject page1;
     public GameObject page2;
@@ -18,6 +19,25 @@ public class Journal : MonoBehaviour
     public GameObject page6;
     public GameObject page7;
     public GameObject page8;
+
+    public Texture texturePage1;
+    public Texture texturePage2;
+    public Texture texturePage3;
+    public Texture texturePage4;
+    public Texture texturePage5;
+    public Texture texturePage6;
+    public Texture texturePage7;
+    /* public Texture texturePage8;*/
+
+    public Texture anim1;
+    public Texture anim2;
+    public Texture anim3;
+    public Texture anim4;
+    public Texture anim5;
+    public Texture anim6;
+    public Texture anim7;
+    public Texture anim8;
+
     //Paragraphs
 
     //Other vars
@@ -30,7 +50,12 @@ public class Journal : MonoBehaviour
     public int currentPage;
     public int lastRevieled;
 
-    void Start()
+    private float time;
+
+    private bool animatingForward;
+    private bool animatingBackward;
+
+    void Awake()
     {
         if (PlayerPrefs.HasKey("lastRevieled"))
         {
@@ -39,6 +64,16 @@ public class Journal : MonoBehaviour
         previousPageButton.SetActive(false);
         nextPageButton.SetActive(false);
         closeJournal.SetActive(false);
+
+        pageTextures.Add(texturePage1);
+        pageTextures.Add(texturePage2);
+        pageTextures.Add(texturePage3);
+        pageTextures.Add(texturePage4);
+        pageTextures.Add(texturePage5);
+        pageTextures.Add(texturePage6);
+        pageTextures.Add(texturePage7);
+        /* pageTextures.Add(texturePage8); */
+
 
         pages = new List<GameObject>();
         pages.Add(page1);
@@ -49,10 +84,117 @@ public class Journal : MonoBehaviour
         pages.Add(page6);
         pages.Add(page7);
         pages.Add(page8);
+
+        animatingForward = false;
+        animatingBackward = false;
     }
 
+    void Update()
+    {
+        //Debug.Log("updating");
+        if (animatingForward)
+        {
+            ShowPage();
+            time += Time.deltaTime;
+            if (time < 0.05)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+            }
+            else if (time < 0.1)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim2;
+            }
+            else if (time < 0.15)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim3;
+            }
+            else if (time < 0.2)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim4;
+            }
+            else if (time < 0.25)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim5;
+            }
+            else if (time < 0.3)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim6;
+            }
+            else if (time < 0.35)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim7;
+            }
+            else if (time < 0.4)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim8;
+            }
+            else if (time < 0.45)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                ActualPages();
+                animatingForward = false;
+            }
+        }
+        if (animatingBackward)
+        {
+            ShowPage();
+            time += Time.deltaTime;
+            if (time < 0.05)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+            }
+            else if (time < 0.1)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim8;
+            }
+            else if (time < 0.15)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim7;
+            }
+            else if (time < 0.2)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim6;
+            }
+            else if (time < 0.25)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim5;
+            }
+            else if (time < 0.3)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim4;
+            }
+            else if (time < 0.35)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim3;
+            }
+            else if (time < 0.4)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim2;
+            }
+            else if (time < 0.45)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                ActualPages();
+                animatingBackward = false;
+            }
+
+        }
+
+    }
+    public void ActualPages()
+    {
+        Debug.Log("current Page = " + currentPage);
+        for (int i = 0; i < currentPage; i++)
+        {
+            Debug.Log("i = " + i);
+            pages[i].GetComponent<RawImage>().texture = pageTextures[i];
+        }
+
+    }
     public void OpenJournal()
     {
+        Time.timeScale = 1f;
+
         nextPageButton.SetActive(false);
         openJournal.SetActive(false);
         closeJournal.SetActive(true);
@@ -60,7 +202,7 @@ public class Journal : MonoBehaviour
         currentPage = lastRevieled; //Default opens book on the last written page
 
         if (lastRevieled == 0)
-        {            
+        {
             Debug.Log("Tried to open Journal, but no pages");
         }
 
@@ -68,10 +210,12 @@ public class Journal : MonoBehaviour
         {
             previousPageButton.SetActive(false);
         }
-        else{
+        else
+        {
             previousPageButton.SetActive(true);
         }
         ShowPage();
+        ActualPages();
     }
 
     public void CloseJournal()
@@ -85,6 +229,12 @@ public class Journal : MonoBehaviour
         currentPage = 0;
 
         ShowPage();
+
+
+        if (gameObject.GetComponentInParent<PauseMenu>().menuOpen)
+        {
+            Time.timeScale = 0f; //Pause again if menu is opened
+        }
     }
 
     public void NextPage()
@@ -95,21 +245,23 @@ public class Journal : MonoBehaviour
         }
         if ((currentPage + 2) >= lastRevieled) //is last page (or last half page)
         {
-            nextPageButton.SetActive(false);            
+            nextPageButton.SetActive(false);
         }
-        
-        if((currentPage + 1) >= lastRevieled)
+
+        if ((currentPage + 1) >= lastRevieled)
         {
             if (lastRevieled % 2 != 0)
             {
                 currentPage++;
-            }                      
+            }
         }
-        else if(lastRevieled > 2)
+        else if (lastRevieled > 2)
         {
             currentPage += 2;
         }
-        ShowPage();
+        time = 0;
+        animatingForward = true;
+        //ShowPage();
     }
 
     public void PreviousPage()
@@ -118,7 +270,7 @@ public class Journal : MonoBehaviour
         {
             nextPageButton.SetActive(true);
         }
-        if(currentPage <= 4)
+        if (currentPage <= 4)
         {
             previousPageButton.SetActive(false);
         }
@@ -134,25 +286,26 @@ public class Journal : MonoBehaviour
                 currentPage -= 2;
             }
         }
-        else if(currentPage > 1)
+        else if (currentPage > 1)
         {
             currentPage -= 2;
         }
-
-        ShowPage();
+        time = 0;
+        animatingBackward = true;
+        //ShowPage();
     }
 
     public void ShowPage() //Scroll through page
     {
-        for(int i = 0; i < pages.Count; i++)
+        for (int i = 0; i < pages.Count; i++)
         {
             pages[i].SetActive(false);
         }
 
-        if(currentPage > 0)
+        if (currentPage > 0 && (currentPage - 1) < pages.Count)
         {
             pages[currentPage - 1].SetActive(true);
-        }        
+        }
     }
 
     public void UpdatePage() //Bring next thing to be visible in the pages
