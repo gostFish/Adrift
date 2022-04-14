@@ -14,7 +14,6 @@ public class SpawnFish : MonoBehaviour
     public int maxTotal;
     public float spawntime;
     public float spawnProbability;
-    public GameObject raft;
 
     private float time;
 
@@ -39,7 +38,7 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, -1f, raft.transform.position.z), Quaternion.identity); 
+                    GameObject newFish = Instantiate(fishSpot, new Vector3(100f, 100f, 100f), Quaternion.identity); 
                     fishList.Add(newFish);
                 }
                 else
