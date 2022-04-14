@@ -19,7 +19,7 @@ public class Fish : MonoBehaviour
     {
         raft = GameObject.FindGameObjectWithTag("Raft");
 
-        radius = 3;
+        radius = 14;
         speed = 0.1f;
         depth = 0.5f;
     }

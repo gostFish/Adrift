@@ -11,10 +11,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fish
       objectReference: {fileID: 0}
-    - target: {fileID: 100032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
-      propertyPath: m_TagString
-      value: Fish
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -82,18 +78,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 100032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
   m_PrefabInstance: {fileID: 127418352821480244}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-7084026567000013307
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 127418352821579252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b302f90106b9d18469c6b0a683d83f87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4384296833633403341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,5 +94,3 @@ MonoBehaviour:
   timeSpeed: 1
   timeToMove: 5
   newPos: {x: 0, y: 0, z: 0}
-  raftPos: {x: 0, y: 0, z: 0}
-  fishScattering: {fileID: -7084026567000013307}
