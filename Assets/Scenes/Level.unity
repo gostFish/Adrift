@@ -5104,7 +5104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759e9920884bff14f85928f82968d23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windLevel: 0.17
+  windLevel: 0.01
   arrivalDist: 1
   moveToNextTimer: 1
 --- !u!23 &1298858158
@@ -7628,6 +7628,10 @@ PrefabInstance:
     - target: {fileID: 5351212615956505045, guid: 6defc94f22c7b864ba34025986b240bb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5351212616838474821, guid: 6defc94f22c7b864ba34025986b240bb, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6defc94f22c7b864ba34025986b240bb, type: 3}
