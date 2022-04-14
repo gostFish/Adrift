@@ -20,9 +20,9 @@ public class Shark : MonoBehaviour
     {
         raft = GameObject.FindGameObjectWithTag("Raft");
 
-        radius = 8;
+        radius = 2;
         speed = 0.1f;
-        depth = 5f;
+        depth = 4.5f;
     }
 
     void FixedUpdate()
