@@ -7,7 +7,8 @@ public class FishMovement : MonoBehaviour
     float endPosX, endPosZ;
     public float timer, timeSpeed, timeToMove;
     public Vector3 newPos, raftPos;
-     
+    //public FishScattering fishScattering;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,20 +18,30 @@ public class FishMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        LookMovingDirection(newPos);
-
-        timer += Time.deltaTime * timeSpeed;
-        if (timer >= timeToMove)
+        if(Input.GetMouseButtonDown(0))
         {
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 0.5f);
-
-            if (Vector3.Distance(transform.position, newPos) <= 0.1f)
-            {
-                NewPosition();
-                timer = 0;
-            }
-
+            //fishScattering.FishScatter();
+            //Debug.Log("Fish are scattering");
         }
+        else
+        {
+            Debug.Log("Normal swimming");
+            LookMovingDirection(newPos);
+
+            timer += Time.deltaTime * timeSpeed;
+            if (timer >= timeToMove)
+            {
+                transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 0.5f);
+
+                if (Vector3.Distance(transform.position, newPos) <= 0.1f)
+                {
+                    NewPosition();
+                    timer = 0;
+                }
+
+            }
+        }
+
     }
 
     void NewPosition()

@@ -6872,12 +6872,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9691e86ae17a545b6e5a99c3232c12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishSpot: {fileID: 2890077882212859845, guid: 70d48c4391f1240409323c3653b779b0, type: 3}
+  fishSpot: {fileID: 127418352821579252, guid: 5a01238d51ac7ec4fb4955ff7be9ab62, type: 3}
   minFish: 0
   maxFish: 3
   maxTotal: 0
   spawntime: 2
   spawnProbability: 50
+  raft: {fileID: 1298858156}
 --- !u!114 &1566922894
 MonoBehaviour:
   m_ObjectHideFlags: 0
