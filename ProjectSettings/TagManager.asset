@@ -9,6 +9,7 @@ TagManager:
   - Fish
   - Log
   - MoveMarker
+  - Shark
   layers:
   - Default
   - TransparentFX
