@@ -141,7 +141,15 @@ public class HoldSpear : MonoBehaviour
             {
                 if (PlayerPrefs.GetInt("HasSpear") == 1)
                 {
-                    crosshair.texture = greenCH;
+                    if(hit.transform.tag == "Shark")
+                    {
+                        crosshair.texture = redCH;
+                    }
+                    else
+                    {
+                        crosshair.texture = greenCH;
+                    }
+                    
                 }
 
             }
@@ -256,25 +264,27 @@ public class HoldSpear : MonoBehaviour
                 {
                     hunger = 100f;
                 }
-
-                spearHealth--;
-                PlayerPrefs.SetInt("SpearHealth", spearHealth);
-                PlayerPrefs.SetFloat("Hunger", hunger);
                 hit.transform.gameObject.active = false;
 
-                if (spearHealth == 0)
-                {
-                    spear.SetActive(false);
-                    PlayerPrefs.SetInt("HasSpear", 0);
-                    clickToStab = false;
-                }
-
-                RefreshUI();
             }
-            else
+            else if (hit.transform.tag == "Shark")
             {
-                // Debug.Log("struck a " + hit.transform.gameObject.name);
+                //Something happens with the shark
             }
+
+            spearHealth--;
+            PlayerPrefs.SetInt("SpearHealth", spearHealth);
+            PlayerPrefs.SetFloat("Hunger", hunger);
+            
+
+            if (spearHealth == 0)
+            {
+                spear.SetActive(false);
+                PlayerPrefs.SetInt("HasSpear", 0);
+                clickToStab = false;
+            }
+
+            RefreshUI();
         }
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
@@ -288,42 +298,38 @@ public class HoldSpear : MonoBehaviour
 
     private void RefreshUI()
     {
+        //Debug.Log("Updating with health == " + spearHealth);
 
-        Debug.Log("Updating with health == " + spearHealth);
-
-        if (spearHealth == 0)
+        switch (spearHealth)
         {
-            if (spear != null)
-            {
-                spearUI.texture = transparent;
-                spear.SetActive(false);
-            }
-        }
-        else if (spearHealth == 1)
-        {
-            spearUI.texture = spear5;
-        }
-        else if (spearHealth == 2)
-        {
-            spearUI.texture = spear4;
-        }
-        else if (spearHealth == 3)
-        {
-            spearUI.texture = spear3;
-        }
-        else if (spearHealth == 4)
-        {
-            spearUI.texture = spear2;
-        }
-        else if (spearHealth == 5)
-        {
-            spearUI.texture = spear1;
+            case 0:
+                if (spear != null)
+                {
+                    spearUI.texture = transparent;
+                    spear.SetActive(false);
+                }
+                break;
+            case 1:
+                spearUI.texture = spear5;
+                break;
+            case 2:
+                spearUI.texture = spear4;
+                break;
+            case 3:
+                spearUI.texture = spear3;
+                break;
+            case 4:
+                spearUI.texture = spear2;
+                break;
+            case 5:
+                spearUI.texture = spear1;
+                break;
         }
     }
 
     private void Throw()
     {
-        Debug.Log("Throwing");
+        //Debug.Log("Throwing");
         spear.transform.position = player.GetComponent<PlayerView1stPerson>().mainCam.transform.position;
         spear.transform.rotation = player.GetComponent<PlayerView1stPerson>().mainCam.transform.rotation;
 

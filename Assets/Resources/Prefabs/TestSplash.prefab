@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2225664950558011462}
   - component: {fileID: 4931763129201906814}
   - component: {fileID: 4586324666606779470}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: TestSplash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
