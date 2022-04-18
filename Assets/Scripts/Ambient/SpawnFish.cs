@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnFish : MonoBehaviour
 {
-    public GameObject fishSpot; //
+    public GameObject fishSpot;
     private List<GameObject> fishList;
 
     private int currentFish;
@@ -15,12 +15,14 @@ public class SpawnFish : MonoBehaviour
     public float spawntime;
     public float spawnProbability;
 
+    public GameObject raft;
+
     private float time;
 
     private void Start()
     {
         minFish = 0; //Potentially no fish
-        maxFish = 3; //3 fish at once
+        maxFish = 10; //3 fish at once
         maxTotal = 50;
         spawntime = 1f;
         spawnProbability = 30f;
@@ -38,7 +40,7 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    GameObject newFish = Instantiate(fishSpot, new Vector3(100f, 100f, 100f), Quaternion.identity); 
+                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, -0.5f, raft.transform.position.z), Quaternion.identity); 
                     fishList.Add(newFish);
                 }
                 else

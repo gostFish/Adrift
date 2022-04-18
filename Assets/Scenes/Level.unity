@@ -3079,6 +3079,7 @@ MonoBehaviour:
   redCH: {fileID: 2800000, guid: bb263b911cce62246b9664ef6b4f1d4d, type: 3}
   greenCH: {fileID: 2800000, guid: 18e663c39d29e9949b660eb3c120d590, type: 3}
   orangeCH: {fileID: 2800000, guid: 07cf9d29e2878c94aa7d1457715f0846, type: 3}
+  stabbing: 0
 --- !u!114 &813022435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5594,6 +5595,7 @@ MonoBehaviour:
   maxTotal: 0
   spawntime: 2
   spawnProbability: 50
+  raft: {fileID: 1298858156}
 --- !u!114 &1566922894
 MonoBehaviour:
   m_ObjectHideFlags: 0
