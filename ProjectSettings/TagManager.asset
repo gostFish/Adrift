@@ -10,12 +10,11 @@ TagManager:
   - Log
   - MoveMarker
   - Shark
-  - InstanceManager
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - PostProcessing
+  - 
   - Water
   - UI
   - Raft

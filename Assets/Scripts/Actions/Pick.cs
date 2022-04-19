@@ -28,7 +28,7 @@ public class Pick : MonoBehaviour
     {
         if(logCount > minLogs && PlayerPrefs.GetInt("HasSpear") == 0)
         {
-            gameObject.GetComponent<SpearManager>().RefreshSpear();
+            gameObject.GetComponent<HoldSpear>().RefreshSpear();
             logCount--;
             PlayerPrefs.SetInt("HasSpear",1);
 
