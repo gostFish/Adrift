@@ -16,6 +16,7 @@ public class SpawnFish : MonoBehaviour
     public float spawnProbability;
 
     private float time;
+    private GameObject instanceManager;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class SpawnFish : MonoBehaviour
         spawnProbability = 30f;
 
         fishList = new List<GameObject>();
+        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
     }
     // Update is called once per frame
     void Update()
@@ -38,7 +40,8 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    GameObject newFish = Instantiate(fishSpot, new Vector3(100f, 100f, 100f), Quaternion.identity); 
+                    GameObject newFish = Instantiate(fishSpot, new Vector3(0f, 0f, 0f), Quaternion.identity);
+                    newFish.transform.parent = instanceManager.transform;
                     fishList.Add(newFish);
                 }
                 else

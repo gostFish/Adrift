@@ -15,6 +15,12 @@ public class PlayerView1stPerson : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
+    public float hungerNoiseTimeMin;
+    public float hungerNoiseTimeMax;
+    private float hungerNoiseTimeNext; //Actual time for next stomach rumbling sound
+
+    private float hungerNoiseTime;
+
     //Other variables
 
     private GameObject raft;
@@ -42,9 +48,13 @@ public class PlayerView1stPerson : MonoBehaviour
     public bool lookingAtLog;
     public bool canPickLog;
 
+    //Audio
+
+    private AudioSource audioSource;
+    public AudioClip stomachRumbling;
+
     void Start()
     {
-
         // rb = gameObject.GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -53,9 +63,14 @@ public class PlayerView1stPerson : MonoBehaviour
         mainCam.transform.localPosition = new Vector3(0, 0, 0);
         mainCam.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
+        audioSource = GetComponent<AudioSource>();
+        hungerNoiseTimeNext = UnityEngine.Random.Range(hungerNoiseTimeMin, hungerNoiseTimeMax);
+
         raftMask = LayerMask.GetMask("Raft");
         raft = GameObject.FindGameObjectWithTag("Raft");
         StartCoroutine(CorrectView());
+
+        hungerNoiseTime = 0f;
 
         //Get saved MoveSpeed
         if (PlayerPrefs.HasKey("MoveSpeed"))
@@ -88,6 +103,8 @@ public class PlayerView1stPerson : MonoBehaviour
 
     void FixedUpdate() //Physics related processes
     {
+        hungerNoiseTime += Time.deltaTime;
+
         transform.localPosition = new Vector3(transform.localPosition.x, raft.transform.position.y, transform.localPosition.z);
 
         if (moveUp)
@@ -138,6 +155,15 @@ public class PlayerView1stPerson : MonoBehaviour
             }
         }
 
+        if(PlayerPrefs.GetFloat("Hunger") < 70)
+        {
+            if(hungerNoiseTime > hungerNoiseTimeNext)
+            {
+                hungerNoiseTimeNext = UnityEngine.Random.Range(hungerNoiseTimeMin, hungerNoiseTimeMax);
+                audioSource.PlayOneShot(stomachRumbling);
+                hungerNoiseTime = 0f;
+            }            
+        }
     }
 
     void Update() //Non pyhsics related processes
@@ -200,7 +226,7 @@ public class PlayerView1stPerson : MonoBehaviour
     IEnumerator PickDelay()
     {
         yield return new WaitForSeconds(1);
-        gameObject.GetComponent<HoldSpear>().clickToStab = true;
+        gameObject.GetComponent<SpearManager>().clickToStab = true;
 
     }
 }

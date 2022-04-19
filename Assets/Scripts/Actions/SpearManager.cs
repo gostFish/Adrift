@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HoldSpear : MonoBehaviour
+public class SpearManager : MonoBehaviour
 {
     //Variables
 
@@ -34,16 +34,26 @@ public class HoldSpear : MonoBehaviour
     private int waterMask;
     private int raftMask;
 
+    private float stabAnimTime;
+    private bool stabbing;
+
     //Game Objects
 
     private GameObject player;
     private Camera mainCam;
 
     public GameObject splash;
+    public GameObject blood;
+
+    private GameObject splashInst;
+    private GameObject bloodInst;
 
     public GameObject spearPrefab;
     public GameObject spear; //As an instance
 
+    private GameObject instanceManager;
+
+    // Images and Textures 
     public RawImage spearUI;
 
     public Texture transparent;
@@ -60,8 +70,11 @@ public class HoldSpear : MonoBehaviour
     public Texture greenCH;
     public Texture orangeCH;
 
-    private float stabAnimTime;
-    private bool stabbing;
+    // Audio
+
+    private AudioSource audioSource;
+    public AudioClip spearDegredation;
+        
 
     void Start()
     {
@@ -72,6 +85,8 @@ public class HoldSpear : MonoBehaviour
         //Find Essential things
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
+
+        audioSource = GetComponent<AudioSource>();
 
         fishMask = LayerMask.GetMask("Interactable"); //Engore everything except fish
         waterMask = LayerMask.GetMask("Water");
@@ -119,6 +134,18 @@ public class HoldSpear : MonoBehaviour
         }
 
         RefreshUI();
+
+        //Instantiate once (Hide and unhide splash instead of intantiating)
+        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
+
+        splashInst = Instantiate(splash, new Vector3(0,0,0), Quaternion.identity);
+        bloodInst = Instantiate(blood, new Vector3(0, 0, 0), Quaternion.identity);
+
+        splashInst.transform.parent = instanceManager.transform;
+        bloodInst.transform.parent = instanceManager.transform;
+
+        splashInst.SetActive(false);
+        bloodInst.SetActive(false);
     }
 
 
@@ -148,10 +175,8 @@ public class HoldSpear : MonoBehaviour
                     else
                     {
                         crosshair.texture = greenCH;
-                    }
-                    
+                    }                    
                 }
-
             }
             else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
             {
@@ -235,7 +260,6 @@ public class HoldSpear : MonoBehaviour
         spear.GetComponent<BoxCollider>().enabled = false;
 
         spear.SetActive(false);
-
     }
 
     public void RefreshSpear()
@@ -270,6 +294,8 @@ public class HoldSpear : MonoBehaviour
             else if (hit.transform.tag == "Shark")
             {
                 //Something happens with the shark
+                bloodInst.transform.position = hit.point;
+                StartCoroutine(Bleed());
             }
 
             spearHealth--;
@@ -284,16 +310,37 @@ public class HoldSpear : MonoBehaviour
                 clickToStab = false;
             }
 
-            RefreshUI();
+            StartCoroutine(BreakDelay());
+            //RefreshUI();
         }
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
             if (hit.transform.tag == "Water")
             {
-                Instantiate(splash, hit.point, Quaternion.identity);
-                // Debug.Log("Fish not hit, water hit instead");
+                //GameObject newSplash = Instantiate(splash, hit.point, Quaternion.identity);
+                splashInst.transform.position = hit.point;
+                StartCoroutine(Splash());               
             }
         }
+    }
+
+    IEnumerator Splash()
+    {
+        splashInst.SetActive(true);
+        yield return new WaitForSeconds(0.8f); //Lasts 0.8 seconds
+        splashInst.SetActive(false);
+    }
+    IEnumerator Bleed()
+    {
+        bloodInst.SetActive(true);
+        yield return new WaitForSeconds(0.8f); //Lasts 0.8 seconds
+        bloodInst.SetActive(false);
+    }
+    IEnumerator BreakDelay() //Spear breaks after short delay
+    {
+        yield return new WaitForSeconds(0.5f);
+        audioSource.PlayOneShot(spearDegredation);
+        RefreshUI();
     }
 
     private void RefreshUI()
@@ -327,7 +374,7 @@ public class HoldSpear : MonoBehaviour
         }
     }
 
-    private void Throw()
+    private void Throw() //No longer used
     {
         //Debug.Log("Throwing");
         spear.transform.position = player.GetComponent<PlayerView1stPerson>().mainCam.transform.position;
