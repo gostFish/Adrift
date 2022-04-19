@@ -8868,7 +8868,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759e9920884bff14f85928f82968d23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windLevel: 10
+  windLevel: 0.17
   arrivalDist: 10
   moveToNextTimer: 1
 --- !u!23 &1298858158
