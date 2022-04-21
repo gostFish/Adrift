@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SpawnFish : MonoBehaviour
 {
+
+    private GameObject instanceManager;
     public GameObject fishSpot;
     private List<GameObject> fishList;
 
@@ -27,6 +29,8 @@ public class SpawnFish : MonoBehaviour
         spawntime = 1f;
         spawnProbability = 30f;
 
+        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
+
         fishList = new List<GameObject>();
     }
     // Update is called once per frame
@@ -40,7 +44,8 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, -0.5f, raft.transform.position.z), Quaternion.identity); 
+                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, 0.4f, raft.transform.position.z), Quaternion.identity);
+                    newFish.transform.parent = instanceManager.transform;
                     fishList.Add(newFish);
                 }
                 else
@@ -56,7 +61,6 @@ public class SpawnFish : MonoBehaviour
                 }
             }
             time = 0f;
-            //Debug.Log("There are currently " + currentFish + " fish nearby");
         }
     }
 }
