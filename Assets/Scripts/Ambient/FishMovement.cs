@@ -5,7 +5,7 @@ using UnityEngine;
 public class FishMovement : MonoBehaviour
 {
     float endPosX, endPosZ;
-    public float timer, timeSpeed, timeToMove;
+    public float timer, timeSpeed, timeToMove, moveSpeed;
     public Vector3 newPos, raftPos;
     private RaycastHit spearHit;
     private Vector3 clickSpot;
@@ -33,12 +33,12 @@ public class FishMovement : MonoBehaviour
 
             //Assigns new position
             newPos = new Vector3(endPosX, transform.position.y, endPosZ);
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 1f);
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * moveSpeed);
 
         }
         else if (timer >= timeToMove)
         {
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 0.5f);
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * moveSpeed);
 
             if (Vector3.Distance(transform.position, newPos) <= 0.1f)
             {
@@ -66,6 +66,6 @@ public class FishMovement : MonoBehaviour
     void LookMovingDirection(Vector3 lookTo)
     {
         Quaternion lookRotation = Quaternion.LookRotation((lookTo - transform.position).normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 1f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * moveSpeed);
     }
 }
