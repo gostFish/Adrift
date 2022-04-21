@@ -204,8 +204,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
-  timeSpeed: 1
+  timeSpeed: 0.5
   timeToMove: 1
-  speed: 0.1
+  moveSpeed: 1
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
