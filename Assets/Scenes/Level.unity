@@ -3079,7 +3079,6 @@ MonoBehaviour:
   redCH: {fileID: 2800000, guid: bb263b911cce62246b9664ef6b4f1d4d, type: 3}
   greenCH: {fileID: 2800000, guid: 18e663c39d29e9949b660eb3c120d590, type: 3}
   orangeCH: {fileID: 2800000, guid: 07cf9d29e2878c94aa7d1457715f0846, type: 3}
-  stabbing: 0
 --- !u!114 &813022435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5589,7 +5588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9691e86ae17a545b6e5a99c3232c12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishSpot: {fileID: 127418352821579252, guid: 5a01238d51ac7ec4fb4955ff7be9ab62, type: 3}
+  fishSpot: {fileID: 7918743994726546452, guid: 1c591ad11c5cea1429ebc2b77c789987, type: 3}
   minFish: 0
   maxFish: 3
   maxTotal: 0
