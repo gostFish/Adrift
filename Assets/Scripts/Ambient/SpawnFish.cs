@@ -40,7 +40,7 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, 0.4f, raft.transform.position.z), Quaternion.identity); 
+                    GameObject newFish = Instantiate(fishSpot, new Vector3(raft.transform.position.x, -0.5f, raft.transform.position.z), Quaternion.identity); 
                     fishList.Add(newFish);
                 }
                 else
