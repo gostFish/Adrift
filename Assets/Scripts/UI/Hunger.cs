@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Hunger : MonoBehaviour
 {
+    public PostProcessProfile effects;
+    private Vignette vig;
+    private ChromaticAberration chr;
+    private Bloom bloom;
 
     private float hunger;
     private float time;
@@ -20,6 +25,8 @@ public class Hunger : MonoBehaviour
     public Texture hunger4;
     public Texture hunger5;
 
+    public GameObject deathScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +39,10 @@ public class Hunger : MonoBehaviour
             hunger = 100f;
             PlayerPrefs.SetFloat("Hunger", hunger);
         }
-       // gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
+
+        vig = effects.GetSetting<Vignette>();
+        chr = effects.GetSetting<ChromaticAberration>();
+        bloom = effects.GetSetting<Bloom>();
     }
 
     // Update is called once per frame
@@ -44,12 +54,15 @@ public class Hunger : MonoBehaviour
         {
             hunger = PlayerPrefs.GetFloat("Hunger"); //Update the hunger
             hunger -= hungerRate;
-            //gameObject.GetComponent<Text>().text = "Hunger or something = " + hunger.ToString("F2") + "%";
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
-            time = 0;
+            
 
             //Debug.Log("Hunger = " + hunger);
-            if (hunger <= 25)
+            if(hunger <= 0)
+            {
+                DeathScreen();
+            }
+            else if (hunger <= 25)
             {
                 hungerUI.texture = hunger5;
             }
@@ -70,8 +83,35 @@ public class Hunger : MonoBehaviour
                 hungerUI.texture = hunger1;
             }
 
-        }
+            //Effects
+            if(hunger <= 100 && hunger >= 0)
+            {
+                vig.intensity.value = 1 - (hunger/60);
+            }
+            
+            if (hunger <= 80 && hunger >= 0)
+            {
+                chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
+            }
+            if (hunger <= 100 && hunger >= 0)
+            {
+                bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
+            }
 
-        
+           /* Debug.Log("Hunger = " + hunger);
+            Debug.Log("vig = " + (1 - (0.3157 * Mathf.Pow(hunger, 0.25f))));
+            Debug.Log("chr = " + (1 - (0.0001 * Mathf.Pow(hunger, 2))));
+            Debug.Log("bloom = " + (0.02f * Mathf.Tan(1.572f - (0.005f * hunger))));*/
+
+            time = 0;
+        }        
+    }
+
+    public void DeathScreen()
+    {
+        deathScreen.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 0f;
     }
 }

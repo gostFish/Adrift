@@ -16,6 +16,10 @@ public class SpearManager : MonoBehaviour
     private Vector3 stabDrawBackPos;
     private Vector3 stabPoint;
 
+    private Quaternion holdAngle;
+    private Quaternion drawAngle;
+    private Quaternion stabAngle;
+
     //Throwing / stabbing
 
     public float despawnDist;
@@ -93,8 +97,12 @@ public class SpearManager : MonoBehaviour
         raftMask = LayerMask.GetMask("Raft");
 
         holdPos = new Vector3(0.4f, 0.1f, 0.4f);  //Position spear to view in 1st person
-        stabDrawBackPos = new Vector3(0.4f, 0.25f, -0.5f);
-        stabPoint = new Vector3(0.4f, 0, 1f);
+        stabDrawBackPos = new Vector3(0.6f, 0.35f, -0.4f);
+        stabPoint = new Vector3(0.4f, 0.1f, 1.2f);
+
+        holdAngle = Quaternion.Euler(0, 90f, 10f);
+        drawAngle = Quaternion.Euler(0, 85f, 9f);
+        stabAngle = Quaternion.Euler(0, 73f,4.5f);
 
         stabAnimTime = 3;
         GetSpear();
@@ -157,8 +165,32 @@ public class SpearManager : MonoBehaviour
         {
             Strike();
         }
+        if (stabbing == true)
+        {
 
-        if (spear != null) //reposition spear if exists
+            if (stabAnimTime < 1) //draw back
+            {
+                stabAnimTime += Time.deltaTime / 0.3f;
+                spear.transform.localPosition = Vector3.Lerp(holdPos, stabDrawBackPos, stabAnimTime);
+                spear.transform.localRotation = Quaternion.Lerp(holdAngle, drawAngle, stabAnimTime);
+            }
+            else if (stabAnimTime <= 2 && hit.point != null) //stab
+            {
+                stabAnimTime += Time.deltaTime / 0.2f;
+                spear.transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime - 1f);
+                spear.transform.localRotation = Quaternion.Lerp(drawAngle, stabAngle, stabAnimTime-1f);
+            }
+            else if (stabAnimTime <= 3) //Return to origin
+            {
+                stabAnimTime += Time.deltaTime / 0.5f;
+                spear.transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
+                spear.transform.localRotation = Quaternion.Lerp(stabAngle, holdAngle, stabAnimTime-2f);
+            }
+            else
+            {
+                stabbing = false;
+            }
+        }else if (spear != null) //reposition spear if exists
         {
             spear.transform.localPosition = holdPos;
             spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(15, 15, 0);
@@ -201,29 +233,7 @@ public class SpearManager : MonoBehaviour
             }
         }
 
-        if (stabbing == true)
-        {
-
-            if (stabAnimTime < 1)
-            {
-                stabAnimTime += Time.deltaTime / 0.4f;
-                spear.transform.localPosition = Vector3.Lerp(holdPos, stabDrawBackPos, stabAnimTime);
-            }
-            else if (stabAnimTime <= 2 && hit.point != null)
-            {
-                stabAnimTime += Time.deltaTime / 0.2f;
-                spear.transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime - 1f);
-            }
-            else if (stabAnimTime <= 3)
-            {
-                stabAnimTime += Time.deltaTime / 0.5f;
-                spear.transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
-            }
-            else
-            {
-                stabbing = false;
-            }
-        }
+        
     }
 
     void Update()
@@ -232,7 +242,7 @@ public class SpearManager : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
-                // Throw();
+                Throw();
                 Debug.Log("Throwing is removed btw");
             }
         }
