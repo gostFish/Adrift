@@ -44,6 +44,7 @@ public class SpearManager : MonoBehaviour
     //Game Objects
 
     private GameObject player;
+    private GameObject shark;
     private Camera mainCam;
 
     public GameObject splash;
@@ -89,6 +90,7 @@ public class SpearManager : MonoBehaviour
         //Find Essential things
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
+        shark = GameObject.FindGameObjectWithTag("Shark");
 
         audioSource = GetComponent<AudioSource>();
 
@@ -305,6 +307,7 @@ public class SpearManager : MonoBehaviour
             {
                 //Something happens with the shark
                 bloodInst.transform.position = hit.point;
+                shark.GetComponent<Shark>().Stabbed();
                 StartCoroutine(Bleed());
             }
 

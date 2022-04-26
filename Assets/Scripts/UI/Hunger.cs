@@ -93,6 +93,10 @@ public class Hunger : MonoBehaviour
             {
                 chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
             }
+            else if (hunger > 80)
+            {
+                chr.intensity.value = 0;
+            }
             if (hunger <= 100 && hunger >= 0)
             {
                 bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
