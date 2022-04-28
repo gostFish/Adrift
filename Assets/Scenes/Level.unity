@@ -4369,7 +4369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 925290159}
   m_Layer: 6
-  m_Name: Logs2
+  m_Name: Raft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5697,9 +5697,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 759e9920884bff14f85928f82968d23f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windLevel: 0.17
+  windLevel: 0.015
   arrivalDist: 10
   moveToNextTimer: 0.1
+  raft: {fileID: 925290158}
 --- !u!23 &1298858158
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6720,9 +6721,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   birdSpot: {fileID: 0}
-  minFish: 0
-  maxFish: 10
-  maxTotal: 0
   spawntime: 2
   spawnProbability: 50
   raft: {fileID: 1298858156}
