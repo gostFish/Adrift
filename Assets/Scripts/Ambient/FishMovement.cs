@@ -56,8 +56,8 @@ public class FishMovement : MonoBehaviour
         raftPos = raft.transform.position;
 
         //Chooses random position around the raft for fish based on the raft position. 
-        endPosX = Random.Range(raftPos.x - 10, raftPos.x + 10);
-        endPosZ = Random.Range(raftPos.z - 10, raftPos.z + 10);
+        endPosX = Random.Range(raftPos.x, raftPos.x + 20);
+        endPosZ = Random.Range(raftPos.z - 20, raftPos.z);
 
         //Assigns new position
         newPos = new Vector3(endPosX, transform.position.y, endPosZ);

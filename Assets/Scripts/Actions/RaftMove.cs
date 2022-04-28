@@ -13,6 +13,7 @@ public class RaftMove : MonoBehaviour
     private float reached; //Egnore already visited priorities
 
     private Vector3 nextPos;
+    public GameObject raft;
 
     private GameObject[] markers;
     private List<GameObject> markerList;
@@ -60,6 +61,7 @@ public class RaftMove : MonoBehaviour
                 reached = markerList[0].GetComponent<MoveMarker>().priority;
             }
             transform.position = Vector3.MoveTowards(transform.position, nextPos, windLevel);
+            raft.transform.LookAt(nextPos);
         }        
     }
 
