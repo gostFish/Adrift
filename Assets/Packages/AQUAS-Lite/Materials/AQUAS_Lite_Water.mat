@@ -70,8 +70,8 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _Density: 0.635
-    - _DepthTransparency: 600
+    - _Density: 0.784
+    - _DepthTransparency: 400
     - _DetailNormalMapScale: 1
     - _DistanceFade: 0.5
     - _Distortion: 0.119
@@ -98,7 +98,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NormalStrength: 1.35
-    - _NormalTiling: 0.25
+    - _NormalTiling: 0.45
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ProbeReflectionIntensity: 0.578
