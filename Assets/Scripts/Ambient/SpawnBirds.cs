@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnBirds : MonoBehaviour
 {
-
+    private GameObject instanceManager;
     public GameObject birdSpot;
 
     private int currentBirdsCount;
@@ -25,6 +25,7 @@ public class SpawnBirds : MonoBehaviour
         spawnProbability = 30f;
         currentBirdsCount = 0;
         newBird = GameObject.FindGameObjectWithTag("bird");
+        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
     }
     // Update is called once per frame
     void Update()
@@ -48,6 +49,7 @@ public class SpawnBirds : MonoBehaviour
         posY = Random.Range(20f, 30f);
         posZ = Random.Range(raft.transform.position.z, raft.transform.position.z + 50);
         newBird = Instantiate(birdSpot, new Vector3(posX, posY, posZ), Quaternion.identity);
+        newBird.transform.parent = instanceManager.transform;
         MakeFlock();
     }
 
@@ -59,6 +61,7 @@ public class SpawnBirds : MonoBehaviour
             posX = Random.Range(newBird.transform.position.x + 3, newBird.transform.position.x - 3);
             posZ = Random.Range(newBird.transform.position.z - 3, newBird.transform.position.z - 6);
             newBird = Instantiate(birdSpot, new Vector3(posX, newBird.transform.position.y, posZ), Quaternion.identity);
+            newBird.transform.parent = instanceManager.transform;
             flockSize--;
         }
     }
