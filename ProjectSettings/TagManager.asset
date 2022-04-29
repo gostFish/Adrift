@@ -11,6 +11,8 @@ TagManager:
   - MoveMarker
   - Shark
   - InstanceManager
+  - bird
+  - Hallucination
   layers:
   - Default
   - TransparentFX
