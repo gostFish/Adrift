@@ -54,17 +54,23 @@ public class PauseMenu : MonoBehaviour
         }
     }
     public void CloseJournal()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-
-        Cursor.visible = false;
-        player.GetComponent<PlayerView1stPerson>().enabled = true;
+    {        
         journalUI.GetComponent<Journal>().CloseJournal();
-        journalUI.SetActive(false);
-
         closeJournal.SetActive(false); //Button to close Journal
-
         journalOpen = false;
+
+        if (menuOpen)
+        {            
+            journalUI.GetComponent<Journal>().openJournal.SetActive(true);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            player.GetComponent<PlayerView1stPerson>().enabled = true;
+
+            journalUI.SetActive(false);            
+        }
     }
 
     public void OpenJournal()

@@ -6,47 +6,20 @@ using UnityEngine.UI;
 
 public class Journal : MonoBehaviour
 {
-    //Pages
+    //Pages and Animation
 
     public List<GameObject> pages;
     public List<Texture> pageTextures;
+    public List<Texture> animation;
 
-    public GameObject page1;
-    public GameObject page2;
-    public GameObject page3;
-    public GameObject page4;
-    public GameObject page5;
-    public GameObject page6;
-    public GameObject page7;
-    public GameObject page8;
-
-    public Texture texturePage1;
-    public Texture texturePage2;
-    public Texture texturePage3;
-    public Texture texturePage4;
-    public Texture texturePage5;
-    public Texture texturePage6;
-    public Texture texturePage7;
-    /* public Texture texturePage8;*/
-
-    public Texture anim1;
-    public Texture anim2;
-    public Texture anim3;
-    public Texture anim4;
-    public Texture anim5;
-    public Texture anim6;
-    public Texture anim7;
-    public Texture anim8;
-
-    //Paragraphs
-
-    //Other vars
+    //Game objects (UI)
     public GameObject nextPageButton;
     public GameObject previousPageButton;
 
     public GameObject openJournal;
     public GameObject closeJournal;
 
+    //Other vars
     public int currentPage;
     public int lastRevieled;
 
@@ -57,33 +30,15 @@ public class Journal : MonoBehaviour
 
     void Awake()
     {
+        //Save to memory which the last page the player unlocked is
         if (PlayerPrefs.HasKey("lastRevieled"))
         {
             lastRevieled = PlayerPrefs.GetInt("lastRevieled");
         }
+
         previousPageButton.SetActive(false);
         nextPageButton.SetActive(false);
         closeJournal.SetActive(false);
-
-        pageTextures.Add(texturePage1);
-        pageTextures.Add(texturePage2);
-        pageTextures.Add(texturePage3);
-        pageTextures.Add(texturePage4);
-        pageTextures.Add(texturePage5);
-        pageTextures.Add(texturePage6);
-        pageTextures.Add(texturePage7);
-        /* pageTextures.Add(texturePage8); */
-
-
-        pages = new List<GameObject>();
-        pages.Add(page1);
-        pages.Add(page2);
-        pages.Add(page3);
-        pages.Add(page4);
-        pages.Add(page5);
-        pages.Add(page6);
-        pages.Add(page7);
-        pages.Add(page8);
 
         animatingForward = false;
         animatingBackward = false;
@@ -91,46 +46,47 @@ public class Journal : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log("updating");
+        
+        //Forward animations
         if (animatingForward)
         {
             ShowPage();
             time += Time.deltaTime;
             if (time < 0.05)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
             }
             else if (time < 0.1)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim2;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[1];
             }
             else if (time < 0.15)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim3;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[2];
             }
             else if (time < 0.2)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim4;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[3];
             }
             else if (time < 0.25)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim5;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[4];
             }
             else if (time < 0.3)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim6;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[5];
             }
             else if (time < 0.35)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim7;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[6];
             }
             else if (time < 0.4)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim8;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[7];
             }
             else if (time < 0.45)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
                 ActualPages();
                 animatingForward = false;
             }
@@ -141,39 +97,39 @@ public class Journal : MonoBehaviour
             time += Time.deltaTime;
             if (time < 0.05)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
             }
             else if (time < 0.1)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim8;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[7];
             }
             else if (time < 0.15)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim7;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[6];
             }
             else if (time < 0.2)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim6;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[5];
             }
             else if (time < 0.25)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim5;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[4];
             }
             else if (time < 0.3)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim4;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[3];
             }
             else if (time < 0.35)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim3;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[2];
             }
             else if (time < 0.4)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim2;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[1];
             }
             else if (time < 0.45)
             {
-                pages[currentPage - 1].GetComponent<RawImage>().texture = anim1;
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
                 ActualPages();
                 animatingBackward = false;
             }
@@ -183,18 +139,18 @@ public class Journal : MonoBehaviour
     }
     public void ActualPages()
     {
-        Debug.Log("current Page = " + currentPage);
+        //Assigning the textures to the pages (for those revealed)
         for (int i = 0; i < currentPage; i++)
         {
-            Debug.Log("i = " + i);
             pages[i].GetComponent<RawImage>().texture = pageTextures[i];
         }
 
     }
     public void OpenJournal()
     {
-        Time.timeScale = 1f;
+        Time.timeScale = 1f; //Unpause if paused
 
+        //Reset UI
         nextPageButton.SetActive(false);
         openJournal.SetActive(false);
         closeJournal.SetActive(true);
@@ -206,6 +162,7 @@ public class Journal : MonoBehaviour
             Debug.Log("Tried to open Journal, but no pages");
         }
 
+        //Hide buttons to prevent going out of the list
         if (lastRevieled <= 2)
         {
             previousPageButton.SetActive(false);
@@ -227,15 +184,14 @@ public class Journal : MonoBehaviour
         previousPageButton.SetActive(false);
 
         currentPage = 0;
-
         ShowPage();
-
 
         if (gameObject.GetComponentInParent<PauseMenu>().menuOpen)
         {
-            Time.timeScale = 0f; //Pause again if menu is opened
+            Time.timeScale = 0f; //Pause again if menu was open
         }
     }
+
 
     public void NextPage()
     {
@@ -261,7 +217,6 @@ public class Journal : MonoBehaviour
         }
         time = 0;
         animatingForward = true;
-        //ShowPage();
     }
 
     public void PreviousPage()
@@ -292,7 +247,6 @@ public class Journal : MonoBehaviour
         }
         time = 0;
         animatingBackward = true;
-        //ShowPage();
     }
 
     public void ShowPage() //Scroll through page
@@ -301,7 +255,6 @@ public class Journal : MonoBehaviour
         {
             pages[i].SetActive(false);
         }
-
         if (currentPage > 0 && (currentPage - 1) < pages.Count)
         {
             pages[currentPage - 1].SetActive(true);
@@ -312,6 +265,6 @@ public class Journal : MonoBehaviour
     {
         lastRevieled = PlayerPrefs.GetInt("lastRevieled");
         lastRevieled++;
-        PlayerPrefs.SetInt("lastRevieled", lastRevieled);
+        PlayerPrefs.SetInt("lastRevieled", lastRevieled); //Save to disk which is last revealed
     }
 }
