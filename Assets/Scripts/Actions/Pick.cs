@@ -104,32 +104,37 @@ public class Pick : MonoBehaviour
 
     public void PickLog()
     {
-        if(logCount > minLogs && PlayerPrefs.GetInt("HasSpear") == 0)
+        if(PlayerPrefs.GetInt("HasSpear") == 0)
         {
             gameObject.GetComponent<SpearManager>().RefreshSpear();
-            logCount--;
-            PlayerPrefs.SetInt("HasSpear",1);
-
-            if (takeFront)
-            {                
-                logs[frontCounter].SetActive(false);
-                frontCounter--;                
-                takeFront = false;
-            }
-            else
-            {                
-                logs[backCounter].SetActive(false);
-                backCounter++;
-                takeFront = true;
-            }
-        }else if(logCount <= minLogs)
+            PlayerPrefs.SetInt("HasSpear", 1);
+            ReduceLogs();
+        }
+        
+        if(logCount <= minLogs)
         {
             DeathScreen();
-            Debug.Log("Death started");
-            foreach(GameObject log in logs)
+            foreach(GameObject log in logs) //All logs disables with death
             {
                 log.SetActive(false);
             }
+        }
+    }
+
+    public void ReduceLogs()
+    {
+        logCount--;
+        if (takeFront)
+        {
+            logs[frontCounter].SetActive(false);
+            frontCounter--;
+            takeFront = false;
+        }
+        else
+        {
+            logs[backCounter].SetActive(false);
+            backCounter++;
+            takeFront = true;
         }
     }
 

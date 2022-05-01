@@ -7,6 +7,8 @@ public class Shark : MonoBehaviour
 
     //Script Objects
     private GameObject raft;
+    private GameObject player;
+    private Vector3 currentPos;
     private Vector3 movePos;    
     private Vector3 fleePos;
     private Vector3 crossPos;
@@ -40,8 +42,6 @@ public class Shark : MonoBehaviour
     public float minAttackDepth;
 
     public float rotateSpeed;
-
-
     private float dynamicRadius; //For approaching
     private float dynamicSpeed;
 
@@ -55,15 +55,24 @@ public class Shark : MonoBehaviour
     public bool flee;
     private bool crossing;
 
+    private bool audioPlaying;
+
+    //Shark Sounds
+
+    private AudioSource audioSource;
+    public AudioClip sharkHit;
+    public AudioClip sharkUnderRaft;
+    public AudioClip sharkTakesPlank;
 
     void Start()
     {
         raft = GameObject.FindGameObjectWithTag("Raft");
-
+        player = GameObject.FindGameObjectWithTag("Player");
+        audioSource = GetComponent<AudioSource>();
         //Temp values
         circleRadius = 15;
         aggressiveRadius = 4f;
-        fleeRadius = 20;
+        fleeRadius = 50;
 
         passiveSpeed = 0.3f;
         agressiveSpeed = 0.9f;
@@ -96,15 +105,16 @@ public class Shark : MonoBehaviour
             transform.Translate(transform.forward);
         }
         else if (flee)
-        {            
-            fleePos = Circling(passiveDepth, fleeRadius, passiveSpeed, 0f);
-            
-            transform.Translate(transform.forward * fleeSpeed); //Move forward while turning
-            transform.LookAt(transform.forward);
+        {
+            transform.localPosition = Vector3.Lerp(currentPos, fleePos, time/fleeTime);
+            //transform.Translate(transform.forward * fleeSpeed); //Move forward while turning
+            transform.LookAt(fleePos);
+
             //transform.Rotate((fleePos - transform.position).normalized * Time.deltaTime * rotateSpeed);// = Quaternion.Slerp(transform.localRotation,fleeAngle,rotateTime);
-            
+            Debug.Log("fleeing");
             if (time > fleeTime)
             {
+
                 time = 0;
                 aggressive = false;
                 flee = false;
@@ -142,12 +152,22 @@ public class Shark : MonoBehaviour
                     lookPos = Crossing(circleDepth, aggressiveRadius, agressiveSpeed, dynamicOffset + 0.15f);
 
                     gameObject.transform.position = movePos;
-                    transform.LookAt(lookPos);
-                                        
-                }               
+                    transform.LookAt(lookPos);                                        
+                }
+                if (Vector3.Distance(gameObject.transform.position, raft.transform.position) < 2)
+                {
+                    //audioPlaying = true;
+                    if (!audioSource.isPlaying)
+                    {
+                        audioSource.PlayOneShot(sharkUnderRaft);
+                    }
+                    
+                }
 
             }else if(time > (circlePeriod + approachPeriod + approachPeriod))
             {
+                player.GetComponent<Pick>().ReduceLogs();
+                audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
         }                
@@ -174,6 +194,9 @@ public class Shark : MonoBehaviour
 
     public void Stabbed()
     {
+        currentPos = transform.position;
+        audioSource.PlayOneShot(sharkHit);
+        fleePos = Circling(passiveDepth, fleeRadius, passiveSpeed, 0f);
         flee = true;
         dynamicOffset = 0;
         time = 0;

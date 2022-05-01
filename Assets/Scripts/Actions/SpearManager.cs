@@ -79,7 +79,8 @@ public class SpearManager : MonoBehaviour
 
     private AudioSource audioSource;
     public AudioClip spearDegredation;
-        
+    public AudioClip splashSound;
+
 
     void Start()
     {
@@ -301,7 +302,7 @@ public class SpearManager : MonoBehaviour
                     hunger = 100f;
                 }
                 hit.transform.gameObject.active = false;
-
+                audioSource.PlayOneShot(splashSound);
             }
             else if (hit.transform.tag == "Shark")
             {
@@ -309,6 +310,7 @@ public class SpearManager : MonoBehaviour
                 bloodInst.transform.position = hit.point;
                 shark.GetComponent<Shark>().Stabbed();
                 StartCoroutine(Bleed());
+                audioSource.PlayOneShot(splashSound);
             }
 
             spearHealth--;
@@ -332,7 +334,8 @@ public class SpearManager : MonoBehaviour
             {
                 //GameObject newSplash = Instantiate(splash, hit.point, Quaternion.identity);
                 splashInst.transform.position = hit.point;
-                StartCoroutine(Splash());               
+                StartCoroutine(Splash());
+                audioSource.PlayOneShot(splashSound);
             }
         }
     }
