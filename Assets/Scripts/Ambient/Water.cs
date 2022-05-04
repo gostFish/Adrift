@@ -7,17 +7,18 @@ using UnityEngine;
 
 public class Water : MonoBehaviour
 {
-    private MeshFilter meshFilter;
-    // Start is called before the first frame update
+    private MeshFilter meshFilter; //Modify water surface
+    
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Vector3[] vertices = meshFilter.mesh.vertices;
+
+        //Get vertex positions based on Sin waves
         for(int i = 0; i < vertices.Length; i++)
         {
             float x = Waves.instance.GetWaveHeight(transform.position.x + vertices[i].x);

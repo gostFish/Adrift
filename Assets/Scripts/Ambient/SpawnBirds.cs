@@ -45,9 +45,9 @@ public class SpawnBirds : MonoBehaviour
 
     public void SpawnBird()
     {
-        posX = Random.Range(raft.transform.position.x + 50, raft.transform.position.x + 150);
-        posY = Random.Range(20f, 50f);
-        posZ = Random.Range(raft.transform.position.z-100, raft.transform.position.z + 20);
+        posX = Random.Range(raft.transform.position.x, raft.transform.position.x + 50);
+        posY = Random.Range(20f, 30f);
+        posZ = Random.Range(raft.transform.position.z, raft.transform.position.z + 50);
         newBird = Instantiate(birdSpot, new Vector3(posX, posY, posZ), Quaternion.identity);
         newBird.transform.parent = instanceManager.transform;
         MakeFlock();

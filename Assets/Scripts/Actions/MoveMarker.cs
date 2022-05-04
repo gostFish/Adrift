@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class MoveMarker : MonoBehaviour
 {
+    //Objects properties
     public float priority;
     public Vector3 pos;
-    // Start is called before the first frame update
+        
     void Start()
     {
-        pos = gameObject.transform.position;
-        gameObject.tag = "MoveMarker";
+        pos = gameObject.transform.position; //Ensure position is public
+        gameObject.tag = "MoveMarker";       //Ensure tag is "MoveMarker"
     }
 }
