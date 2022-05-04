@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerView1stPerson : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
 
     //Player variables
@@ -15,30 +15,24 @@ public class PlayerView1stPerson : MonoBehaviour
     private float mouseX;
     private float mouseY;
 
-    public float hungerNoiseTimeMin;
-    public float hungerNoiseTimeMax;
-    private float hungerNoiseTimeNext; //Actual time for next stomach rumbling sound
 
-    private float hungerNoiseTime;
 
-    //Other variables
-
+    //Relevant Objects
     private GameObject raft;
 
-    //Script variables
-
-    private RaycastHit hit;
-    private int raftMask;
-
+        //Preventing player from falling off raft
     public GameObject forwardStop;
     public GameObject backStop;
     public GameObject leftStop;
     public GameObject rightStop;
 
+    //Instrumental variables
+
+    private RaycastHit hit;
+    private int raftMask;
+
     private Vector3 from;
     private Vector3 to;
-
-    private Vector3 playerPos;
 
     private bool moveUp;
     private bool moveBack;
@@ -47,32 +41,23 @@ public class PlayerView1stPerson : MonoBehaviour
 
     public bool lookingAtLog;
     public bool canPickLog;
-
-    //Audio
-
-    private AudioSource audioSource;
-    public AudioClip stomachRumbling;
+    
 
     void Start()
     {
-        // rb = gameObject.GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked; //Prevent using cursor
 
+        //Set Prerequisites
         mainCam = Camera.main;
         mainCam.transform.parent = gameObject.transform;
         mainCam.transform.localPosition = new Vector3(0, 0, 0);
         mainCam.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        audioSource = GetComponent<AudioSource>();
-        hungerNoiseTimeNext = UnityEngine.Random.Range(hungerNoiseTimeMin, hungerNoiseTimeMax);
-
         raftMask = LayerMask.GetMask("Raft");
         raft = GameObject.FindGameObjectWithTag("Raft");
-        StartCoroutine(CorrectView());
+        
 
-        hungerNoiseTime = 0f;
-
-        //Get saved MoveSpeed
+        //Load saved variables (From settings\Saved variables)
         if (PlayerPrefs.HasKey("MoveSpeed"))
         {
             moveSpeed = PlayerPrefs.GetFloat("MoveSpeed");
@@ -82,8 +67,6 @@ public class PlayerView1stPerson : MonoBehaviour
             PlayerPrefs.SetFloat("MoveSpeed", 1); //Default value
             moveSpeed = 1f;
         }
-
-        //Get saved LookSpeed
         if (PlayerPrefs.HasKey("LookSpeed"))
         {
             lookSpeed = PlayerPrefs.GetFloat("LookSpeed");
@@ -95,18 +78,13 @@ public class PlayerView1stPerson : MonoBehaviour
         }
     }
 
-    IEnumerator CorrectView()
-    {
-        yield return new WaitForSeconds(1); //wait one second before correcting view
-        transform.rotation = Quaternion.Euler(0, 100, 0); //Default looking location
-    }
-
     void FixedUpdate() //Physics related processes
-    {
-        hungerNoiseTime += Time.deltaTime;
-
+    {      
+        //Keep Locked with raft position
         transform.localPosition = new Vector3(transform.localPosition.x, raft.transform.position.y, transform.localPosition.z);
 
+        //Physics checkers during interraction (split second changes)
+        //Using raycasts to ensure player dowsnt walk off the raft (hence why fixed updates)
         if (moveUp)
         {
             from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
@@ -154,32 +132,23 @@ public class PlayerView1stPerson : MonoBehaviour
                 gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
             }
         }
-
-        if(PlayerPrefs.GetFloat("Hunger") < 70)
-        {
-            if(hungerNoiseTime > hungerNoiseTimeNext)
-            {
-                hungerNoiseTimeNext = UnityEngine.Random.Range(hungerNoiseTimeMin, hungerNoiseTimeMax);
-                audioSource.PlayOneShot(stomachRumbling);
-                hungerNoiseTime = 0f;
-            }            
-        }
     }
 
     void Update() //Non pyhsics related processes
     {
-        Cursor.lockState = CursorLockMode.Locked;
+
+        //Manage Mouse readings (Not physics related)
 
         mouseY += Input.GetAxis("Mouse X") * lookSpeed;
-        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view
+        if ((mouseX - Input.GetAxis("Mouse Y") * lookSpeed) < 70 && //Limit view (can't look straight up or down)
             (mouseX - Input.GetAxis("Mouse Y") * lookSpeed) > -50)
         {
             mouseX -= Input.GetAxis("Mouse Y") * lookSpeed;
         }
-        gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);
-        mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);
+        gameObject.transform.rotation = Quaternion.Euler(0, mouseY, 0);     //Object only rotates y axis for balance
+        mainCam.transform.rotation = Quaternion.Euler(mouseX, mouseY, 0);   //Camera rotation is player view
 
-
+        //Various Player Controls
         if (Input.GetKey("up") || Input.GetKey("w"))
         {
             moveUp = true;
@@ -197,7 +166,6 @@ public class PlayerView1stPerson : MonoBehaviour
         {
             moveBack = false;
         }
-
         if (Input.GetKey("left") || Input.GetKey("a"))
         {
             moveLeft = true;
@@ -206,7 +174,6 @@ public class PlayerView1stPerson : MonoBehaviour
         {
             moveLeft = false;
         }
-
         if (Input.GetKey("right") || Input.GetKey("d"))
         {
             moveRight = true;
@@ -215,11 +182,10 @@ public class PlayerView1stPerson : MonoBehaviour
         {
             moveRight = false;
         }
-
-        if (Input.GetMouseButtonDown(0) && canPickLog) //Was previously "p"
+        if (Input.GetMouseButtonDown(0) && canPickLog)
         {
             gameObject.GetComponent<Pick>().PickLog();
-            StartCoroutine(PickDelay());
+            StartCoroutine(PickDelay());    //Avoid stabbing right after picking
         }
     }
 
