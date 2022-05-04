@@ -6,24 +6,16 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class Hunger : MonoBehaviour
 {
-
-    //Game Variables
-    private float hunger;
-    private float time;
-
-    public float hungerRate; //Higher is quicker
-    public float updateRate;
-
-
-    //Post Processing
-
     public PostProcessProfile effects;
     private Vignette vig;
     private ChromaticAberration chr;
     private Bloom bloom;
 
+    private float hunger;
+    private float time;
 
-    //UI Objects
+    public float hungerRate; //Higher is quicker
+    public float updateRate;
 
     public RawImage hungerUI;
 
@@ -35,10 +27,9 @@ public class Hunger : MonoBehaviour
 
     public GameObject deathScreen;
 
-
+    // Start is called before the first frame update
     void Start()
     {
-        //Load saved data if any
         if (PlayerPrefs.HasKey("Hunger"))
         {
             hunger = PlayerPrefs.GetFloat("Hunger");
@@ -49,53 +40,55 @@ public class Hunger : MonoBehaviour
             PlayerPrefs.SetFloat("Hunger", hunger);
         }
 
-        //Hunger effects
         vig = effects.GetSetting<Vignette>();
         chr = effects.GetSetting<ChromaticAberration>();
         bloom = effects.GetSetting<Bloom>();
     }
 
-    
+    // Update is called once per frame
     void FixedUpdate()
     {
         time += Time.deltaTime;         
 
         if (time > updateRate)
         {
-            //Decrease hunger and save state
             hunger = PlayerPrefs.GetFloat("Hunger"); //Update the hunger
             hunger -= hungerRate;
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
-                     
-            //Update Hunger UI
-            switch (hunger)
+            
+
+            //Debug.Log("Hunger = " + hunger);
+            if(hunger <= 0)
             {
-                case float hunger when hunger <= 0:
-                    DeathScreen();
-                    break;
-                case float hunger when hunger <= 25:
-                    hungerUI.texture = hunger5;
-                    break;
-                case float hunger when hunger <= 50:
-                    hungerUI.texture = hunger4;
-                    break;
-                case float hunger when hunger <= 75:
-                    hungerUI.texture = hunger3;
-                    break;
-                case float hunger when hunger <= 99:
-                    hungerUI.texture = hunger2;
-                    break;
-                case float hunger when hunger > 99:
-                    hungerUI.texture = hunger1;
-                    break;
+                DeathScreen();
+            }
+            else if (hunger <= 25)
+            {
+                hungerUI.texture = hunger5;
+            }
+            else if (hunger <= 50)
+            {
+                hungerUI.texture = hunger4;
+            }
+            else if (hunger <= 75)
+            {
+                hungerUI.texture = hunger3;
+            }
+            else if (hunger <= 99)
+            {
+                hungerUI.texture = hunger2;
+            }
+            else
+            {
+                hungerUI.texture = hunger1;
             }
 
             //Effects
-            if (hunger <= 100 && hunger >= 0)
+            if(hunger <= 100 && hunger >= 0)
             {
-                vig.intensity.value = 1 - (hunger / 60);
+                vig.intensity.value = 1 - (hunger/60);
             }
-
+            
             if (hunger <= 80 && hunger >= 0)
             {
                 chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
@@ -104,16 +97,20 @@ public class Hunger : MonoBehaviour
             {
                 chr.intensity.value = 0;
             }
-
             if (hunger <= 100 && hunger >= 0)
             {
                 bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
             }
+
+           /* Debug.Log("Hunger = " + hunger);
+            Debug.Log("vig = " + (1 - (0.3157 * Mathf.Pow(hunger, 0.25f))));
+            Debug.Log("chr = " + (1 - (0.0001 * Mathf.Pow(hunger, 2))));
+            Debug.Log("bloom = " + (0.02f * Mathf.Tan(1.572f - (0.005f * hunger))));*/
+
             time = 0;
         }        
     }
 
-    //Show death UI
     public void DeathScreen()
     {
         deathScreen.SetActive(true);

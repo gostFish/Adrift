@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviour
+public class ButtonScript : MonoBehaviour
 {
-    
+    //Buttons may be assigned a function from the below
+    //This script should be attached to the "Scene Manager" object, drag that to the "On click" to get its function
     public void StartGame()
     {
         SceneManager.LoadScene("Level");
