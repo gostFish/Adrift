@@ -19,6 +19,7 @@ public class HoldSpear : MonoBehaviour
     //Throwing / stabbing
 
     public float despawnDist;
+    public float throwForce;
 
     public int stabRange;
     public int maxSpearHits;
@@ -26,14 +27,12 @@ public class HoldSpear : MonoBehaviour
     public float fishHungerUp;
     private float hunger;
 
+    private bool holding;
     public bool clickToStab;
 
     private int fishMask;
     private int waterMask;
     private int raftMask;
-
-    private float stabAnimTime;
-    private bool stabbing;
 
     //Game Objects
 
@@ -45,7 +44,6 @@ public class HoldSpear : MonoBehaviour
     public GameObject spearPrefab;
     public GameObject spear; //As an instance
 
-    //Spear UI
     public RawImage spearUI;
 
     public Texture transparent;
@@ -62,11 +60,12 @@ public class HoldSpear : MonoBehaviour
     public Texture greenCH;
     public Texture orangeCH;
 
-    
+    private float stabAnimTime;
+    private bool stabbing;
 
     void Start()
     {
-        //Temporary for testing (will always start with spear) - when removed, game will remember player states
+        //Temporary for testing (will always start with spear)
         PlayerPrefs.SetInt("HasSpear", 0);
         PlayerPrefs.SetFloat("Hunger", 100);
 
@@ -74,14 +73,11 @@ public class HoldSpear : MonoBehaviour
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
 
-        //Layers for raycasts
-        fishMask = LayerMask.GetMask("Interactable");
+        fishMask = LayerMask.GetMask("Interactable"); //Engore everything except fish
         waterMask = LayerMask.GetMask("Water");
         raftMask = LayerMask.GetMask("Raft");
 
-        //Animation positions
-
-        holdPos = new Vector3(0.4f, 0.1f, 0.4f);  
+        holdPos = new Vector3(0.4f, 0.1f, 0.4f);  //Position spear to view in 1st person
         stabDrawBackPos = new Vector3(0.4f, 0.25f, -0.5f);
         stabPoint = new Vector3(0.4f, 0, 1f);
 
@@ -128,20 +124,19 @@ public class HoldSpear : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Time for stab effect to occur
-        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) 
+        //Debug.DrawRay(mainCam.transform.position, mainCam.transform.forward * stabRange, Color.green, 2, false);
+
+        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
         {
             Strike();
         }
 
         if (spear != null) //reposition spear if exists
         {
-            //Keep spear in position
             spear.transform.localPosition = holdPos;
             spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(15, 15, 0);
             spear.transform.rotation = mainCam.transform.rotation * Quaternion.Euler(0, 90, 10);
 
-            //Change crosshair
             if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
             {
                 if (PlayerPrefs.GetInt("HasSpear") == 1)
@@ -153,8 +148,10 @@ public class HoldSpear : MonoBehaviour
                     else
                     {
                         crosshair.texture = greenCH;
-                    }                    
+                    }
+                    
                 }
+
             }
             else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
             {
@@ -162,26 +159,26 @@ public class HoldSpear : MonoBehaviour
                 if (PlayerPrefs.GetInt("HasSpear") == 0)
                 {
                     crosshair.texture = orangeCH;
-                    player.GetComponent<PlayerManager>().canPickLog = true;
+                    player.GetComponent<PlayerView1stPerson>().canPickLog = true;
                 }
                 else
                 {
                     crosshair.texture = greyCH;
                 }
-                player.GetComponent<PlayerManager>().lookingAtLog = true;
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = true;
 
             }
             else
             {
                 crosshair.texture = greyCH;
-                player.GetComponent<PlayerManager>().canPickLog = false;
-                player.GetComponent<PlayerManager>().lookingAtLog = false;
+                player.GetComponent<PlayerView1stPerson>().canPickLog = false;
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = false;
             }
         }
 
-        //Animate stabbing
         if (stabbing == true)
         {
+
             if (stabAnimTime < 1)
             {
                 stabAnimTime += Time.deltaTime / 0.4f;
@@ -205,8 +202,16 @@ public class HoldSpear : MonoBehaviour
     }
 
     void Update()
-    {        
-        //Check if stabbing
+    {
+        if (Input.GetKey("t")) //Throwing spear
+        {
+            if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
+            {
+                // Throw();
+                Debug.Log("Throwing is removed btw");
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
@@ -217,8 +222,7 @@ public class HoldSpear : MonoBehaviour
         }
     }
 
-    //Make spear available
-    public void GetSpear() 
+    public void GetSpear() //Instantiate the spear
     {
         spear = Instantiate(spearPrefab);
 
@@ -234,9 +238,10 @@ public class HoldSpear : MonoBehaviour
 
     }
 
-    //Reset spear stats
     public void RefreshSpear()
     {
+        holding = true;
+
         PlayerPrefs.SetInt("SpearHealth", maxSpearHits);
         spearHealth = maxSpearHits;
         spear.SetActive(true);
@@ -245,8 +250,9 @@ public class HoldSpear : MonoBehaviour
     }
 
     private void Strike()
-    {  
-        //Hit something interractable
+    {
+        //Debug.Log("Stabbing with health: " + spearHealth);        
+
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
         {
             if (hit.transform.tag == "Fish")
@@ -260,14 +266,17 @@ public class HoldSpear : MonoBehaviour
                 }
                 hit.transform.gameObject.active = false;
 
-                PlayerPrefs.SetFloat("Hunger", hunger);
-            }            
+            }
+            else if (hit.transform.tag == "Shark")
+            {
+                //Something happens with the shark
+            }
 
             spearHealth--;
             PlayerPrefs.SetInt("SpearHealth", spearHealth);
+            PlayerPrefs.SetFloat("Hunger", hunger);
             
-            
-            //Spear now out of health, destroy
+
             if (spearHealth == 0)
             {
                 spear.SetActive(false);
@@ -277,19 +286,19 @@ public class HoldSpear : MonoBehaviour
 
             RefreshUI();
         }
-        //Hit water
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
             if (hit.transform.tag == "Water")
             {
                 Instantiate(splash, hit.point, Quaternion.identity);
+                // Debug.Log("Fish not hit, water hit instead");
             }
         }
     }
 
-    //Update UI in game
     private void RefreshUI()
     {
+        //Debug.Log("Updating with health == " + spearHealth);
 
         switch (spearHealth)
         {
@@ -316,5 +325,19 @@ public class HoldSpear : MonoBehaviour
                 spearUI.texture = spear1;
                 break;
         }
+    }
+
+    private void Throw()
+    {
+        //Debug.Log("Throwing");
+        spear.transform.position = player.GetComponent<PlayerView1stPerson>().mainCam.transform.position;
+        spear.transform.rotation = player.GetComponent<PlayerView1stPerson>().mainCam.transform.rotation;
+
+        spear.transform.position += gameObject.transform.forward * 1; //Throw starts in fron of player (to avoid collision)
+        //spear.transform.Rotate(0,20,0);                                                                      
+        spear.GetComponent<Spear>().Throw(throwForce);
+
+        PlayerPrefs.SetInt("HasSpear", 0);
+        holding = false;
     }
 }

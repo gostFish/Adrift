@@ -168,48 +168,6 @@ public class SpearManager : MonoBehaviour
         {
             Strike();
         }
-
-        if (spear != null) //reposition spear if exists
-        {
-            //Change crosshair
-            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
-            {
-                if (PlayerPrefs.GetInt("HasSpear") == 1)
-                {
-                    if (hit.transform.tag == "Shark")
-                    {
-                        crosshair.texture = redCH;
-                    }
-                    else
-                    {
-                        crosshair.texture = greenCH;
-                    }
-                }
-            }
-            else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
-            {
-
-                if (PlayerPrefs.GetInt("HasSpear") == 0)
-                {
-                    crosshair.texture = orangeCH;
-                    player.GetComponent<PlayerManager>().canPickLog = true;
-                }
-                else
-                {
-                    crosshair.texture = greyCH;
-                }
-                player.GetComponent<PlayerManager>().lookingAtLog = true;
-
-            }
-            else
-            {
-                crosshair.texture = greyCH;
-                player.GetComponent<PlayerManager>().canPickLog = false;
-                player.GetComponent<PlayerManager>().lookingAtLog = false;
-            }
-        }
-
-        //Animate Stabbing
         if (stabbing == true)
         {
 
@@ -261,27 +219,37 @@ public class SpearManager : MonoBehaviour
                 if (PlayerPrefs.GetInt("HasSpear") == 0)
                 {
                     crosshair.texture = orangeCH;
-                    player.GetComponent<PlayerManager>().canPickLog = true;
+                    player.GetComponent<PlayerView1stPerson>().canPickLog = true;
                 }
                 else
                 {
                     crosshair.texture = greyCH;
                 }
-                player.GetComponent<PlayerManager>().lookingAtLog = true;
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = true;
 
             }
             else
             {
                 crosshair.texture = greyCH;
-                player.GetComponent<PlayerManager>().canPickLog = false;
-                player.GetComponent<PlayerManager>().lookingAtLog = false;
+                player.GetComponent<PlayerView1stPerson>().canPickLog = false;
+                player.GetComponent<PlayerView1stPerson>().lookingAtLog = false;
             }
-        }        
+        }
+
+        
     }
 
     void Update()
     {
-        
+        if (Input.GetKey("t")) //Throwing spear
+        {
+            if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
+            {
+                Throw();
+                Debug.Log("Throwing is removed btw");
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
@@ -307,7 +275,6 @@ public class SpearManager : MonoBehaviour
         spear.SetActive(false);
     }
 
-    //Update Spear UI
     public void RefreshSpear()
     {
         holding = true;
@@ -319,9 +286,10 @@ public class SpearManager : MonoBehaviour
         RefreshUI();
     }
 
-    //Hit something
     private void Strike()
-    {      
+    {
+        //Debug.Log("Stabbing with health: " + spearHealth);        
+
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
         {
             if (hit.transform.tag == "Fish")
@@ -333,8 +301,6 @@ public class SpearManager : MonoBehaviour
                 {
                     hunger = 100f;
                 }
-                PlayerPrefs.SetFloat("Hunger", hunger);
-
                 hit.transform.gameObject.active = false;
                 audioSource.PlayOneShot(splashSound);
             }
@@ -346,8 +312,10 @@ public class SpearManager : MonoBehaviour
                 StartCoroutine(Bleed());
                 audioSource.PlayOneShot(splashSound);
             }
+
             spearHealth--;
             PlayerPrefs.SetInt("SpearHealth", spearHealth);
+            PlayerPrefs.SetFloat("Hunger", hunger);
             
 
             if (spearHealth == 0)
@@ -358,11 +326,13 @@ public class SpearManager : MonoBehaviour
             }
 
             StartCoroutine(BreakDelay());
+            //RefreshUI();
         }
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
             if (hit.transform.tag == "Water")
             {
+                //GameObject newSplash = Instantiate(splash, hit.point, Quaternion.identity);
                 splashInst.transform.position = hit.point;
                 StartCoroutine(Splash());
                 audioSource.PlayOneShot(splashSound);
@@ -370,7 +340,6 @@ public class SpearManager : MonoBehaviour
         }
     }
 
-    //Effects (with delays)
     IEnumerator Splash()
     {
         splashInst.SetActive(true);
@@ -392,6 +361,8 @@ public class SpearManager : MonoBehaviour
 
     private void RefreshUI()
     {
+        //Debug.Log("Updating with health == " + spearHealth);
+
         switch (spearHealth)
         {
             case 0:
@@ -417,5 +388,19 @@ public class SpearManager : MonoBehaviour
                 spearUI.texture = spear1;
                 break;
         }
+    }
+
+    private void Throw() //No longer used
+    {
+        //Debug.Log("Throwing");
+        spear.transform.position = player.GetComponent<PlayerView1stPerson>().mainCam.transform.position;
+        spear.transform.rotation = player.GetComponent<PlayerView1stPerson>().mainCam.transform.rotation;
+
+        spear.transform.position += gameObject.transform.forward * 1; //Throw starts in fron of player (to avoid collision)
+        //spear.transform.Rotate(0,20,0);                                                                      
+        spear.GetComponent<Spear>().Throw(throwForce);
+
+        PlayerPrefs.SetInt("HasSpear", 0);
+        holding = false;
     }
 }

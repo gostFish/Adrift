@@ -72,7 +72,6 @@ public class Pick : MonoBehaviour
 
     private void FixedUpdate()
     {        
-        //Death animation from over-picking
         if (dead)
         {            
             if (deathAnimTime < 1) //draw back
@@ -103,18 +102,15 @@ public class Pick : MonoBehaviour
         }                
     }
 
-    
     public void PickLog()
     {
-        //Register that player has a log and decrease log quantity
-        if (PlayerPrefs.GetInt("HasSpear") == 0)
+        if(PlayerPrefs.GetInt("HasSpear") == 0)
         {
             gameObject.GetComponent<SpearManager>().RefreshSpear();
             PlayerPrefs.SetInt("HasSpear", 1);
             ReduceLogs();
         }
         
-        //Kill player and remove raft
         if(logCount <= minLogs)
         {
             DeathScreen();
@@ -145,7 +141,7 @@ public class Pick : MonoBehaviour
     public void DeathScreen()
     {
         playerUI.SetActive(false);
-        player.GetComponent<PlayerManager>().enabled = false;
+        player.GetComponent<PlayerView1stPerson>().enabled = false;
         dead = true;
         StartCoroutine(DrownAnim());
     }

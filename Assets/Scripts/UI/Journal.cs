@@ -10,10 +10,7 @@ public class Journal : MonoBehaviour
 
     public List<GameObject> pages;
     public List<Texture> pageTextures;
-    public List<Texture> anim;
-
-    private bool animatingForward;
-    private bool animatingBackward;
+    public List<Texture> animation;
 
     //Game objects (UI)
     public GameObject nextPageButton;
@@ -28,7 +25,8 @@ public class Journal : MonoBehaviour
 
     private float time;
 
-    
+    private bool animatingForward;
+    private bool animatingBackward;
 
     void Awake()
     {
@@ -54,78 +52,91 @@ public class Journal : MonoBehaviour
         {
             ShowPage();
             time += Time.deltaTime;
-            switch (time)
+            if (time < 0.05)
             {
-                case float time when time < 0.05:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[0];
-                    break;
-                case float time when time < 0.1:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[1];
-                    break;
-                case float time when time < 0.15:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[2];
-                    break;
-                case float time when time < 0.2:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[3];
-                    break;
-                case float time when time < 0.25:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[4];
-                    break;
-                case float time when time < 0.3:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[5];
-                    break;
-                case float time when time < 0.35:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[6];
-                    break;
-                case float time when time < 0.4:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[7];
-                    break;
-                case float time when time < 0.45:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[0];
-                    ActualPages();
-                    animatingForward = false;
-                    break;
-            }            
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
+            }
+            else if (time < 0.1)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[1];
+            }
+            else if (time < 0.15)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[2];
+            }
+            else if (time < 0.2)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[3];
+            }
+            else if (time < 0.25)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[4];
+            }
+            else if (time < 0.3)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[5];
+            }
+            else if (time < 0.35)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[6];
+            }
+            else if (time < 0.4)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[7];
+            }
+            else if (time < 0.45)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
+                ActualPages();
+                animatingForward = false;
+            }
         }
         if (animatingBackward)
         {
             ShowPage();
             time += Time.deltaTime;
-            switch (time)
+            if (time < 0.05)
             {
-                case float time when time < 0.05:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[0];
-                    break;
-                case float time when time < 0.1:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[7];
-                    break;
-                case float time when time < 0.15:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[6];
-                    break;
-                case float time when time < 0.2:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[5];
-                    break;
-                case float time when time < 0.25:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[4];
-                    break;
-                case float time when time < 0.3:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[3];
-                    break;
-                case float time when time < 0.35:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[2];
-                    break;
-                case float time when time < 0.4:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[1];
-                    break;
-                case float time when time < 0.45:
-                    pages[currentPage - 1].GetComponent<RawImage>().texture = anim[0];
-                    ActualPages();
-                    animatingBackward = false;
-                    break;
-            }            
-        }
-    }
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
+            }
+            else if (time < 0.1)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[7];
+            }
+            else if (time < 0.15)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[6];
+            }
+            else if (time < 0.2)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[5];
+            }
+            else if (time < 0.25)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[4];
+            }
+            else if (time < 0.3)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[3];
+            }
+            else if (time < 0.35)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[2];
+            }
+            else if (time < 0.4)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[1];
+            }
+            else if (time < 0.45)
+            {
+                pages[currentPage - 1].GetComponent<RawImage>().texture = animation[0];
+                ActualPages();
+                animatingBackward = false;
+            }
 
+        }
+
+    }
     public void ActualPages()
     {
         //Assigning the textures to the pages (for those revealed)
@@ -133,8 +144,8 @@ public class Journal : MonoBehaviour
         {
             pages[i].GetComponent<RawImage>().texture = pageTextures[i];
         }
-    }
 
+    }
     public void OpenJournal()
     {
         Time.timeScale = 1f; //Unpause if paused
@@ -164,7 +175,6 @@ public class Journal : MonoBehaviour
         ActualPages();
     }
 
-    //Button to close UI
     public void CloseJournal()
     {
         openJournal.SetActive(true);
@@ -182,7 +192,7 @@ public class Journal : MonoBehaviour
         }
     }
 
-    //Get next possible page
+
     public void NextPage()
     {
         if (currentPage <= 2) //When pressed, on 0 (now no longer first page)
@@ -205,13 +215,10 @@ public class Journal : MonoBehaviour
         {
             currentPage += 2;
         }
-
-        //For the animation
         time = 0;
         animatingForward = true;
     }
 
-    //Get previous possible page
     public void PreviousPage()
     {
         if (currentPage == lastRevieled) //When pressed, on 0 (now no longer first page
@@ -238,8 +245,6 @@ public class Journal : MonoBehaviour
         {
             currentPage -= 2;
         }
-
-        //For the animation
         time = 0;
         animatingBackward = true;
     }
