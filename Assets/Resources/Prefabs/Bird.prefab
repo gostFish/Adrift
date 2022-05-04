@@ -74,6 +74,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 100036, guid: 175febab25a133545bb941cb948a5bf3, type: 3}
   m_PrefabInstance: {fileID: 4183512451797944213}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-1176872303252606475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4183512451797909841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 247eb300c3d01c240af8f3490d87bcf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 1
+  timeSpeed: 1
+  timeToMove: 0
+  newPos: {x: 0, y: 0, z: 0}
 --- !u!114 &3339143705928156254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,5 +102,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2fd5a7055e47634381d3bea0fdd0323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raft: {fileID: 0}
   bird: {fileID: 4183512451797909841}
