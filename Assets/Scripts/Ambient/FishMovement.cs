@@ -9,8 +9,6 @@ public class FishMovement : MonoBehaviour
     public Vector3 newPos, raftPos;
     private RaycastHit spearHit;
     private Vector3 clickSpot;
-    public GameObject fish;
-    public GameObject raft;
 
     // Start is called before the first frame update
     void Start()
@@ -22,16 +20,12 @@ public class FishMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance (fish.transform.position, raft.transform.position);
         LookMovingDirection(newPos);
         timer += Time.deltaTime * timeSpeed;
-        
 
-        if (Input.GetMouseButtonDown(0) && (distance < 20))
+        if (Input.GetMouseButtonDown(0))
         {
             GameObject fish = GameObject.FindGameObjectWithTag("Fish");
-            //Debug.Log("Pressed primary button.");
-
             Vector3 forceDirection = (fish.transform.position - clickSpot);
 
             endPosX = forceDirection.x + fish.transform.position.x;
@@ -39,12 +33,12 @@ public class FishMovement : MonoBehaviour
 
             //Assigns new position
             newPos = new Vector3(endPosX, transform.position.y, endPosZ);
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2f);
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 1f);
 
         }
         else if (timer >= timeToMove)
         {
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 1f);
+            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 0.5f);
 
             if (Vector3.Distance(transform.position, newPos) <= 0.1f)
             {
@@ -62,8 +56,8 @@ public class FishMovement : MonoBehaviour
         raftPos = raft.transform.position;
 
         //Chooses random position around the raft for fish based on the raft position. 
-        endPosX = Random.Range(raftPos.x, raftPos.x + 5);
-        endPosZ = Random.Range(raftPos.z - 5, raftPos.z);
+        endPosX = Random.Range(raftPos.x, raftPos.x + 20);
+        endPosZ = Random.Range(raftPos.z - 20, raftPos.z);
 
         //Assigns new position
         newPos = new Vector3(endPosX, transform.position.y, endPosZ);
@@ -72,6 +66,6 @@ public class FishMovement : MonoBehaviour
     void LookMovingDirection(Vector3 lookTo)
     {
         Quaternion lookRotation = Quaternion.LookRotation((lookTo - transform.position).normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 2f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 1f);
     }
 }
