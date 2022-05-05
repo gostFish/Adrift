@@ -156,7 +156,7 @@ public class Shark : MonoBehaviour
 
             }else if(time > (circlePeriod + approachPeriod + approachPeriod))
             {
-                player.GetComponent<Pick>().ReduceLogs();
+                //player.GetComponent<Pick>().ReduceLogs();
                 audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
