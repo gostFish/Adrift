@@ -111,7 +111,7 @@ public class Pick : MonoBehaviour
         {
             gameObject.GetComponent<SpearManager>().RefreshSpear();
             PlayerPrefs.SetInt("HasSpear", 1);
-            //ReduceLogs();
+            ReduceLogs();
         }
         
         //Kill player and remove raft

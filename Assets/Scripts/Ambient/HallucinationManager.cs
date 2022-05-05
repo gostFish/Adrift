@@ -11,6 +11,9 @@ public class HallucinationManager : MonoBehaviour
 
     //Game variables
     private float time;
+    private int activeCount;
+
+    public bool haveActive;
 
     public float checkTimer;
     public float showDist;
@@ -42,6 +45,22 @@ public class HallucinationManager : MonoBehaviour
             {
                 obj.SetActive(false);
             }
+        }
+        activeCount = 0;
+        foreach (GameObject go in hallucinations)
+        {
+            if (go.activeSelf)
+            {
+                activeCount++;
+            }
+        }
+        if(activeCount > 0)
+        {
+            haveActive = true;
+        }
+        else
+        {
+            haveActive = false;
         }
     }
 }

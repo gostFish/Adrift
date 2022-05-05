@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AQUAS_Lite_Water_Backface
-  m_Shader: {fileID: 4800000, guid: e6e2dc5b4e4813e41ab7c2639f6d071e, type: 3}
+  m_Shader: {fileID: 4800000, guid: 6c5f1c7411ec6004fb354db7ff23d494, type: 3}
   m_ShaderKeywords: _ENABLEPROBERELFECTIONS_ON _ENABLEREALTIMEREFLECTIONS_ON _ENABLEREFLECTIONS_ON
     _SPECULAR_ON
   m_LightmapFlags: 5
@@ -95,7 +95,7 @@ Material:
     - _EnableRealtimeReflections: 1
     - _EnableReflections: 1
     - _Fade: 2
-    - _FarTilingDistance: 1000
+    - _FarTilingDistance: 600
     - _FoamBlend: 0.2
     - _FoamContrast: 0.276
     - _FoamIntensity: 1.92

@@ -8,40 +8,40 @@ public class Shark : MonoBehaviour
     //Script Objects
     private GameObject raft;
     private GameObject player;
+
     private Vector3 currentPos;
+    private Vector3 oldPos;
     private Vector3 movePos;    
-    private Vector3 fleePos;
-    //private Vector3 crossPos;
+    private Quaternion stabbedPos;
 
     private Vector3 lookPos;
 
     //Variables
-    private float time; //Public for testing
+    public float time; //Public for testing
     
     public float passivePeriod;
     public float circlePeriod;
     public float approachPeriod;    
-    public float agressivePeriod;
+    public float aggressivePeriod;
 
-   // private float timeStamp;
-    //public float crossTime;
     public float fleeTime;
 
     public float passiveSpeed;
-    public float agressiveSpeed;
+    public float aggressiveSpeed;
     public float fleeSpeed;
 
+    public float circleOffset;
     public float circleRadius;
     public float aggressiveRadius;
     public float fleeRadius;
 
     public float circleDepth;
     public float passiveDepth;
+    private float fleeDepth;
 
     private float dynamicRadius; //For approaching
     private float dynamicSpeed;
-
-    private float dynamicOffset; //For shark attacking
+    private float dynamicDepth;
 
     //Shark states    
 
@@ -66,23 +66,24 @@ public class Shark : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         audioSource = GetComponent<AudioSource>();
         //Temp values
-     /*   circleRadius = 15;
-        aggressiveRadius = 4f;
+        circleRadius = 20;
+        aggressiveRadius = 2.5f;
         fleeRadius = 50;
 
-        passiveSpeed = 0.3f;
-        agressiveSpeed = 0.9f;
-        fleeSpeed = 0.01f;
+        passiveSpeed = 0.1f;
+        aggressiveSpeed = 0.8f;
+        fleeSpeed = 0.025f;
 
-        passivePeriod = 3f; //Time before is aggressive
-        circlePeriod = 10f; //Stalk time
-        approachPeriod = 10; //Approach time
-        agressivePeriod = 10; //Time it terrorised the player
+        passivePeriod = 180f; //Time before is aggressive
+        circlePeriod = 90f; //Stalk time
+        approachPeriod = 30; //Approach time
+        aggressivePeriod = 45; //Time it terrorised the player
 
         fleeTime = 20;
-        circleDepth = -0.3f;         */
+        circleDepth = -0.3f;
+        passiveDepth = -50;
+        fleeDepth = -8;
 
-        dynamicOffset = 0;
         crossing = false;
 
         time = 0f;
@@ -91,17 +92,17 @@ public class Shark : MonoBehaviour
     void FixedUpdate()
     {
         time += Time.deltaTime;
+        
+        if (flee) //From agressive to passive
+        {
+            dynamicDepth = Mathf.Lerp(circleDepth, fleeDepth, time / fleeTime);
+            dynamicRadius = Mathf.Lerp(circleRadius, fleeRadius, time / fleeTime);
 
-        if(!aggressive && time > passivePeriod)
-        {
-            aggressive = true;
-            //transform.Translate(transform.forward);
-        }
-        else if (flee)
-        {
-            Debug.Log("fleeing");
-            transform.localPosition = Vector3.Lerp(currentPos, fleePos, time/fleeTime);
-            transform.LookAt(fleePos);
+            movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0f);
+            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0.01f);
+
+            gameObject.transform.position = movePos;
+            transform.LookAt(lookPos);
 
             if (time > fleeTime)
             {
@@ -109,40 +110,54 @@ public class Shark : MonoBehaviour
                 aggressive = false;
                 flee = false;
             }
-        }
-        else if (aggressive) //Interacting with raft
+        }else if (time < passivePeriod)//Is passive
         {
-            Debug.Log("agressive");
-            if (time < circlePeriod) //Stalking
+            aggressive = false;
+
+            dynamicDepth = Mathf.Lerp(passiveDepth, circleDepth, time / passivePeriod);
+            dynamicRadius = Mathf.Lerp(fleeRadius, circleRadius, time / passivePeriod);
+
+            movePos = Circling(dynamicDepth, dynamicRadius, passiveSpeed, 0f);
+            lookPos = Circling(dynamicDepth, dynamicRadius, passiveSpeed, 0.5f);
+
+            gameObject.transform.position = movePos;
+            transform.LookAt(lookPos);
+        }
+        else if (time > passivePeriod) //Interacting with raft
+        {
+            aggressive = true;
+            if (time < (passivePeriod + circlePeriod)) //Stalking
             {               
                 movePos = Circling(circleDepth, circleRadius, passiveSpeed, 0f);
                 lookPos = Circling(circleDepth, circleRadius, passiveSpeed, 0.5f);
 
-                gameObject.transform.position = movePos;
+                gameObject.transform.position = movePos;               
                 transform.LookAt(lookPos);
             }
-            else if(time >= circlePeriod && time < (circlePeriod + approachPeriod)) //Gradually approach raft
-            {
-                dynamicRadius = Mathf.Lerp(circleRadius, aggressiveRadius, (time - circlePeriod) / approachPeriod);
-                dynamicSpeed = Mathf.Lerp(passiveSpeed*0.7f, agressiveSpeed*0.7f, (time - circlePeriod) / approachPeriod);
+            else if(time >= (passivePeriod + circlePeriod) && time < (passivePeriod + circlePeriod + approachPeriod)) //Gradually approach raft
+            {                
+                dynamicRadius = Mathf.Lerp(circleRadius, 0,  (time- (passivePeriod + circlePeriod))/approachPeriod);
+                dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.03f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
 
                 movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
-                lookPos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0.1f);
+                lookPos = Circling(circleDepth, dynamicRadius-0.001f, dynamicSpeed, 0.001f);
 
                 gameObject.transform.position = movePos;
                 transform.LookAt(lookPos);
             }
-            else if (time >= circlePeriod && time < (circlePeriod + approachPeriod + approachPeriod)) //Actively terrorising raft
+            else if (time >= (passivePeriod + circlePeriod + approachPeriod) && time < (passivePeriod + circlePeriod + approachPeriod + aggressivePeriod)) //Actively terrorising raft
             {
                 //Will circle the boat closer, sometimes rise and cross under the boat
                 if (!crossing)
                 {
+
                     //Agressive circling
-                    movePos = Crossing(circleDepth, aggressiveRadius, agressiveSpeed, dynamicOffset);
-                    lookPos = Crossing(circleDepth, aggressiveRadius, agressiveSpeed, dynamicOffset + 0.15f);
+                    movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1f);
+                    lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.001f);
 
                     gameObject.transform.position = movePos;
-                    transform.LookAt(lookPos);                                        
+                    transform.LookAt(lookPos);
+
                 }
                 if (Vector3.Distance(gameObject.transform.position, raft.transform.position) < 2)
                 {
@@ -150,13 +165,12 @@ public class Shark : MonoBehaviour
                     if (!audioSource.isPlaying)
                     {
                         audioSource.PlayOneShot(sharkUnderRaft);
-                    }
-                    
+                    }                    
                 }
 
-            }else if(time > (circlePeriod + approachPeriod + approachPeriod))
+            }else if(time > (passivePeriod + circlePeriod + approachPeriod + approachPeriod)) //Reset to passive (lost a raft piece)
             {
-                //player.GetComponent<Pick>().ReduceLogs();
+                player.GetComponent<Pick>().ReduceLogs();
                 audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
@@ -164,7 +178,7 @@ public class Shark : MonoBehaviour
         else //Avoiding the raft
         {
             movePos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0);
-            lookPos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0 + 0.15f);
+            lookPos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0 + 0.1f);
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);
@@ -175,8 +189,8 @@ public class Shark : MonoBehaviour
     {
         Vector3 circlePos = new Vector3();
         circlePos.y = height;
-        circlePos.x = raft.transform.position.x + (radius * (Mathf.Cos((time + offset) * speed)));
-        circlePos.z = raft.transform.position.z + (radius * (Mathf.Sin((time + offset) * speed)));
+        circlePos.x = raft.transform.position.x + (((radius / (2 - circleOffset)) * ((2 - circleOffset) + (circleOffset * Mathf.Sin(time))) * (Mathf.Cos((time + offset) * speed))));
+        circlePos.z = raft.transform.position.z + (((radius / (2 - circleOffset)) * ((2 - circleOffset) + (circleOffset * Mathf.Sin(time))) * (Mathf.Sin((time + offset) * speed))));
 
         return circlePos;
     }
@@ -189,15 +203,31 @@ public class Shark : MonoBehaviour
 
         return circlePos;
     }
+    private Vector3 Fleeing(float height, float radius, float speed, float offset)
+    {
+        Vector3 circlePos = new Vector3();
+        circlePos.y = height;
+        if (stabbedPos.eulerAngles.x > 0)
+        {
+            circlePos.x = gameObject.transform.position.x + (3 * ((time + offset) * speed));
+        }
+        else
+        {
+            circlePos.x = gameObject.transform.position.x + (-3 * ((time + offset) * speed));
+        }
+        
+        circlePos.z = gameObject.transform.position.z + (((Mathf.Pow(time,2f) + offset) * speed));
+
+        return circlePos;
+    }
 
     public void Stabbed()
     {
-        currentPos = transform.position;
         audioSource.PlayOneShot(sharkHit);
-        fleePos = Circling(passiveDepth, fleeRadius, passiveSpeed, 0f);
-        flee = true;
-        dynamicOffset = 0;
         time = 0;
+        flee = true;
+        aggressive = false;
+        stabbedPos = gameObject.transform.rotation;
     }
 
 
