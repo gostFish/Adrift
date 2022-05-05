@@ -203,10 +203,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab304c7b3acd32742ac3c9172d928c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 2
-  timeSpeed: 2
-  timeToMove: 0.5
+  timer: 0
+  timeSpeed: 0.5
+  timeToMove: 1
+  moveSpeed: 1
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
-  fish: {fileID: 7918743994726546452}
-  raft: {fileID: 8966982714799235827, guid: 50419cea83e5a804898fda00d872aaf5, type: 3}
