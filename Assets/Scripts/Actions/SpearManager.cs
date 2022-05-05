@@ -177,7 +177,11 @@ public class SpearManager : MonoBehaviour
                     {
                         crosshair.texture = redCH;
                     }
-                    else
+                    else if (hit.transform.tag == "Raft")
+                    {
+                        crosshair.texture = greyCH;
+                    }
+                    else if (hit.transform.tag == "Fish")
                     {
                         crosshair.texture = greenCH;
                     }
