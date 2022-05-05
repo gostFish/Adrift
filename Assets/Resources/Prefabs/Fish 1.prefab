@@ -209,4 +209,4 @@ MonoBehaviour:
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 7918743994726546452}
-  raft: {fileID: 8966982714799235827, guid: 50419cea83e5a804898fda00d872aaf5, type: 3}
+  raft: {fileID: 1275727427285460817, guid: 50419cea83e5a804898fda00d872aaf5, type: 3}
