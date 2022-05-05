@@ -15,7 +15,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   spectralLut:
     overrideState: 0
     value: {fileID: 0}
@@ -57,10 +57,10 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   intensity:
     overrideState: 1
-    value: 0.10794834
+    value: 0.104672536
   threshold:
     overrideState: 1
     value: 0.1
@@ -104,7 +104,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 0
+    value: 1
   mode:
     overrideState: 1
     value: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: -0.53666866
+    value: -0.5833351
   smoothness:
     overrideState: 1
     value: 1

@@ -66,7 +66,28 @@ public class Hunger : MonoBehaviour
             hunger = PlayerPrefs.GetFloat("Hunger"); //Update the hunger
             hunger -= hungerRate;
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
-                     
+
+            //Effects
+            if (hunger <= 100 && hunger >= 0)
+            {
+                vig.intensity.value = 1 - (hunger / 60);
+            }
+
+            if (hunger <= 80 && hunger >= 0)
+            {
+                chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
+            }
+            else if (hunger > 80)
+            {
+                chr.intensity.value = 0;
+            }
+
+            if (hunger <= 100 && hunger >= 0)
+            {
+                bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
+            }
+            time = 0;
+
             //Update Hunger UI
             switch (hunger)
             {
@@ -89,27 +110,6 @@ public class Hunger : MonoBehaviour
                     hungerUI.texture = hunger1;
                     break;
             }
-
-            //Effects
-            if (hunger <= 100 && hunger >= 0)
-            {
-                vig.intensity.value = 1 - (hunger / 60);
-            }
-
-            if (hunger <= 80 && hunger >= 0)
-            {
-                chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
-            }
-            else if (hunger > 80)
-            {
-                chr.intensity.value = 0;
-            }
-
-            if (hunger <= 100 && hunger >= 0)
-            {
-                bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
-            }
-            time = 0;
         }        
     }
 
