@@ -5,67 +5,65 @@ using UnityEngine;
 
 public class RaftMove : MonoBehaviour
 {
-    //Varaibles
-    private float time;
-    private int currentMarker;
 
-    public float raftSpeed; //Depending how much wind there is, the raft moves faster
+    public float windLevel; //Depending how much wind there is, the raft moves faster
     public float arrivalDist; //Distance to marker to qualify arrival
     public float moveToNextTimer;
 
-    private Vector3 nextPos;
-    
+    private float reached; //Egnore already visited priorities
 
-    //Game Objects
-    public GameObject raft;
+    private Vector3 nextPos;
 
     private GameObject[] markers;
     private List<GameObject> markerList;
-    
+
+    private float time;
 
     void Start()
     {
         markers = GameObject.FindGameObjectsWithTag("MoveMarker");
-        markerList = new List<GameObject>(markers);        
-                                       
-        foreach (GameObject marker in markers)
-        {            
-            markerList.Add(marker);
-            
-        }
+        markerList = new List<GameObject>(markers);
+        markerList.Sort(SortPriority); //Sort the markers by priority       
 
-        markerList.Sort(SortPriority); //Sort the markers by priority
-        
-        currentMarker = 0;
+        reached = 0;
     }
 
-
+    // Update is called once per frame
     void FixedUpdate()
     {
         //Every 8 seconds look for new markers
         time += Time.deltaTime;
-        if(time > moveToNextTimer)
+        if (time > moveToNextTimer)
         {
             time = 0;
-          
-            if(currentMarker < markerList.Count)
+            markers = GameObject.FindGameObjectsWithTag("MoveMarker"); //Expensive, should optimise
+            markerList = new List<GameObject>();
+
+            foreach (GameObject marker in markers)
             {
-                nextPos = markerList[currentMarker].GetComponent<MoveMarker>().pos;
-            }            
+                if (marker.GetComponent<MoveMarker>().priority > reached)
+                {
+                    markerList.Add(marker);
+                }
+            }
+
+            markerList.Sort(SortPriority); //Sort the markers by priority
+            if (markerList.Count > 0)
+            {
+                nextPos = markerList[0].GetComponent<MoveMarker>().pos;
+                Debug.Log("next marker = " + markerList[0].name);
+            }
         }
-        if(currentMarker < markerList.Count)
+        if (markerList.Count > 0)
         {
             if (Vector3.Distance(transform.position, nextPos) < arrivalDist)
             {
-                currentMarker++;
+                reached = markerList[0].GetComponent<MoveMarker>().priority;
             }
-            transform.position = Vector3.MoveTowards(transform.position, nextPos, raftSpeed);
-            raft.transform.LookAt(nextPos);
-            
-        }        
+            transform.position = Vector3.MoveTowards(transform.position, nextPos, windLevel);
+        }
     }
 
-    //Simple Unity sorting algorithm
     private int SortPriority(GameObject a, GameObject b)
     {
         return a.GetComponent<MoveMarker>().priority.CompareTo(b.GetComponent<MoveMarker>().priority);
