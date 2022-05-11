@@ -34,8 +34,12 @@ public class PauseMenu : MonoBehaviour
         //Journal opening interractions
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (menuOpen)
+            if (menuOpen && settingsOpen)
             {
+                CloseSettings();
+                Resume();
+            }else if (menuOpen)
+            {                
                 Resume();
             }
             else
@@ -44,7 +48,7 @@ public class PauseMenu : MonoBehaviour
                 Time.timeScale = 0f;
             }
         }
-        if (Input.GetKeyDown("j"))
+        if (Input.GetKeyDown("j") &&!menuOpen && !settingsOpen)
         {            
             if (journalOpen)
             {
@@ -113,7 +117,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         journalUI.SetActive(true);
         playerUI.SetActive(false);
-
+        CloseJournal();
         menuOpen = true;
         Cursor.lockState = CursorLockMode.None;
         AudioListener.pause = true;
