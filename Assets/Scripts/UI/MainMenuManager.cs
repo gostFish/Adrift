@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
-    
+    public GameObject cutScene;
     public void StartGame()
     {
-        SceneManager.LoadScene("Level");
+        cutScene.SetActive(true);
+        cutScene.GetComponentInChildren<IntroAnimation>().StartCutscene();
+        //SceneManager.LoadScene("Level");
     }
     public void LoadGame()
     {

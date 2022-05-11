@@ -374,7 +374,7 @@ public class SpearManager : MonoBehaviour
             {
                 //Something happens with the shark
                 bloodInst.transform.position = hit.point;
-                shark.GetComponent<Shark>().Stabbed();
+                hit.transform.GetComponent<Shark>().Stabbed();
                 StartCoroutine(Bleed());
                 audioSource.PlayOneShot(splashSound);
             }

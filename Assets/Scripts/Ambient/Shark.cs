@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Shark : MonoBehaviour
 {
-
+    public bool night;
+    public bool delayed;
     //Script Objects
     private GameObject raft;
     private GameObject player;
 
-    private Vector3 currentPos;
-    private Vector3 oldPos;
     private Vector3 movePos;    
     private Quaternion stabbedPos;
 
@@ -65,28 +64,80 @@ public class Shark : MonoBehaviour
         raft = GameObject.FindGameObjectWithTag("Raft");
         player = GameObject.FindGameObjectWithTag("Player");
         audioSource = GetComponent<AudioSource>();
-        //Temp values
-        circleRadius = 20;
-        aggressiveRadius = 2.5f;
-        fleeRadius = 50;
 
-        passiveSpeed = 0.1f;
-        aggressiveSpeed = 0.8f;
-        fleeSpeed = 0.025f;
+        if (night)
+        {
+            circleRadius = 15;
+            aggressiveRadius = 2f;
+            fleeRadius = 50;
 
-        passivePeriod = 180f; //Time before is aggressive
-        circlePeriod = 90f; //Stalk time
-        approachPeriod = 30; //Approach time
-        aggressivePeriod = 45; //Time it terrorised the player
+            passiveSpeed = 0.3f;
+            aggressiveSpeed = 1.1f;
+            fleeSpeed = 0.035f;
 
-        fleeTime = 20;
-        circleDepth = -0.3f;
-        passiveDepth = -50;
-        fleeDepth = -8;
+            passivePeriod = 20f; //Time before is aggressive
+            circlePeriod = 30f; //Stalk time
+            approachPeriod = 20; //Approach time
+            aggressivePeriod = 55; //Time it terrorised the player
+
+            fleeTime = 10;
+            circleDepth = -0.3f;
+            passiveDepth = -50;
+            fleeDepth = -8;
+
+            gameObject.transform.localScale = new Vector3(1.4f, 1.4f, 1.2f);
+        }
+        else
+        {
+            circleRadius = 20;
+            aggressiveRadius = 2.5f;
+            fleeRadius = 50;
+
+            passiveSpeed = 0.1f;
+            aggressiveSpeed = 0.8f;
+            fleeSpeed = 0.025f;
+
+            passivePeriod = 180f; //Time before is aggressive
+            circlePeriod = 90f; //Stalk time
+            approachPeriod = 30; //Approach time
+            aggressivePeriod = 45; //Time it terrorised the player
+
+            fleeTime = 20;
+            circleDepth = -0.3f;
+            passiveDepth = -50;
+            fleeDepth = -8;
+
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+        }                
 
         crossing = false;
+        if (delayed)
+        {
+            time = 10f;            
+        }
+        else
+        {
+            time = 0f;
+            circlePeriod = 20f;
+        }        
+    }
 
-        time = 0f;
+    private void OnEnable()
+    {
+        crossing = false;
+        if (delayed)
+        {
+            time = 10f;
+        }
+        else
+        {
+            time = 0f;
+        }
+    }
+
+    private void SetupShark()
+    {
+
     }
 
     void FixedUpdate()
@@ -137,7 +188,15 @@ public class Shark : MonoBehaviour
             else if(time >= (passivePeriod + circlePeriod) && time < (passivePeriod + circlePeriod + approachPeriod)) //Gradually approach raft
             {                
                 dynamicRadius = Mathf.Lerp(circleRadius, 0,  (time- (passivePeriod + circlePeriod))/approachPeriod);
-                dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.03f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
+                if (night)
+                {
+                    dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.3f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
+                }
+                else
+                {
+                    dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.03f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
+                }
+                
 
                 movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
                 lookPos = Circling(circleDepth, dynamicRadius-0.001f, dynamicSpeed, 0.001f);
@@ -152,8 +211,17 @@ public class Shark : MonoBehaviour
                 {
 
                     //Agressive circling
-                    movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1f);
-                    lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.001f);
+                    if (delayed)
+                    {
+                        movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 5f);
+                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 5.001f);
+                    }
+                    else
+                    {
+                        movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1f);
+                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.001f);
+                    }
+                    
 
                     gameObject.transform.position = movePos;
                     transform.LookAt(lookPos);

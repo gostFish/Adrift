@@ -33,6 +33,7 @@ public class AmbientAudio : MonoBehaviour
     }
     void Update()
     {
+        /*
         if(!hallPlaying && hallManager.GetComponent<HallucinationManager>().haveActive)
         {
             //audioSource.clip = whales;
@@ -70,15 +71,14 @@ public class AmbientAudio : MonoBehaviour
                 audioSource.volume += ((time * volumeLevel) / 100);
             }
             
-        }
-
+        }*/
     }
 
     IEnumerator ToNormal()
     {        
         volumeLowering = true;
         volumeRising = false;
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(1);
         time = 0;
         volumeRising = true;
         volumeLowering = false;
@@ -91,12 +91,28 @@ public class AmbientAudio : MonoBehaviour
     {
         volumeLowering = true;
         volumeRising = false;
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(1);
         time = 0;
         volumeRising = true;
         volumeLowering = false;
         audioSource.clip = whales;
         audioSource.volume = 0;
         audioSource.Play();        
+    }
+
+    public void PlaySeaguls()
+    {
+        time = 0;
+        audioSource.clip = seaguls;
+        //audioSource.volume = 0;
+        //audioSource.Play();
+    }
+
+    public void PlayWhales()
+    {
+        time = 0;
+        audioSource.clip = whales;
+        //audioSource.volume = 0;
+        //audioSource.Play();
     }
 }
