@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PlayerManager : MonoBehaviour
 {
 
@@ -41,6 +42,7 @@ public class PlayerManager : MonoBehaviour
 
     public bool lookingAtLog;
     public bool canPickLog;
+
     
 
     void Start()
@@ -76,6 +78,7 @@ public class PlayerManager : MonoBehaviour
             PlayerPrefs.SetFloat("LookSpeed", 10); //Default value
             lookSpeed = 10f;
         }
+        
     }
 
     void FixedUpdate() //Physics related processes
@@ -188,11 +191,13 @@ public class PlayerManager : MonoBehaviour
             StartCoroutine(PickDelay());    //Avoid stabbing right after picking
         }
     }
-
+    
     IEnumerator PickDelay()
     {
         yield return new WaitForSeconds(1);
         gameObject.GetComponent<SpearManager>().clickToStab = true;
 
     }
+
+    
 }
