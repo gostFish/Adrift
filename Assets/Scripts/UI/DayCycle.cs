@@ -12,6 +12,7 @@ public class DayCycle : MonoBehaviour
     public int nightTime;   //Number of ticks till night expires
 
     private float time;
+    private float timeslice;
     public int dayNum;
     public int isDay;  //Starts day or night scene (1 = day, 0 = night)
 
@@ -86,7 +87,16 @@ public class DayCycle : MonoBehaviour
     void FixedUpdate()
     {
         time = time + Time.deltaTime;
-        if(time > updateTime)
+
+        if (fadeOut)
+        {
+            fadeUI.alpha = Mathf.Lerp(0, 1, time / updateTime);
+        }
+        else if (fadeIn)
+        {
+            fadeUI.alpha = Mathf.Lerp(1, 0, time / updateTime);
+        }
+        else if (time > updateTime)
         {
             dayTime -= 1;
             nightTime -= 1;
@@ -103,15 +113,7 @@ public class DayCycle : MonoBehaviour
             }            
         }
 
-        if (fadeOut)
-        {
-            fadeUI.alpha = Mathf.Lerp(0, 1, time / updateTime);
-        }
-
-        if (fadeIn)
-        {
-            fadeUI.alpha = Mathf.Lerp(1, 0, time / updateTime);
-        }        
+               
     }
 
     void NextPeriod()
@@ -178,6 +180,7 @@ public class DayCycle : MonoBehaviour
 
     IEnumerator FadeOut()
     {
+        timeslice = time;
         fadeOut = true;
         yield return new WaitForSeconds(2);
         fadeOut = false;
@@ -195,6 +198,7 @@ public class DayCycle : MonoBehaviour
     }
     IEnumerator FadeIn()
     {
+        timeslice = time;
         fadeIn = true;
         yield return new WaitForSeconds(2);
         fadeIn = false;
