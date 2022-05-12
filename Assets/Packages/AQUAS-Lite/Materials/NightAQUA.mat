@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AQUAS_Lite_Water
+  m_Name: NightAQUA
   m_Shader: {fileID: 4800000, guid: d54a881b830cae544a72985daaece999, type: 3}
   m_ShaderKeywords: _ENABLEPROBERELFECTIONS_ON _ENABLEREFLECTIONS_ON
   m_LightmapFlags: 5
