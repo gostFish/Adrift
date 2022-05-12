@@ -17,7 +17,8 @@ public class Shark : MonoBehaviour
 
     //Variables
     public float time; //Public for testing
-    
+    public float shakeLvl;
+
     public float passivePeriod;
     public float circlePeriod;
     public float approachPeriod;    
@@ -135,10 +136,6 @@ public class Shark : MonoBehaviour
         }
     }
 
-    private void SetupShark()
-    {
-
-    }
 
     void FixedUpdate()
     {
@@ -177,7 +174,7 @@ public class Shark : MonoBehaviour
         else if (time > passivePeriod) //Interacting with raft
         {
             aggressive = true;
-            if (time < (passivePeriod + circlePeriod)) //Stalking
+            if (time < (passivePeriod + circlePeriod) || night) //Stalking
             {               
                 movePos = Circling(circleDepth, circleRadius, passiveSpeed, 0f);
                 lookPos = Circling(circleDepth, circleRadius, passiveSpeed, 0.5f);
@@ -195,11 +192,10 @@ public class Shark : MonoBehaviour
                 else
                 {
                     dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.03f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
-                }
-                
+                }                
 
                 movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
-                lookPos = Circling(circleDepth, dynamicRadius-0.001f, dynamicSpeed, 0.001f);
+                lookPos = Circling(circleDepth, dynamicRadius-0.001f, dynamicSpeed, 0.1f);
 
                 gameObject.transform.position = movePos;
                 transform.LookAt(lookPos);
@@ -214,12 +210,12 @@ public class Shark : MonoBehaviour
                     if (delayed)
                     {
                         movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 5f);
-                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 5.001f);
+                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 5.01f);
                     }
                     else
                     {
                         movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1f);
-                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.001f);
+                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.01f);
                     }
                     
 
@@ -230,15 +226,21 @@ public class Shark : MonoBehaviour
                 if (Vector3.Distance(gameObject.transform.position, raft.transform.position) < 2)
                 {
                     //audioPlaying = true;
+                    Camera.main.transform.position = Camera.main.transform.position + Random.insideUnitSphere * shakeLvl;
                     if (!audioSource.isPlaying)
                     {
                         audioSource.PlayOneShot(sharkUnderRaft);
-                    }                    
+                    }
+                }
+                else
+                {
+                    Camera.main.transform.localPosition = new Vector3(0,0,0);
                 }
 
             }else if(time > (passivePeriod + circlePeriod + approachPeriod + approachPeriod)) //Reset to passive (lost a raft piece)
             {
                 player.GetComponent<Pick>().ReduceLogs();
+                player.GetComponent<SpearManager>().RefreshUI();
                 audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
