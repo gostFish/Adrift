@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 6893054982286000961}
   - component: {fileID: 6893054982295268481}
   - component: {fileID: -5758741077756538005}
-  m_Layer: 0
+  - component: {fileID: -4392642986330660518}
+  m_Layer: 9
   m_Name: SCharacter_Fish (5)
-  m_TagString: Untagged
+  m_TagString: Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,6 +73,19 @@ MonoBehaviour:
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 6893054982285909793}
   raft: {fileID: 1275727427285460817, guid: 50419cea83e5a804898fda00d872aaf5, type: 3}
+--- !u!65 &-4392642986330660518
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6893054982285909793}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6893054982285909795
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000963}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spine_Con1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,7 +126,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000965}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spine_Con2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000967}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Spine_Jnt1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000969}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tail_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000971}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tail_Jnt1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -237,7 +251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000973}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tail_Jnt2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +282,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000975}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Tail_Jnt3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +312,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000993}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bones_And_Cons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6893054982286000995}
   - component: {fileID: 6893054982291182145}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Fish_Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000997}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,7 +471,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286000999}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head_Jnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -489,7 +503,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001001}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Jaw_Jnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -520,7 +534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001003}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Arm_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -550,7 +564,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001005}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Fin_Jnt1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001007}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: L_Fin_Jnt2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001009}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Lip_Jnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +655,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001011}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Mouth_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -671,7 +685,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001013}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Nose_Jnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -701,7 +715,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001015}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Arm_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -731,7 +745,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001017}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Fin_Jnt1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -762,7 +776,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001019}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: R_Fin_Jnt2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -792,7 +806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001021}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Root_Con
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -824,7 +838,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6893054982286001023}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Root_Jnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
