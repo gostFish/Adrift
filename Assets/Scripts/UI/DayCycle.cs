@@ -8,11 +8,11 @@ using UnityEngine.Rendering.PostProcessing;
 public class DayCycle : MonoBehaviour
 {
     //Variables
-    public int dayTime;     //Number of ticks till day expires
-    public int nightTime;   //Number of ticks till night expires
+    private int dayTime;     //Number of ticks till day expires
+    private int nightTime;   //Number of ticks till night expires
 
-    private int dayTicks;
-    private int nightTicks;
+    public int dayTicks;
+    public int nightTicks;
 
     private float time;
     private float timeslice;
@@ -52,8 +52,8 @@ public class DayCycle : MonoBehaviour
         currentPos = 0;
 
         //dayTicks;
-        dayTime = 10;
-        nightTime = 6;
+        dayTime = dayTicks;
+        nightTime = nightTicks;
 
         fadeIn = false;
         fadeOut = false;
@@ -122,8 +122,8 @@ public class DayCycle : MonoBehaviour
 
     void NextPeriod()
     {
-        dayTime = 10;
-        nightTime = 6;
+        dayTime = dayTicks;
+        nightTime = nightTicks;
         
         StartCoroutine(FadeOut());
     }
@@ -153,6 +153,8 @@ public class DayCycle : MonoBehaviour
         nightShark2.SetActive(false);
         dayShark.SetActive(true);
 
+        raft.GetComponent<RaftMove>().isDay = true;
+
         mainCam.clearFlags = CameraClearFlags.Skybox;
         mainCam.GetComponent<AmbientAudio>().PlaySeaguls();
     }
@@ -171,6 +173,8 @@ public class DayCycle : MonoBehaviour
 
         //Set effects
         dof.active = true;
+
+        raft.GetComponent<RaftMove>().isDay = false;
 
         //Activate night things
         sceneManager.GetComponent<SpawnBirds>().enabled = false;

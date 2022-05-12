@@ -6,7 +6,9 @@ using UnityEngine;
 public class RaftMove : MonoBehaviour
 {
 
-    public float windLevel; //Depending how much wind there is, the raft moves faster
+    public float daySpeed; //Depending how much wind there is, the raft moves faster
+    public float nightSpeed;
+    public bool isDay;
     public float arrivalDist; //Distance to marker to qualify arrival
     public float moveToNextTimer;
 
@@ -60,7 +62,15 @@ public class RaftMove : MonoBehaviour
             {
                 reached = markerList[0].GetComponent<MoveMarker>().priority;
             }
-            transform.position = Vector3.MoveTowards(transform.position, nextPos, windLevel);
+            if (isDay)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, nextPos, daySpeed);
+            }
+            else
+            {
+                transform.position = Vector3.MoveTowards(transform.position, nextPos, nightSpeed);
+            }
+            
         }
     }
 
