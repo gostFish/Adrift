@@ -11,6 +11,9 @@ public class DayCycle : MonoBehaviour
     public int dayTime;     //Number of ticks till day expires
     public int nightTime;   //Number of ticks till night expires
 
+    private int dayTicks;
+    private int nightTicks;
+
     private float time;
     private float timeslice;
     public int dayNum;
@@ -48,6 +51,7 @@ public class DayCycle : MonoBehaviour
     {
         currentPos = 0;
 
+        //dayTicks;
         dayTime = 10;
         nightTime = 6;
 
