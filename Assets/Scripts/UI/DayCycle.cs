@@ -51,6 +51,9 @@ public class DayCycle : MonoBehaviour
     public PostProcessProfile effects;
     private DepthOfField dof;
 
+    public GameObject water;
+    public Material dayWater;
+    public Material nightWater;
  
 
     void Start()
@@ -154,7 +157,8 @@ public class DayCycle : MonoBehaviour
             journal.GetComponent<Journal>().UpdatePage();
             ui.GetComponent<PauseMenu>().OpenJournal(true);
 
-        }        
+        }
+        water.GetComponent<MeshRenderer>().material = dayWater;
         dayNum = dayNum + 1;
         isDay = 1;
 
@@ -194,6 +198,7 @@ public class DayCycle : MonoBehaviour
         journal.SetActive(false);
         isDay = 0;
         PlayerPrefs.SetInt("IsDay", isDay);
+        water.GetComponent<MeshRenderer>().material = nightWater;
 
         //Enable/Disable UI
         hungerUi.GetComponent<Hunger>().hungerRate = 0.01f; //hunger decrease 10x slower
