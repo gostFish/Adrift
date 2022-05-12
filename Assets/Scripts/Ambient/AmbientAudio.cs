@@ -15,16 +15,20 @@ public class AmbientAudio : MonoBehaviour
     private bool volumeLowering;
     private bool volumeRising;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
+    public AudioSource nightAudio;
     public AudioClip whales;
     public AudioClip seaguls;
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        //audioSource = GetComponent<AudioSource>();
+        //nightAudio = GetComponentInChildren<AudioSource>();
         volumeRising = false;
         volumeLowering = false;
         normalPlaying = true;
+
+        PlaySeaguls();
     }
 
     private void FixedUpdate()
@@ -75,7 +79,8 @@ public class AmbientAudio : MonoBehaviour
     }
 
     IEnumerator ToNormal()
-    {        
+    {
+        audioSource.Stop();
         volumeLowering = true;
         volumeRising = false;
         yield return new WaitForSeconds(1);
@@ -89,6 +94,7 @@ public class AmbientAudio : MonoBehaviour
 
     IEnumerator ToWhales()
     {
+        audioSource.Stop();
         volumeLowering = true;
         volumeRising = false;
         yield return new WaitForSeconds(1);
@@ -103,7 +109,9 @@ public class AmbientAudio : MonoBehaviour
     public void PlaySeaguls()
     {
         time = 0;
-        audioSource.clip = seaguls;
+        nightAudio.Stop();
+        audioSource.Play();
+        //audioSource.clip = seaguls;
         //audioSource.volume = 0;
         //audioSource.Play();
     }
@@ -111,7 +119,9 @@ public class AmbientAudio : MonoBehaviour
     public void PlayWhales()
     {
         time = 0;
-        audioSource.clip = whales;
+        audioSource.Stop();
+        nightAudio.Play();
+        //audioSource.clip = whales;
         //audioSource.volume = 0;
         //audioSource.Play();
     }
