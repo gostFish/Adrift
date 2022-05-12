@@ -368,6 +368,8 @@ public class SpearManager : MonoBehaviour
 
                 hit.transform.gameObject.active = false;
                 audioSource.PlayOneShot(splashSound);
+                spearHealth--;
+                StartCoroutine(BreakDelay());
                 if (spearHealth > 1)
                 {
                     fish.SetActive(true);
@@ -380,8 +382,10 @@ public class SpearManager : MonoBehaviour
                 hit.transform.GetComponent<Shark>().Stabbed();
                 StartCoroutine(Bleed());
                 audioSource.PlayOneShot(splashSound);
+                spearHealth--;
+                StartCoroutine(BreakDelay());
             }
-            spearHealth--;
+            
             PlayerPrefs.SetInt("SpearHealth", spearHealth);
             
 
@@ -391,9 +395,10 @@ public class SpearManager : MonoBehaviour
                 RefreshUI();
                 PlayerPrefs.SetInt("HasSpear", 0);
                 clickToStab = false;
+                StartCoroutine(BreakDelay());
             }
 
-            StartCoroutine(BreakDelay());
+            
         }
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
