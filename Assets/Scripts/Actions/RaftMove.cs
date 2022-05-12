@@ -53,7 +53,6 @@ public class RaftMove : MonoBehaviour
             if (markerList.Count > 0)
             {
                 nextPos = markerList[0].GetComponent<MoveMarker>().pos;
-                Debug.Log("next marker = " + markerList[0].name);
             }
         }
         if (markerList.Count > 0)

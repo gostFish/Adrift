@@ -20,7 +20,7 @@ public class Pick : MonoBehaviour
 
     //GameObjects
     private GameObject player;
-    private GameObject[] logs;
+    public GameObject[] logs;
 
     public GameObject playerUI;
     public GameObject deathScreen;
@@ -140,6 +140,19 @@ public class Pick : MonoBehaviour
             backCounter++;
             takeFront = true;
         }
+    }
+
+    public int LogsLeft()
+    {
+        int remaining = 0;
+        for(int i = 0; i < logs.Length; i++)
+        {
+            if (logs[i].activeSelf)
+            {
+                remaining++;
+            }
+        }
+        return remaining;
     }
 
     public void DeathScreen()

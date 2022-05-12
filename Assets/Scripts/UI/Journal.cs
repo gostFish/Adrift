@@ -27,16 +27,17 @@ public class Journal : MonoBehaviour
     public int lastRevieled;
 
     private float time;
+    private bool leaveBlank;
 
     
 
     void Awake()
     {
         //Save to memory which the last page the player unlocked is
-        if (PlayerPrefs.HasKey("lastRevieled"))
+        /*if (PlayerPrefs.HasKey("lastRevieled"))
         {
             lastRevieled = PlayerPrefs.GetInt("lastRevieled");
-        }
+        }*/
 
         previousPageButton.SetActive(false);
         nextPageButton.SetActive(false);
@@ -82,7 +83,10 @@ public class Journal : MonoBehaviour
                     break;
                 case float time when time < 0.45:
                     pages[currentPage - 1].GetComponent<RawImage>().texture = anim[0];
-                    ActualPages();
+                    if (!leaveBlank)
+                    {
+                        ActualPages();
+                    }                    
                     animatingForward = false;
                     break;
             }            
@@ -164,6 +168,19 @@ public class Journal : MonoBehaviour
         ActualPages();
     }
 
+    public IEnumerator OpenBlank()
+    {        
+        
+        yield return new WaitForSeconds(1);
+        time = 0;
+        if(lastRevieled % 2 == 0)
+        {
+            animatingForward = true;
+            leaveBlank = true;
+        }
+        
+    }
+
     //Button to close UI
     public void CloseJournal()
     {
@@ -209,6 +226,7 @@ public class Journal : MonoBehaviour
         //For the animation
         time = 0;
         animatingForward = true;
+        leaveBlank = false;
     }
 
     //Get previous possible page
@@ -258,8 +276,8 @@ public class Journal : MonoBehaviour
 
     public void UpdatePage() //Bring next thing to be visible in the pages
     {
-        lastRevieled = PlayerPrefs.GetInt("lastRevieled");
-        lastRevieled++;
-        PlayerPrefs.SetInt("lastRevieled", lastRevieled); //Save to disk which is last revealed
+        //lastRevieled = PlayerPrefs.GetInt("lastRevieled");
+        lastRevieled = lastRevieled + 1;
+        //PlayerPrefs.SetInt("lastRevieled", lastRevieled); //Save to disk which is last revealed
     }
 }

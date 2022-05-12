@@ -24,7 +24,7 @@ MonoBehaviour:
     value: 0.1
   focalLength:
     overrideState: 1
-    value: 10
+    value: 7
   kernelSize:
     overrideState: 1
     value: 2
@@ -89,7 +89,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.10579716
+    value: 0.1043558
   threshold:
     overrideState: 1
     value: 0.1
@@ -145,7 +145,7 @@ MonoBehaviour:
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: -0.5669993
+    value: 0
   smoothness:
     overrideState: 1
     value: 1

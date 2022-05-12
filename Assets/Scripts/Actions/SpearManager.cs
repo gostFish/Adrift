@@ -44,6 +44,8 @@ public class SpearManager : MonoBehaviour
     private float stabAnimTime;
     private bool stabbing;
 
+    private int planksRemaning;
+
     //Game Objects
 
     private GameObject player;
@@ -76,6 +78,7 @@ public class SpearManager : MonoBehaviour
     public Texture spear5;
 
     public RawImage crosshair;
+    public Text plankCountImg;
 
     public Texture greyCH;
     public Texture redCH;
@@ -117,6 +120,8 @@ public class SpearManager : MonoBehaviour
         drawAngle = Quaternion.Euler(0, 85f, 9f);
         stabAngle = Quaternion.Euler(0, 73f,4.5f);
 
+        StartCoroutine(CheckPlanksDelay());
+
         stabAnimTime = 3;
         GetSpear();
         GetFish();
@@ -132,7 +137,6 @@ public class SpearManager : MonoBehaviour
             else
             {
                 spear[0].SetActive(false);
-                Debug.Log("Spear should not be active");
             }
         }
         else
@@ -267,10 +271,12 @@ public class SpearManager : MonoBehaviour
                     {
                         crosshair.texture = orangeCH;
                         player.GetComponent<PlayerManager>().canPickLog = true;
+                        plankCountImg.text = planksRemaning.ToString();
                     }
                     else
                     {
                         crosshair.texture = greyCH;
+                        plankCountImg.text = "";
                     }
                     player.GetComponent<PlayerManager>().lookingAtLog = true;
                 }
@@ -281,10 +287,12 @@ public class SpearManager : MonoBehaviour
                         if (hit.transform.tag == "Shark")
                         {
                             crosshair.texture = redCH;
+                            plankCountImg.text = "";
                         }
                         else if (hit.transform.tag == "Fish")
                         {
                             crosshair.texture = greenCH;
+                            plankCountImg.text = "";
                         }
                     }
                 }
@@ -292,6 +300,7 @@ public class SpearManager : MonoBehaviour
             else
             {
                 crosshair.texture = greyCH;
+                plankCountImg.text = "";
                 player.GetComponent<PlayerManager>().canPickLog = false;
                 player.GetComponent<PlayerManager>().lookingAtLog = false;
             }
@@ -436,8 +445,22 @@ public class SpearManager : MonoBehaviour
         RefreshUI();
     }
 
-    private void RefreshUI()
+    IEnumerator CheckPlanksDelay()
     {
+        yield return new WaitForSeconds(0.5f);
+        planksRemaning = player.GetComponent<Pick>().LogsLeft();
+    }
+
+    public void HideSpears()
+    {
+        for (int i = 0; i < spearPrefab.Length; i++)
+        {
+            spear[i].SetActive(false);
+        }
+    }
+    public void RefreshUI()
+    {
+        planksRemaning = player.GetComponent<Pick>().LogsLeft();
         for (int i = 0; i < spearPrefab.Length;i++)
         {
             spear[i].SetActive(false);
@@ -455,40 +478,30 @@ public class SpearManager : MonoBehaviour
                 spearUI.texture = spear5;
                 spear[4].SetActive(true);
                 activeSpear = 4;
-                Debug.Log("here5");
-                
                 break;
             case 2:
                 spearUI.texture = spear4;
                 //spear = spearPrefab[1];
                 spear[3].SetActive(true);
                 activeSpear = 3;
-                Debug.Log("here4");
-                
                 break;
             case 3:
                 spearUI.texture = spear3;
                 //spear = spearPrefab[2];
                 spear[2].SetActive(true);
-                activeSpear = 2;
-                Debug.Log("here3");
-                
+                activeSpear = 2;                
                 break;
             case 4:
                 spearUI.texture = spear2;
                 //spear = spearPrefab[3];
                 spear[1].SetActive(true);
-                activeSpear = 1;
-                Debug.Log("here2");
-                
+                activeSpear = 1;                
                 break;
             case 5:
                 spearUI.texture = spear1;
                 //spear = spearPrefab[4];
                 spear[0].SetActive(true);
-                activeSpear = 0;
-                Debug.Log("here1");
-                
+                activeSpear = 0;                
                 break;
         }
     }

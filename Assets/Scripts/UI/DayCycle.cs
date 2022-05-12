@@ -8,6 +8,8 @@ using UnityEngine.Rendering.PostProcessing;
 public class DayCycle : MonoBehaviour
 {
     //Variables
+    public int currentTick;
+
     private int dayTime;     //Number of ticks till day expires
     private int nightTime;   //Number of ticks till night expires
 
@@ -32,6 +34,10 @@ public class DayCycle : MonoBehaviour
     public GameObject hungerUi;
     public GameObject spearUI;
     public GameObject crosshairUI;
+    public GameObject journalIndication;
+
+    public GameObject journal;
+    public GameObject ui;
 
     public GameObject dayShark;
     public GameObject nightShark1;
@@ -102,19 +108,30 @@ public class DayCycle : MonoBehaviour
         }
         else if (time > updateTime)
         {
-            dayTime -= 1;
-            nightTime -= 1;
+            //dayTime -= 1;
+            //nightTime -= 1;
+            currentTick += 1;
             time = 0;
 
-            if(isDay == 1 && dayTime < 0)
+            if(isDay == 1 && dayTicks < currentTick)
             {
                 PlayerPrefs.SetInt("DayNum", dayNum+1);
+                currentTick = 0;
                 NextPeriod();                
             }
-            else if(isDay == 0 && nightTime < 0)
-            {                
+            else if(isDay == 0 && nightTicks < currentTick)
+            {
+                currentTick = 0;
                 NextPeriod();
             }            
+        }
+
+        if(isDay == 1 && currentTick > (dayTicks-1) && !journal.activeSelf)
+        {
+            journal.SetActive(true);
+            ui.GetComponent<PauseMenu>().OpenJournal(false);
+            StartCoroutine(journal.GetComponent<Journal>().OpenBlank());
+
         }
 
                
@@ -131,6 +148,13 @@ public class DayCycle : MonoBehaviour
     public void MakeDay()
     {
         //Set stats and player prefs
+        if(dayNum > 1)
+        {
+            journal.SetActive(true);
+            journal.GetComponent<Journal>().UpdatePage();
+            ui.GetComponent<PauseMenu>().OpenJournal(true);
+
+        }        
         dayNum = dayNum + 1;
         isDay = 1;
 
@@ -142,6 +166,7 @@ public class DayCycle : MonoBehaviour
         hungerUi.GetComponent<RawImage>().enabled = true;
         spearUI.SetActive(true);
         crosshairUI.SetActive(true);
+        journalIndication.SetActive(true);
 
         //Set effects
         dof.active = false;
@@ -157,11 +182,16 @@ public class DayCycle : MonoBehaviour
 
         mainCam.clearFlags = CameraClearFlags.Skybox;
         mainCam.GetComponent<AmbientAudio>().PlaySeaguls();
+
+        raft.GetComponentInChildren<SpearManager>().enabled = true;
+        raft.GetComponentInChildren<SpearManager>().RefreshUI();
+        ui.GetComponent<PauseMenu>().isNight = false;
     }
 
     public void MakeNight()
     {
         //Set stats and player prefs
+        journal.SetActive(false);
         isDay = 0;
         PlayerPrefs.SetInt("IsDay", isDay);
 
@@ -170,6 +200,7 @@ public class DayCycle : MonoBehaviour
         hungerUi.GetComponent<RawImage>().enabled = false;
         spearUI.SetActive(false);
         crosshairUI.SetActive(false);
+        journalIndication.SetActive(false);
 
         //Set effects
         dof.active = true;
@@ -182,13 +213,19 @@ public class DayCycle : MonoBehaviour
         nightShark1.SetActive(true);
         nightShark2.SetActive(true);
         dayShark.SetActive(false);
+
         mainCam.clearFlags = CameraClearFlags.SolidColor;
         mainCam.GetComponent<AmbientAudio>().PlayWhales();
+
+        raft.GetComponentInChildren<SpearManager>().HideSpears();
+        raft.GetComponentInChildren<SpearManager>().enabled = false;
+        ui.GetComponent<PauseMenu>().isNight = true;
     }
 
     IEnumerator FadeOut()
     {
-        timeslice = time;
+        //timeslice = time;
+        time = 0;
         fadeOut = true;
         yield return new WaitForSeconds(2);
         fadeOut = false;
@@ -206,7 +243,8 @@ public class DayCycle : MonoBehaviour
     }
     IEnumerator FadeIn()
     {
-        timeslice = time;
+        //timeslice = time;
+        time = 0;
         fadeIn = true;
         yield return new WaitForSeconds(2);
         fadeIn = false;

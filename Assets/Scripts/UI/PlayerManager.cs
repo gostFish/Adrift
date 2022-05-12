@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
-
     //Player variables
     public float moveSpeed;
     public float lookSpeed;
@@ -15,7 +14,6 @@ public class PlayerManager : MonoBehaviour
 
     private float mouseX;
     private float mouseY;
-
 
 
     //Relevant Objects
@@ -42,7 +40,6 @@ public class PlayerManager : MonoBehaviour
 
     public bool lookingAtLog;
     public bool canPickLog;
-
     
 
     void Start()

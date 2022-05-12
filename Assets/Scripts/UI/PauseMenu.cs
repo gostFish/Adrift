@@ -12,6 +12,8 @@ public class PauseMenu : MonoBehaviour
     private bool settingsOpen;
     private bool journalOpen;
 
+    public bool isNight;
+
     //UI Objects
 
     public GameObject pauseMenuUI;
@@ -48,7 +50,7 @@ public class PauseMenu : MonoBehaviour
                 Time.timeScale = 0f;
             }
         }
-        if (Input.GetKeyDown("j") &&!menuOpen && !settingsOpen)
+        if (Input.GetKeyDown("j") &&!menuOpen && !settingsOpen && !isNight)
         {            
             if (journalOpen)
             {
@@ -56,7 +58,7 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
-                OpenJournal();
+                OpenJournal(true);
             }
         }
     }
@@ -80,11 +82,15 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public void OpenJournal()
+    public void OpenJournal(bool moveMouse)
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-        player.GetComponent<PlayerManager>().enabled = false;
+        if (moveMouse)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            player.GetComponent<PlayerManager>().enabled = false;
+        }        
+
         journalUI.SetActive(true);
         journalUI.GetComponent<Journal>().openJournal.SetActive(false);
         journalUI.GetComponent<Journal>().closeJournal.SetActive(false);
