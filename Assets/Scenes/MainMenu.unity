@@ -870,13 +870,13 @@ MonoBehaviour:
   sceneManager: {fileID: 1139988280}
   mainCamera: {fileID: 1940090510}
   frames:
-  - {fileID: 2800000, guid: bc4cbc66e5b763a4297f3e940a193aeb, type: 3}
-  - {fileID: 2800000, guid: 8c06a35b38a58504fafb23fce40ba2b2, type: 3}
-  - {fileID: 2800000, guid: 8777e6fdf14a0ee4a9752ec74ad794ea, type: 3}
-  - {fileID: 2800000, guid: b69e0e875d0b4af4abfa0ca35f6b2d85, type: 3}
-  - {fileID: 2800000, guid: 8e2e91fb3fb7bd14592fc1c50db03c6c, type: 3}
-  - {fileID: 2800000, guid: 9058174e74369b54a9bad7004a56a7ea, type: 3}
-  - {fileID: 2800000, guid: 718dba309e28ed5499ec3c7c30bd1b5e, type: 3}
+  - {fileID: 2800000, guid: 87bc3019ae083eb41a071a80acaea514, type: 3}
+  - {fileID: 2800000, guid: d495ef7a95fff47419e50884d35342f1, type: 3}
+  - {fileID: 2800000, guid: 171b7b9df4a60484babc1ff26ce02143, type: 3}
+  - {fileID: 2800000, guid: 9a0c5d74d0347f24ebe57d3237c5d7dc, type: 3}
+  - {fileID: 2800000, guid: cee9a24be0dd7c04a9a72cf5e2429777, type: 3}
+  - {fileID: 2800000, guid: b0adbc7bab61a474bb30d80339ffda06, type: 3}
+  - {fileID: 2800000, guid: e9d0ac80fbd054547856bfa6b8359d77, type: 3}
   - {fileID: 2800000, guid: 94aabf30cd4c23f4d81fd57b4cbde10a, type: 3}
   changeTiming: 9
   fadeTiming: 2
