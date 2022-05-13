@@ -7,6 +7,8 @@ public class MoveMarker : MonoBehaviour
     //Objects properties
     public float priority;
     public Vector3 pos;
+
+    public bool gameEnder;
         
     void Start()
     {

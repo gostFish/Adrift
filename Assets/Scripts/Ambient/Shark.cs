@@ -17,7 +17,7 @@ public class Shark : MonoBehaviour
 
     //Variables
     public float time; //Public for testing
-    public float shakeLvl;
+    public float cameraShakeLvl;
 
     public float passivePeriod;
     public float circlePeriod;
@@ -90,7 +90,7 @@ public class Shark : MonoBehaviour
         }
         else
         {
-            circleRadius = 20;
+            /*circleRadius = 20;
             aggressiveRadius = 2.5f;
             fleeRadius = 50;
 
@@ -106,7 +106,7 @@ public class Shark : MonoBehaviour
             fleeTime = 20;
             circleDepth = -0.3f;
             passiveDepth = -50;
-            fleeDepth = -8;
+            fleeDepth = -8;*/
 
             gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         }                
@@ -147,7 +147,7 @@ public class Shark : MonoBehaviour
             dynamicRadius = Mathf.Lerp(circleRadius, fleeRadius, time / fleeTime);
 
             movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0f);
-            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0.01f);
+            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0.5f);
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);
@@ -226,7 +226,7 @@ public class Shark : MonoBehaviour
                 if (Vector3.Distance(gameObject.transform.position, raft.transform.position) < 2)
                 {
                     //audioPlaying = true;
-                    Camera.main.transform.position = Camera.main.transform.position + Random.insideUnitSphere * shakeLvl;
+                    Camera.main.transform.position = Camera.main.transform.position + Random.insideUnitSphere * cameraShakeLvl;
                     if (!audioSource.isPlaying)
                     {
                         audioSource.PlayOneShot(sharkUnderRaft);

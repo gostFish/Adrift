@@ -129,7 +129,7 @@ public class DayCycle : MonoBehaviour
             }            
         }
 
-        if(isDay == 1 && currentTick > (dayTicks-1) && !journal.activeSelf)
+        if(isDay == 1 && currentTick > (dayTicks-1) && !journal.activeSelf && dayNum < 5)
         {
             journal.SetActive(true);
             ui.GetComponent<PauseMenu>().OpenJournal(false);

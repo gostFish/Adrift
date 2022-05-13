@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class RaftMove : MonoBehaviour
@@ -60,6 +61,10 @@ public class RaftMove : MonoBehaviour
             if (Vector3.Distance(transform.position, nextPos) < arrivalDist)
             {
                 reached = markerList[0].GetComponent<MoveMarker>().priority;
+                if (markerList[0].GetComponent<MoveMarker>().gameEnder)
+                {
+                    SceneManager.LoadScene("Credits");
+                }
             }
             if (isDay)
             {
