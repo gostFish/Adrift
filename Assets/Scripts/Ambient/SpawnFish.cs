@@ -13,7 +13,6 @@ public class SpawnFish : MonoBehaviour
 
     public int minFish;
     public int maxFish;
-    public int maxTotal;
     public float spawntime;
     public float spawnProbability;
 
@@ -24,8 +23,7 @@ public class SpawnFish : MonoBehaviour
     private void Start()
     {
         minFish = 0; //Potentially no fish
-        maxFish = 10; //3 fish at once
-        maxTotal = 50;
+        maxFish = 7; 
         spawntime = 1f;
         spawnProbability = 30f;
 

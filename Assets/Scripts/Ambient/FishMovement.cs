@@ -22,15 +22,14 @@ public class FishMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance (fish.transform.position, raft.transform.position);
+        float distance = Vector3.Distance (fish.transform.position, clickSpot);
         LookMovingDirection(newPos);
         timer += Time.deltaTime * timeSpeed;
         
 
-        if (Input.GetMouseButtonDown(0) && (distance < 20))
+        if (Input.GetMouseButtonDown(0) && (distance < 15))
         {
             GameObject fish = GameObject.FindGameObjectWithTag("Fish");
-            //Debug.Log("Pressed primary button.");
 
             Vector3 forceDirection = (fish.transform.position - clickSpot);
 
