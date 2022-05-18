@@ -7,8 +7,6 @@ public class SpawnBirds : MonoBehaviour
     private GameObject instanceManager;
     public GameObject birdSpot;
 
-    private int currentBirdsCount;
-
     public float spawntime;
     public float spawnProbability;
 
@@ -22,8 +20,7 @@ public class SpawnBirds : MonoBehaviour
     private void Start()
     {
         spawntime = 1f;
-        spawnProbability = 30f;
-        currentBirdsCount = 0;
+        spawnProbability = 7f;
         newBird = GameObject.FindGameObjectWithTag("bird");
         instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
     }
@@ -35,7 +32,6 @@ public class SpawnBirds : MonoBehaviour
         {
             if (Random.Range(0f, 100f) < spawnProbability)
             {
-                    currentBirdsCount++;
                     SpawnBird();
             }
             time = 0f;
@@ -45,9 +41,9 @@ public class SpawnBirds : MonoBehaviour
 
     public void SpawnBird()
     {
-        posX = Random.Range(raft.transform.position.x, raft.transform.position.x + 50);
+        posX = Random.Range(raft.transform.position.x+400, raft.transform.position.x + 500);
         posY = Random.Range(20f, 30f);
-        posZ = Random.Range(raft.transform.position.z, raft.transform.position.z + 50);
+        posZ = Random.Range(raft.transform.position.z-50, raft.transform.position.z);
         newBird = Instantiate(birdSpot, new Vector3(posX, posY, posZ), Quaternion.identity);
         newBird.transform.parent = instanceManager.transform;
         MakeFlock();
@@ -55,10 +51,10 @@ public class SpawnBirds : MonoBehaviour
 
     public void MakeFlock()
     {
-        flockSize = Random.Range(1, 5);
+        flockSize = Random.Range(1, 10);
         while (flockSize >= 0)
         {
-            posX = Random.Range(newBird.transform.position.x + 3, newBird.transform.position.x - 3);
+            posX = Random.Range(newBird.transform.position.x + 10, newBird.transform.position.x - 10);
             posZ = Random.Range(newBird.transform.position.z - 3, newBird.transform.position.z - 6);
             newBird = Instantiate(birdSpot, new Vector3(posX, newBird.transform.position.y, posZ), Quaternion.identity);
             newBird.transform.parent = instanceManager.transform;

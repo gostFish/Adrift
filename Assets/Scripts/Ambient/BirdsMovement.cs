@@ -9,7 +9,7 @@ public class BirdsMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        newPos = new Vector3(transform.position.x - 200, transform.position.y, transform.position.z + 100);
+        newPos = new Vector3(transform.position.x - 200, transform.position.y, transform.position.z + 0);
         LookMovingDirection(newPos);
         transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 0.05f);  
     }
