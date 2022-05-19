@@ -18,7 +18,6 @@ public class FishMovement : MonoBehaviour
     void Start()
     {
         NewPosition();
-        clickSpot = new Vector3 (transform.position.x, transform.position.y, transform.position.z);
         shark = GameObject.FindGameObjectWithTag("Shark");
     }
 
@@ -32,10 +31,13 @@ public class FishMovement : MonoBehaviour
         LookMovingDirection(newPos);
         timer += Time.deltaTime * timeSpeed;
         
-        if (Input.GetMouseButtonDown(0) && (distance < 15))
+        if (Input.GetMouseButtonDown(0) /*&& (distance < 15)*/)
         {
+            clickSpot = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+         
             GameObject fish = GameObject.FindGameObjectWithTag("Fish");
-
+            Debug.Log("CLickspot" + clickSpot);
+            Debug.Log("Fish spot" + fish.transform.position);
             Vector3 forceDirection = (fish.transform.position - clickSpot);
 
             endPosX = forceDirection.x + fish.transform.position.x;
