@@ -11,22 +11,27 @@ public class FishMovement : MonoBehaviour
     private Vector3 clickSpot;
     public GameObject fish;
     public GameObject raft;
+    private bool sharkIsNear;
+    private GameObject shark;
 
     // Start is called before the first frame update
     void Start()
     {
         NewPosition();
         clickSpot = new Vector3 (transform.position.x, transform.position.y, transform.position.z);
+        shark = GameObject.FindGameObjectWithTag("Shark");
     }
 
     // Update is called once per frame
     void Update()
     {
         float distance = Vector3.Distance (fish.transform.position, clickSpot);
+        Shark sharkScript = shark.GetComponent<Shark>();
+        sharkIsNear = sharkScript.isNear;
+        Debug.Log("Shark is near " + sharkIsNear);
         LookMovingDirection(newPos);
         timer += Time.deltaTime * timeSpeed;
         
-
         if (Input.GetMouseButtonDown(0) && (distance < 15))
         {
             GameObject fish = GameObject.FindGameObjectWithTag("Fish");
@@ -47,7 +52,15 @@ public class FishMovement : MonoBehaviour
 
             if (Vector3.Distance(transform.position, newPos) <= 0.1f)
             {
-                NewPosition();
+                if (sharkIsNear == true)
+                {
+                    NewPositionShark();
+                }
+                else
+                {
+                    NewPosition();
+                }
+
                 timer = 0;
             }
 
@@ -64,6 +77,15 @@ public class FishMovement : MonoBehaviour
         endPosX = Random.Range(raftPos.x, raftPos.x + 5);
         endPosZ = Random.Range(raftPos.z - 5, raftPos.z);
 
+        //Assigns new position
+        newPos = new Vector3(endPosX, transform.position.y, endPosZ);
+    }
+
+    void NewPositionShark()
+    {
+
+        endPosX = Random.Range(raftPos.x - 20, raftPos.x - 10);
+        endPosZ = Random.Range(raftPos.z - 20, raftPos.z - 10);
         //Assigns new position
         newPos = new Vector3(endPosX, transform.position.y, endPosZ);
     }

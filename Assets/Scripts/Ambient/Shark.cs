@@ -303,6 +303,4 @@ public class Shark : MonoBehaviour
         aggressive = false;
         stabbedPos = gameObject.transform.rotation;
     }
-
-
 }
