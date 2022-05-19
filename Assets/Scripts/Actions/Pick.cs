@@ -159,8 +159,16 @@ public class Pick : MonoBehaviour
     {
         playerUI.SetActive(false);
         player.GetComponent<PlayerManager>().enabled = false;
+        //player.GetComponent<Pick>().enabled = false;
+        player.GetComponent<SpearManager>().enabled = false;
+        GameObject.FindGameObjectWithTag("Shark").SetActive(false);
         dead = true;
         StartCoroutine(DrownAnim());
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        //Time.timeScale = 0f;
+        //player.SetActive(false);
     }
 
     IEnumerator DrownAnim()

@@ -102,7 +102,7 @@ public class SpearManager : MonoBehaviour
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
         shark = GameObject.FindGameObjectWithTag("Shark");
-
+        fishHungerUp = 8;
         audioSource = GetComponent<AudioSource>();
 
         fishMask = LayerMask.GetMask("Interactable", "Raft"); //Engore everything except fish
@@ -378,7 +378,9 @@ public class SpearManager : MonoBehaviour
                 hit.transform.gameObject.active = false;
                 audioSource.PlayOneShot(splashSound);
                 spearHealth--;
-                StartCoroutine(BreakDelay());
+
+                audioSource.PlayOneShot(spearDegredation);
+                //StartCoroutine(BreakDelay());
                 if (spearHealth > 0)
                 {
                     fish.SetActive(true);
@@ -392,7 +394,9 @@ public class SpearManager : MonoBehaviour
                 StartCoroutine(Bleed());
                 audioSource.PlayOneShot(splashSound);
                 spearHealth--;
-                StartCoroutine(BreakDelay());
+
+                audioSource.PlayOneShot(spearDegredation);
+                //StartCoroutine(BreakDelay());
             }
             
             PlayerPrefs.SetInt("SpearHealth", spearHealth);
@@ -404,7 +408,9 @@ public class SpearManager : MonoBehaviour
                 RefreshUI();
                 PlayerPrefs.SetInt("HasSpear", 0);
                 clickToStab = false;
-                StartCoroutine(BreakDelay());
+
+                audioSource.PlayOneShot(spearDegredation);
+                //StartCoroutine(BreakDelay());
             }
 
             
