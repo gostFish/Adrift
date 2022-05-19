@@ -379,7 +379,7 @@ public class SpearManager : MonoBehaviour
                 audioSource.PlayOneShot(splashSound);
                 spearHealth--;
                 StartCoroutine(BreakDelay());
-                if (spearHealth > 1)
+                if (spearHealth > 0)
                 {
                     fish.SetActive(true);
                 }
