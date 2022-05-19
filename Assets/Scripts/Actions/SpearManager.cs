@@ -46,6 +46,10 @@ public class SpearManager : MonoBehaviour
 
     private int planksRemaning;
 
+            //Shark hits
+    public int minHits;
+    private int currentHits;
+
     //Game Objects
 
     private GameObject player;
@@ -61,9 +65,10 @@ public class SpearManager : MonoBehaviour
     private GameObject bloodInst;
 
     public GameObject[] spearPrefab;
-    public GameObject fishPrefab;
+    public GameObject[] fishPrefab;
     public GameObject[] spear; //As an instance
-    private GameObject fish;
+    private GameObject[] fish;
+    private GameObject targetFish;
 
     private GameObject instanceManager;
 
@@ -120,6 +125,7 @@ public class SpearManager : MonoBehaviour
         drawAngle = Quaternion.Euler(0, 85f, 9f);
         stabAngle = Quaternion.Euler(0, 73f,4.5f);
 
+        fish = new GameObject[fishPrefab.Length];
         StartCoroutine(CheckPlanksDelay());
 
         stabAnimTime = 3;
@@ -243,19 +249,29 @@ public class SpearManager : MonoBehaviour
             {
                 stabAnimTime += Time.deltaTime / 0.2f;
                 spear[activeSpear].transform.localPosition = Vector3.Lerp(stabDrawBackPos, stabPoint, stabAnimTime - 1f);
-                fish.transform.localPosition = fishStabbed;
+                if(targetFish != null)
+                {
+                    targetFish.transform.localPosition = fishStabbed;
+                }                
                 spear[activeSpear].transform.localRotation = Quaternion.Lerp(drawAngle, stabAngle, stabAnimTime-1f);
             }
             else if (stabAnimTime <= 3) //Return to origin
             {
                 stabAnimTime += Time.deltaTime / 0.5f;
                 spear[activeSpear].transform.localPosition = Vector3.Lerp(stabPoint, holdPos, stabAnimTime - 2f);
-                fish.transform.localPosition = Vector3.Lerp(fishStabbed, fishBack , stabAnimTime - 2f);
+                if (targetFish != null)
+                {
+                    targetFish.transform.localPosition = Vector3.Lerp(fishStabbed, fishBack, stabAnimTime - 2f);
+                }                
                 spear[activeSpear].transform.localRotation = Quaternion.Lerp(stabAngle, holdAngle, stabAnimTime-2f);
             }
             else
-            {
+            {                
                 stabbing = false;
+                if (targetFish != null)
+                {
+                    targetFish.SetActive(false);
+                }
             }
         }else if (spear != null) //reposition spear if exists
         {
@@ -304,13 +320,14 @@ public class SpearManager : MonoBehaviour
                 player.GetComponent<PlayerManager>().canPickLog = false;
                 player.GetComponent<PlayerManager>().lookingAtLog = false;
             }
-        }        
+        }
+               
     }
 
     void Update()
     {
         
-        if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab) //stab animation
+        if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab && !Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask)) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
@@ -339,13 +356,17 @@ public class SpearManager : MonoBehaviour
 
     public void GetFish()
     {
-        fish = Instantiate(fishPrefab);
-        fish.GetComponent<FishMovement>().enabled = false;
-        fish.GetComponent<BoxCollider>().enabled = false;
-        fish.transform.parent = mainCam.transform;
-        fish.transform.localPosition = new Vector3(0.35f, -0.1f, 1.4f);
-        fish.transform.localRotation = Quaternion.Euler(-50f, -50f, -150);
-        fish.SetActive(false);
+        for(int i = 0; i < fish.Length; i++)
+        {
+            fish[i] = Instantiate(fishPrefab[i]);
+            fish[i].GetComponent<FishMovement>().enabled = false;
+            fish[i].GetComponent<BoxCollider>().enabled = false;
+            fish[i].transform.parent = mainCam.transform;
+            fish[i].transform.localPosition = new Vector3(0.35f, -0.1f, 1.4f);
+            fish[i].transform.localRotation = Quaternion.Euler(-50f, -50f, -150);
+            fish[i].SetActive(false);
+        }
+        
     }
     //Update Spear UI
     public void RefreshSpear()
@@ -366,8 +387,10 @@ public class SpearManager : MonoBehaviour
         {
             if (hit.transform.tag == "Fish")
             {
+                targetFish = fish[hit.transform.GetComponent<FishType>().type - 1];
                 hunger = PlayerPrefs.GetFloat("Hunger");
-                hunger += fishHungerUp;
+                hunger += targetFish.GetComponent<FishType>().hungerFill;
+                Debug.Log("Captured fish " + targetFish.GetComponent<FishType>().type + " and restored " + targetFish.GetComponent<FishType>().hungerFill + "% hunger");
 
                 if (hunger > 100)
                 {
@@ -376,26 +399,37 @@ public class SpearManager : MonoBehaviour
                 PlayerPrefs.SetFloat("Hunger", hunger);
 
                 hit.transform.gameObject.active = false;
-                audioSource.PlayOneShot(splashSound);
                 spearHealth--;
 
                 audioSource.PlayOneShot(spearDegredation);
+                RefreshUI();
                 //StartCoroutine(BreakDelay());
                 if (spearHealth > 0)
                 {
-                    fish.SetActive(true);
+                    targetFish.SetActive(true);
                 }
             }
             else if (hit.transform.tag == "Shark")
             {
                 //Something happens with the shark
-                bloodInst.transform.position = hit.point;
-                hit.transform.GetComponent<Shark>().Stabbed();
+
+                 
+                currentHits += 1;
+                if( currentHits >= minHits)
+                {
+                    hit.transform.GetComponent<Shark>().Stabbed();
+                    hit.transform.GetComponent<Shark>().Sound();
+                    currentHits = 0;
+                }
+
+                bloodInst.transform.position = hit.point;                
                 StartCoroutine(Bleed());
-                audioSource.PlayOneShot(splashSound);
+
+                //audioSource.PlayOneShot(splashSound);
                 spearHealth--;
 
                 audioSource.PlayOneShot(spearDegredation);
+                RefreshUI();
                 //StartCoroutine(BreakDelay());
             }
             
@@ -410,6 +444,7 @@ public class SpearManager : MonoBehaviour
                 clickToStab = false;
 
                 audioSource.PlayOneShot(spearDegredation);
+                RefreshUI();
                 //StartCoroutine(BreakDelay());
             }
 
@@ -447,7 +482,7 @@ public class SpearManager : MonoBehaviour
               
         yield return new WaitForSeconds(0.5f);
         audioSource.PlayOneShot(spearDegredation);
-        fish.SetActive(false);
+        targetFish.SetActive(false);
         RefreshUI();
     }
 

@@ -45,12 +45,13 @@ public class Shark : MonoBehaviour
 
     //Shark states    
 
-    public bool aggressive; //In attack mode
+    private bool aggressive; //In attack mode
     public bool isNear;
 
-    public bool flee;
+    private bool flee;
     private bool crossing;
-
+    public bool circleOnly;
+    
     //private bool audioPlaying;
 
     //Shark Sounds
@@ -59,6 +60,7 @@ public class Shark : MonoBehaviour
     public AudioClip sharkHit;
     public AudioClip sharkUnderRaft;
     public AudioClip sharkTakesPlank;
+    public AudioClip splashSound;
 
     void Start()
     {
@@ -66,6 +68,7 @@ public class Shark : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         audioSource = GetComponent<AudioSource>();
 
+        circleOnly = false;
         if (night)
         {
             circleRadius = 15;
@@ -123,6 +126,11 @@ public class Shark : MonoBehaviour
         }        
     }
 
+    public void Sound()
+    {        
+            audioSource.PlayOneShot(splashSound);
+    }
+
     private void OnEnable()
     {
         crossing = false;
@@ -140,14 +148,23 @@ public class Shark : MonoBehaviour
     void FixedUpdate()
     {
         time += Time.deltaTime;
-        
-        if (flee) //From agressive to passive
+
+        if (circleOnly) //Circling dead drowned player
+        {
+            raft = player;
+            movePos = Circling(circleDepth, circleRadius, 0.7f, 0f);
+            lookPos = Circling(circleDepth, circleRadius, 0.7f, 0.1f);
+
+            gameObject.transform.position = movePos;
+            transform.LookAt(lookPos);
+        }
+        else if (flee) //From agressive to passive
         {
             dynamicDepth = Mathf.Lerp(circleDepth, fleeDepth, time / fleeTime);
             dynamicRadius = Mathf.Lerp(circleRadius, fleeRadius, time / fleeTime);
 
             movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0f);
-            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0.5f);
+            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 1.5f);
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);

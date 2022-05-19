@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 90083374023009304}
   - component: {fileID: 748470737197002088}
   - component: {fileID: 2709609164553640844}
+  - component: {fileID: -4614414007196238265}
   m_Layer: 9
   m_Name: SCharacter_Fish (1)
   m_TagString: Fish
@@ -208,6 +209,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.4107466, y: 1, z: 2.2318518}
   m_Center: {x: -0.010855198, y: 0, z: -0.16483486}
+--- !u!114 &-4614414007196238265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 90083374015584184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c80540b9b93ad34082443f83b4abb26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  hungerFill: 10
 --- !u!1 &90083374015584186
 GameObject:
   m_ObjectHideFlags: 0

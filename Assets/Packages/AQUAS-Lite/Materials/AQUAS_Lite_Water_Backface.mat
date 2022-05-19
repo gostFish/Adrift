@@ -137,7 +137,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorBlend: {r: 0.19607843, g: 0.3137255, b: 0.3137255, a: 0.11764706}
-    - _DeepWaterColor: {r: 0.06763973, g: 0.11615724, b: 0.1509434, a: 0.14117648}
+    - _DeepWaterColor: {r: 0.06763973, g: 0.11615724, b: 0.1509434, a: 0.7058824}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _EmissiveBlend: {r: 0.19607843, g: 0.3137255, b: 0.3137255, a: 0.11764706}
     - _FoamColor: {r: 1, g: 1, b: 1, a: 1}

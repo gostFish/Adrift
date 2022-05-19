@@ -959,8 +959,8 @@ MonoBehaviour:
   - {fileID: 2800000, guid: b0adbc7bab61a474bb30d80339ffda06, type: 3}
   - {fileID: 2800000, guid: e9d0ac80fbd054547856bfa6b8359d77, type: 3}
   - {fileID: 2800000, guid: 94aabf30cd4c23f4d81fd57b4cbde10a, type: 3}
-  changeTiming: 9
-  fadeTiming: 2
+  changeTiming: 4
+  fadeTiming: 1
   time: 0
   thunder: {fileID: 8300000, guid: a03c5f4697c247447a77495f94d3c788, type: 3}
   lerpVal: 0

@@ -71,12 +71,12 @@ public class Hunger : MonoBehaviour
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
 
             //Effects
-            if (hunger <= 100 && hunger >= 0)
+            if (hunger <= 100)
             {
                 vig.intensity.value = 1 - (hunger / 60);
             }
 
-            if (hunger <= 80 && hunger >= 0)
+            if (hunger <= 80)
             {
                 chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
             }
@@ -85,7 +85,7 @@ public class Hunger : MonoBehaviour
                 chr.intensity.value = 0;
             }
 
-            if (hunger <= 100 && hunger >= 0)
+            if (hunger <= 100)
             {
                 bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
             }
