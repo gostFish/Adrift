@@ -158,6 +158,7 @@ public class Shark : MonoBehaviour
                 aggressive = false;
                 flee = false;
             }
+            isNear = false;
         }else if (time < passivePeriod)//Is passive
         {
             aggressive = false;
@@ -170,6 +171,7 @@ public class Shark : MonoBehaviour
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);
+            isNear = false;
         }
         else if (time > passivePeriod) //Interacting with raft
         {
@@ -244,6 +246,7 @@ public class Shark : MonoBehaviour
                 audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
+            isNear = true;
         }
         else //Avoiding the raft
         {
@@ -252,6 +255,7 @@ public class Shark : MonoBehaviour
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);
+            isNear = false;
         }                
     }
 
