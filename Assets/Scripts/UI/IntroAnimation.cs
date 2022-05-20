@@ -28,6 +28,15 @@ public class IntroAnimation : MonoBehaviour
         //fadeTime = 0;
         audioSource = mainCamera.GetComponent<AudioSource>();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Escape))
+        {
+            Skip();
+        }
+    }
+
     void FixedUpdate()
     {
         time = time + Time.deltaTime;

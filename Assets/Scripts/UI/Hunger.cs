@@ -22,6 +22,7 @@ public class Hunger : MonoBehaviour
     private ChromaticAberration chr;
     private Bloom bloom;
 
+    private GameObject player;
 
     //UI Objects
 
@@ -53,6 +54,8 @@ public class Hunger : MonoBehaviour
         vig = effects.GetSetting<Vignette>();
         chr = effects.GetSetting<ChromaticAberration>();
         bloom = effects.GetSetting<Bloom>();
+
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     
@@ -68,12 +71,12 @@ public class Hunger : MonoBehaviour
             PlayerPrefs.SetFloat("Hunger", hunger); //Update the hunger
 
             //Effects
-            if (hunger <= 100 && hunger >= 0)
+            if (hunger <= 100)
             {
                 vig.intensity.value = 1 - (hunger / 60);
             }
 
-            if (hunger <= 80 && hunger >= 0)
+            if (hunger <= 80)
             {
                 chr.intensity.value = 1 - (0.0002f * Mathf.Pow(hunger, 2f));
             }
@@ -82,7 +85,7 @@ public class Hunger : MonoBehaviour
                 chr.intensity.value = 0;
             }
 
-            if (hunger <= 100 && hunger >= 0)
+            if (hunger <= 100)
             {
                 bloom.intensity.value = 0.02f * Mathf.Tan(1.572f - (0.002f * hunger));
             }
@@ -120,5 +123,9 @@ public class Hunger : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         Time.timeScale = 0f;
+
+        player.GetComponent<PlayerManager>().enabled = false;
+        player.GetComponent<Pick>().enabled = false;
+        player.GetComponent<SpearManager>().enabled = false;
     }
 }

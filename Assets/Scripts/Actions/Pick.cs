@@ -20,6 +20,7 @@ public class Pick : MonoBehaviour
 
     //GameObjects
     private GameObject player;
+    private GameObject raft;
     public GameObject[] logs;
 
     public GameObject playerUI;
@@ -52,18 +53,19 @@ public class Pick : MonoBehaviour
         deathAnimTime = 0;
 
         player = GameObject.FindGameObjectWithTag("Player");
+        raft = GameObject.FindGameObjectWithTag("Raft");
         mainCam = Camera.main;
         startPos = player.transform.position;
         startAngle = player.transform.rotation;
 
         sinkPos1 = startPos;
-        sinkPos1.y -= 6;
+        sinkPos1.y = -6;
         sinkPos2 = startPos;
-        sinkPos2.y -= 8;
+        sinkPos2.y = -8;
         sinkPos3 = startPos;
-        sinkPos3.y -= 10;
+        sinkPos3.y = -10;
         sinkPos4 = startPos;
-        sinkPos4.y -= 14;
+        sinkPos4.y = -14;
 
         sinkAngle = Quaternion.Euler(-90, 0, 0);
         sinkSwayRightAngle = Quaternion.Euler(-90, 0, -25);
@@ -74,10 +76,20 @@ public class Pick : MonoBehaviour
     {        
         //Death animation from over-picking
         if (dead)
-        {            
+        {
+            
+            sinkPos1 = raft.transform.position;
+            sinkPos1.y = -6;
+            sinkPos2 = raft.transform.position;
+            sinkPos2.y = -8;
+            sinkPos3 = raft.transform.position;
+            sinkPos3.y = -10;
+            sinkPos4 = raft.transform.position;
+            sinkPos4.y = -14;
+
             if (deathAnimTime < 1) //draw back
             {
-                deathAnimTime += Time.deltaTime / 2f;
+                deathAnimTime += Time.deltaTime * 2f;
                 player.transform.localPosition = Vector3.Lerp(startPos, sinkPos1, deathAnimTime);
                 mainCam.transform.localRotation = Quaternion.Lerp(startAngle, sinkAngle, deathAnimTime);
                 
@@ -159,8 +171,24 @@ public class Pick : MonoBehaviour
     {
         playerUI.SetActive(false);
         player.GetComponent<PlayerManager>().enabled = false;
+        
+        for(int i = 0;i< 5; i++) //Disable all spears
+        {
+            player.GetComponent<SpearManager>().spear[0].SetActive(false);
+        }
+        
+        player.GetComponent<SpearManager>().enabled = false;
+        GameObject shark = GameObject.FindGameObjectWithTag("Shark");
+        GameObject.FindGameObjectWithTag("PauseManager").GetComponent<PauseMenu>().enabled = false;
+        shark.GetComponent<Shark>().circleOnly = true;
+        shark.GetComponent<Shark>().circleRadius = 4;
         dead = true;
         StartCoroutine(DrownAnim());
+        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        //Time.timeScale = 0f;
+        //player.SetActive(false);
     }
 
     IEnumerator DrownAnim()
