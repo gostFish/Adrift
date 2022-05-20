@@ -6,7 +6,8 @@ public class SpawnFish : MonoBehaviour
 {
 
     private GameObject instanceManager;
-    public GameObject fishPrefab, fishPrefab1, fishPrefab2, fishPrefab3, fishPrefab4, fishPrefab5, fishPrefab6;
+    private GameObject fishPrefab;
+    public GameObject fishPrefab1, fishPrefab2, fishPrefab3, fishPrefab4, fishPrefab5, fishPrefab6, fishPrefab7;
     private List<GameObject> fishList;
 
     private int currentFish;
@@ -42,7 +43,7 @@ public class SpawnFish : MonoBehaviour
                 if (currentFish < maxFish) //Spawn all the fish
                 {
                     currentFish++;
-                    int rand = Random.Range(1, 7);
+                    int rand = Random.Range(1, 8);
                     ChooseFish(rand);
                     GameObject newFish = Instantiate(fishPrefab, new Vector3(raft.transform.position.x, 0.4f, raft.transform.position.z), Quaternion.identity);
                     newFish.transform.parent = instanceManager.transform;
@@ -86,6 +87,10 @@ public class SpawnFish : MonoBehaviour
             case int prefabNr when prefabNr == 6:
                 fishPrefab = fishPrefab6;
                 break;
+            case int prefabNr when prefabNr == 7:
+                fishPrefab = fishPrefab7;
+                break;
+
         }
     }
 }
