@@ -116,6 +116,10 @@ public class DayCycle : MonoBehaviour
             currentTick += 1;
             time = 0;
 
+            if(dayNum >= 5)
+            {
+                SceneManager.LoadScene("Credits");
+            }
             if(isDay == 1 && dayTicks < currentTick)
             {
                 PlayerPrefs.SetInt("DayNum", dayNum+1);
