@@ -235,7 +235,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timer: 2
   timeSpeed: 2
-  timeToMove: 0.5
+  timeToMove: 2
+  fishSpeed: 2.5
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 7918743994726546452}

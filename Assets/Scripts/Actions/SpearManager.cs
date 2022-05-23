@@ -23,6 +23,9 @@ public class SpearManager : MonoBehaviour
     private Quaternion drawAngle;
     private Quaternion stabAngle;
 
+    public Vector3 hitPos;
+    public Vector3 clickPos;
+
     //Throwing / stabbing
 
     public float despawnDist;
@@ -42,7 +45,8 @@ public class SpearManager : MonoBehaviour
     private int raftMask;
 
     private float stabAnimTime;
-    private bool stabbing;
+    public bool stabbing;
+    public bool strikeContact;
 
     private int planksRemaning;
 
@@ -181,63 +185,13 @@ public class SpearManager : MonoBehaviour
         bloodInst.SetActive(false);
     }
 
-
+  
     void FixedUpdate()
     {
-
-        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
-        {
-            Strike();
-        }
-
-        if (spear != null) //reposition spear if exists
-        {
-            //Change crosshair
-            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
-            {
-                if (PlayerPrefs.GetInt("HasSpear") == 1)
-                {
-                    if (hit.transform.tag == "Shark")
-                    {
-                        crosshair.texture = redCH;
-                    }
-                    else if (hit.transform.tag == "Raft")
-                    {
-                        crosshair.texture = greyCH;
-                    }
-                    else if (hit.transform.tag == "Fish")
-                    {
-                        crosshair.texture = greenCH;
-                    }
-                }
-            }
-            else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
-            {
-
-                if (PlayerPrefs.GetInt("HasSpear") == 0)
-                {
-                    crosshair.texture = orangeCH;
-                    player.GetComponent<PlayerManager>().canPickLog = true;
-                }
-                else
-                {
-                    crosshair.texture = greyCH;
-                }
-                player.GetComponent<PlayerManager>().lookingAtLog = true;
-
-            }
-            else
-            {
-                crosshair.texture = greyCH;
-                player.GetComponent<PlayerManager>().canPickLog = false;
-                player.GetComponent<PlayerManager>().lookingAtLog = false;
-            }
-        }
-
+        
         //Animate Stabbing
         if (stabbing == true)
         {
-
             if (stabAnimTime < 1) //draw back
             {
                 stabAnimTime += Time.deltaTime / 0.3f;
@@ -266,12 +220,12 @@ public class SpearManager : MonoBehaviour
                 spear[activeSpear].transform.localRotation = Quaternion.Lerp(stabAngle, holdAngle, stabAnimTime-2f);
             }
             else
-            {                
-                stabbing = false;
+            {                                
                 if (targetFish != null)
                 {
                     targetFish.SetActive(false);
                 }
+                stabbing = false;
             }
         }else if (spear != null) //reposition spear if exists
         {
@@ -326,7 +280,71 @@ public class SpearManager : MonoBehaviour
 
     void Update()
     {
-        
+
+        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
+        {
+            Strike();
+        }
+        else
+        {
+            strikeContact = false;
+        }
+
+
+        if (spear != null) //reposition spear if exists
+        {
+            //Change crosshair
+            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
+            {
+                if (PlayerPrefs.GetInt("HasSpear") == 1)
+                {
+                    if (hit.transform.tag == "Shark")
+                    {
+                        crosshair.texture = redCH;
+                    }
+                    else if (hit.transform.tag == "Raft")
+                    {
+                        crosshair.texture = greyCH;
+                    }
+                    else if (hit.transform.tag == "Fish")
+                    {
+                        crosshair.texture = greenCH;
+                    }
+                }
+                if (Input.GetMouseButtonDown(0)) //Player clicking
+                {
+                    clickPos = hit.point;
+                }
+            }
+            else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask))
+            {
+
+                if (PlayerPrefs.GetInt("HasSpear") == 0)
+                {
+                    crosshair.texture = orangeCH;
+                    player.GetComponent<PlayerManager>().canPickLog = true;
+                }
+                else
+                {
+                    crosshair.texture = greyCH;
+                }
+                player.GetComponent<PlayerManager>().lookingAtLog = true;
+
+            }else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask)) //Clicking water
+            {
+                if (Input.GetMouseButtonDown(0)) //Player clicking
+                {
+                    clickPos = hit.point;
+                }
+            }
+            else
+            {
+                crosshair.texture = greyCH;
+                player.GetComponent<PlayerManager>().canPickLog = false;
+                player.GetComponent<PlayerManager>().lookingAtLog = false;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab && !Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask)) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
@@ -432,9 +450,8 @@ public class SpearManager : MonoBehaviour
                 RefreshUI();
                 //StartCoroutine(BreakDelay());
             }
-            
-            PlayerPrefs.SetInt("SpearHealth", spearHealth);
-            
+
+            PlayerPrefs.SetInt("SpearHealth", spearHealth);            
 
             if (spearHealth == 0)
             {
@@ -448,17 +465,26 @@ public class SpearManager : MonoBehaviour
                 //StartCoroutine(BreakDelay());
             }
 
-            
+            strikeContact = true;
+            hitPos = hit.point;
         }
         else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
         {
-            if (hit.transform.tag == "Water")
+            if (!strikeContact)
             {
-                
-                StartCoroutine(Splash());
-                audioSource.PlayOneShot(splashSound);
-            }
-        }
+                strikeContact = true;
+
+
+                if (hit.transform.tag == "Water")
+                {
+                    StartCoroutine(Splash());
+                    audioSource.PlayOneShot(splashSound);
+
+                }
+                hitPos = hit.point;
+            }            
+        }        
+
     }
 
     //Effects (with delays)

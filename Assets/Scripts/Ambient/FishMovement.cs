@@ -4,90 +4,180 @@ using UnityEngine;
 
 public class FishMovement : MonoBehaviour
 {
-    float endPosX, endPosZ;
+    //Variables
+    private float endPosX, endPosZ;
+    private float xPos, yPos, zPos;
+    private float xLook, yLook, zLook;
+
     public float timer, timeSpeed, timeToMove;
+    public float fishSpeed;
+
+
+    private Vector3 newFishPos, newfishDir;
+
+    private float fleeTimer;
+    private bool sharkIsNear, react, escaping, moving;
+
     public Vector3 newPos, raftPos;
-    private RaycastHit spearHit;
-    private Vector3 clickSpot;
+
+    private Vector3 clickSpot, stabSpot;
+    private Vector3 initialPos;    
+
+    private float newPosAngle, newPosRadius;
+    private float randomRot;
+
+    //Game objects
+
     public GameObject fish;
     public GameObject raft;
-    private bool sharkIsNear;
     private GameObject shark;
+    private GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
         NewPosition();
         shark = GameObject.FindGameObjectWithTag("Shark");
+        player = GameObject.FindGameObjectWithTag("Player");
+        raft = GameObject.FindGameObjectWithTag("Raft");
+
+        react = false;
+
+        
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance (fish.transform.position, clickSpot);
-        Shark sharkScript = shark.GetComponent<Shark>();
-        sharkIsNear = sharkScript.isNear;
-        Debug.Log("Shark is near " + sharkIsNear);
-        LookMovingDirection(newPos);
-        timer += Time.deltaTime * timeSpeed;
-        
-        if (Input.GetMouseButtonDown(0) /*&& (distance < 15)*/)
+        //Ensure shark is close
+        sharkIsNear = shark.GetComponent<Shark>().isNear;
+
+        //Player is stabbing (might not need to react)
+        if (player.GetComponent<SpearManager>().stabbing) 
         {
-            clickSpot = new Vector3(transform.position.x, transform.position.y, transform.position.z);
-         
-            GameObject fish = GameObject.FindGameObjectWithTag("Fish");
-            Debug.Log("CLickspot" + clickSpot);
-            Debug.Log("Fish spot" + fish.transform.position);
-            Vector3 forceDirection = (fish.transform.position - clickSpot);
-
-            endPosX = forceDirection.x + fish.transform.position.x;
-            endPosZ = forceDirection.z + fish.transform.position.z;
-
-            //Assigns new position
-            newPos = new Vector3(endPosX, transform.position.y, endPosZ);
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 2f);
-
-        }
-        else if (timer >= timeToMove)
-        {
-            transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * 1f);
-
-            if (Vector3.Distance(transform.position, newPos) <= 0.1f)
-            {
-                if (sharkIsNear == true)
-                {
-                    NewPositionShark();
-                }
-                else
-                {
-                    NewPosition();
-                }
-
-                timer = 0;
+            
+            if (!react) //Is not already reacting (so test react)
+            {                            
+                StartCoroutine(checkReact());
             }
+        }
 
+        //Player is hitting something (for 0.1 seconds)
+        if (player.GetComponent<SpearManager>().strikeContact) 
+        {
+            
+            if (!escaping) //Escape if not escaping already
+            {
+                randomRot = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
+                StartCoroutine(checkReact());
+            }
+        }
+
+        //Movement timer
+        
+        if (Vector3.Distance(transform.position, newPos) >= 0.1f)
+        {
+            if (sharkIsNear)
+            {
+                NewPositionShark();
+            }
+            else if (!moving) //Set new Destination
+            {                     
+                
+                    //NewPosition();
+                    //Debug.Log("start Moving to " + newPos);
+                    moving = true;
+                                     
+            }
+        }   
+        else
+        {
+            NewPosition();
+            moving = false;
+        }
+
+        if (timer > timeToMove)
+        {
+            NewPosition();
+            timer = 0;
+        }
+        
+    }
+
+    
+
+    //float decelerate = 1f;
+    void FixedUpdate()
+    {
+        //Timer should be in fixed update (due to physics)
+        timer = timer + Time.deltaTime;
+
+        if (moving)
+        {
+
+            MoveNewPos();
+        }
+
+        if (escaping) //Playing the escape motion
+        {
+            MoveEscape();
         }
     }
 
-    void NewPosition()
+    
+    //Applying normal move motion
+    private void MoveNewPos()
     {
-        //Gets raft position every time the fish has to go to new position.
-        GameObject raft = GameObject.FindGameObjectWithTag("Raft");
-        raftPos = raft.transform.position;
+        transform.position += transform.forward * Time.deltaTime * fishSpeed; //Move forward
+
+        //Rotate fish to needed position
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newPos - transform.position), Time.deltaTime * 2f);
+    }
+
+    //Applying Escape motion
+    private void MoveEscape()
+    {
+        fleeTimer += Time.deltaTime * Mathf.Lerp(4, 0, fleeTimer / 2);  //Start fast and decelerate
+                
+        //Make new axis with Formula
+        xPos = initialPos.x + (Mathf.Pow(fleeTimer, 3) - (fleeTimer)) * Mathf.Sin(randomRot);
+        yPos = Mathf.Lerp(initialPos.y, initialPos.y - 5, fleeTimer * 0.1f);
+        zPos = initialPos.z + (fleeTimer) * Mathf.Cos(randomRot);
+
+        //Same formula with offset to get direction
+        xLook = initialPos.x + (Mathf.Pow(fleeTimer + 0.1f, 3) - (fleeTimer + 0.1f)) * Mathf.Sin(randomRot);
+        yLook = Mathf.Lerp(initialPos.y, initialPos.y - 5, (fleeTimer * 0.1f));
+        zLook = initialPos.z + (fleeTimer + 0.1f) * Mathf.Cos(randomRot);
+
+        newFishPos = new Vector3(xPos, yPos, zPos);
+        newfishDir = new Vector3(xLook, yLook, zLook);
+
+        //Apply motion
+        transform.position = newFishPos;
+        transform.LookAt(newfishDir);
+    }
+        
+    
+    private void NewPosition()
+    {        
+        //Determin vars for pos (also used to lerp and turn to it)
+        newPosAngle = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
+        newPosRadius = Random.Range(0.8f, 4f);
 
         //Chooses random position around the raft for fish based on the raft position. 
-        endPosX = Random.Range(raftPos.x, raftPos.x + 5);
-        endPosZ = Random.Range(raftPos.z - 5, raftPos.z);
+        endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius); 
+        endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
 
         //Assigns new position
-        newPos = new Vector3(endPosX, transform.position.y, endPosZ);
+        newPos = new Vector3(endPosX, 0.4f , endPosZ);
     }
 
     void NewPositionShark()
     {
-
         endPosX = Random.Range(raftPos.x - 20, raftPos.x - 10);
         endPosZ = Random.Range(raftPos.z - 20, raftPos.z - 10);
+
         //Assigns new position
         newPos = new Vector3(endPosX, transform.position.y, endPosZ);
     }
@@ -97,5 +187,51 @@ public class FishMovement : MonoBehaviour
         Quaternion lookRotation = Quaternion.LookRotation((lookTo - transform.position).normalized);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 2f);
     }
+
+    
+    IEnumerator checkReact() //check if the fish should react
+    {        
+        yield return new WaitForSeconds(0.05f); //Wait for click position to be returned from spear update        
+        
+        //Get positions of last clicked spot and last stabbed spot
+        clickSpot = player.GetComponent<SpearManager>().clickPos;
+        stabSpot = player.GetComponent<SpearManager>().hitPos;
+
+        if (!player.GetComponent<SpearManager>().strikeContact) //Checking because player struck something
+        {
+            //If spear is aiming at the fish, slow react            
+            if (Vector3.Distance(transform.position, clickSpot) < 0.5f) 
+            {                
+                react = true;
+                StartCoroutine(SlowReact());
+            }            
+        }
+        else //Checking because player clicked (not necessarily hit something)
+        {
+            //If something is hit and is close, immediately escape
+            if (Vector3.Distance(transform.position, stabSpot) < 5) 
+            {                
+                react = true;
+                StartCoroutine(Escape());
+            }            
+        }        
+    }
+
+    IEnumerator SlowReact() //Time to notice player is attacking them (different from water being hit)
+    {
+        yield return new WaitForSeconds(1.2f);
+        StartCoroutine(Escape());        
+    }
+
+    IEnumerator Escape()
+    {
+        initialPos = transform.position;
+        fleeTimer = 0;
+        escaping = true;
+        yield return new WaitForSeconds(1f);
+        react = false;
+        escaping = false;
+    }
+
 }
 

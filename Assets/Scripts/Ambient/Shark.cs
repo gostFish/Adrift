@@ -92,24 +92,7 @@ public class Shark : MonoBehaviour
             gameObject.transform.localScale = new Vector3(1.4f, 1.4f, 1.2f);
         }
         else
-        {
-            /*circleRadius = 20;
-            aggressiveRadius = 2.5f;
-            fleeRadius = 50;
-
-            passiveSpeed = 0.1f;
-            aggressiveSpeed = 0.8f;
-            fleeSpeed = 0.025f;
-
-            passivePeriod = 180f; //Time before is aggressive
-            circlePeriod = 90f; //Stalk time
-            approachPeriod = 30; //Approach time
-            aggressivePeriod = 45; //Time it terrorised the player
-
-            fleeTime = 20;
-            circleDepth = -0.3f;
-            passiveDepth = -50;
-            fleeDepth = -8;*/
+        {            
 
             gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         }                
