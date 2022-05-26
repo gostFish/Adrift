@@ -113,6 +113,7 @@ public class SpearManager : MonoBehaviour
         mainCam = Camera.main;
         player = GameObject.FindGameObjectWithTag("Player");
         shark = GameObject.FindGameObjectWithTag("Shark");
+
         fishHungerUp = 8;
         audioSource = GetComponent<AudioSource>();
 
@@ -349,7 +350,9 @@ public class SpearManager : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab && !Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask)) //stab animation
+        if (Input.GetMouseButtonDown(0) && !stabbing && clickToStab && 
+            !Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, raftMask) &&
+            Time.timeScale == 1) //stab animation
         {
             if (PlayerPrefs.GetInt("HasSpear") == 1)//Does not have a spear
             {
@@ -407,7 +410,7 @@ public class SpearManager : MonoBehaviour
     {      
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, fishMask))
         {
-            if (hit.transform.tag == "Fish")
+            if (hit.transform.tag == "Fish" && nothingHit)
             {
                 targetFish = fish[hit.transform.GetComponent<FishType>().type - 1];
                 hunger = PlayerPrefs.GetFloat("Hunger");
@@ -426,14 +429,14 @@ public class SpearManager : MonoBehaviour
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
                 //StartCoroutine(BreakDelay());
-                if (spearHealth > 0)
-                {
+               // if (spearHealth > 0)
+               // {
                     StartCoroutine(showFish());
                     //targetFish.SetActive(true);
-                }
+               // }
                 nothingHit = false;
             }
-            else if (hit.transform.tag == "Shark")
+            else if (hit.transform.tag == "Shark" && nothingHit)
             {
                 //Something happens with the shark
 
@@ -461,21 +464,20 @@ public class SpearManager : MonoBehaviour
             PlayerPrefs.SetInt("SpearHealth", spearHealth);            
 
             if (spearHealth == 0)
-            {
-                //spear.SetActive(false);
-                RefreshUI();
+            {                
+                
                 PlayerPrefs.SetInt("HasSpear", 0);
                 clickToStab = false;
 
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
-                //StartCoroutine(BreakDelay());
+                StartCoroutine(lastBreakDelay());
             }
 
             strikeContact = true;
             hitPos = hit.point;
         }
-        else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask))
+        else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask)&& nothingHit)
         {
             if (!strikeContact)
             {
@@ -542,17 +544,16 @@ public class SpearManager : MonoBehaviour
     public void RefreshUI()
     {
         planksRemaning = player.GetComponent<Pick>().LogsLeft();
-        if (spearHealth == 0)
-        {
-            StartCoroutine(delayBreak());
-        }
-        else
-        {
-            for (int i = 0; i < spearPrefab.Length; i++)
+        
+            for (int i = 0; i < spearPrefab.Length-1; i++)
             {
                 spear[i].SetActive(false);
             }
-        }
+            for(int i = 0;i < fish.Length; i++)
+            {
+                fish[i].SetActive(false);
+            }
+        
         
         switch (spearHealth)
         {
@@ -595,7 +596,7 @@ public class SpearManager : MonoBehaviour
         }
     }
 
-    IEnumerator delayBreak()
+    IEnumerator lastBreakDelay()
     {
         yield return new WaitForSeconds(0.8f);
         for (int i = 0; i < spearPrefab.Length; i++)

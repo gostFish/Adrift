@@ -251,7 +251,7 @@ public class Shark : MonoBehaviour
         else //Avoiding the raft
         {
             movePos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0);
-            lookPos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0 + 0.1f);
+            lookPos = Circling(passiveDepth, fleeRadius, fleeSpeed, 0.01f);
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);

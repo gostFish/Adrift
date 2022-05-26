@@ -28,7 +28,13 @@ public class AmbientAudio : MonoBehaviour
         volumeLowering = false;
         normalPlaying = true;
 
-        PlaySeaguls();
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            PlayerPrefs.SetFloat("volume",0.5f); //If 0, no spear, if 1 there is a spear
+            audioSource.volume = 0.5f;
+        }
+
+            PlaySeaguls();
     }
 
     private void FixedUpdate()

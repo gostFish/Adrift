@@ -53,9 +53,10 @@ public class SpawnFish : MonoBehaviour
                 {
                     for (int i = 0; i < fishList.Count; i++)
                     {
-                        if (!fishList[i].activeSelf) //Activate fish once all spawned
+                        if (!fishList[i].activeSelf) //Recycle dead fish when all spawned
                         {
                             fishList[i].active = true;
+                            fishList[i].transform.position = new Vector3(raft.transform.position.x, 0.4f, raft.transform.position.z);
                             break;
                         }
                     }
