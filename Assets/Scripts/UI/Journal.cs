@@ -29,7 +29,7 @@ public class Journal : MonoBehaviour
     private float time;
     private bool leaveBlank;
 
-    
+    private bool firstOpen;
 
     void Awake()
     {
@@ -45,6 +45,8 @@ public class Journal : MonoBehaviour
 
         animatingForward = false;
         animatingBackward = false;
+
+        firstOpen = true;
     }
 
     void Update()
@@ -148,22 +150,34 @@ public class Journal : MonoBehaviour
         openJournal.SetActive(false);
         closeJournal.SetActive(true);
 
-        currentPage = lastRevieled; //Default opens book on the last written page
+        if (firstOpen)
+        {
+            currentPage = 2;
+            firstOpen = false;
+            previousPageButton.SetActive(false);
+            nextPageButton.SetActive(true);
+        }
+        else
+        {
+            currentPage = lastRevieled; //Default opens book on the last written page
+                                        
+            if (lastRevieled <= 2)//Hide buttons to prevent going out of the list
+            {
+                previousPageButton.SetActive(false);
+            }
+            else
+            {
+                previousPageButton.SetActive(true);
+            }
+        }
+        
 
         if (lastRevieled == 0)
         {
             Debug.Log("Tried to open Journal, but no pages");
         }
 
-        //Hide buttons to prevent going out of the list
-        if (lastRevieled <= 2)
-        {
-            previousPageButton.SetActive(false);
-        }
-        else
-        {
-            previousPageButton.SetActive(true);
-        }
+        
         ShowPage();
         ActualPages();
     }
@@ -264,14 +278,18 @@ public class Journal : MonoBehaviour
 
     public void ShowPage() //Scroll through page
     {
-        for (int i = 0; i < pages.Count; i++)
-        {
-            pages[i].SetActive(false);
-        }
-        if (currentPage > 0 && (currentPage - 1) < pages.Count)
-        {
-            pages[currentPage - 1].SetActive(true);
-        }
+        
+            for (int i = 0; i < pages.Count; i++)
+            {
+                pages[i].SetActive(false);
+            }
+            if (currentPage > 0 && (currentPage - 1) < pages.Count)
+            {
+                pages[currentPage - 1].SetActive(true);
+            }
+        
+
+        
     }
 
     public void UpdatePage() //Bring next thing to be visible in the pages
