@@ -1139,23 +1139,23 @@ MonoBehaviour:
   m_Text: "Team Lead - Matthew Schembri\r\n\nDesigner - David Brincat, Leonel Bonnici
     and Matthew Schembri \r\n\nProgrammer - Malcolm Grech, Kristiine Parna and Matthew
     Schembri \r\n\nArtist - Leonel Bonnici\r\n\nLevel Designer - Michele Perrino,
-    David Brincat and Kristiine Perrino\r\n\n\n3D Models\r\n\r\nParticle Effects\r\nSplash
-    and Blood: 48 Particle Effect Pack | Spells | Unity Asset Store \r\nLandmarks\r\nBoat
-    Wreck: Boats - PolyPack | 3D Sea | Unity Asset Store \r\nTrees: Low Poly Tree
-    Pack - 3D \r\nPort: Old Sea Port - 3D Environments, Viking Village URP | Tutorial
-    Projects | Unity Asset Store \r\nCave: Old Sea Port - 3D Environments \r\nHallucinations\r\nColumns
-    - Classic Columns | 3D Historic | Unity Asset Store \r\nBridge - Modular Fantasy
-    Bridges - 3D \r\nBuildings - City Voxel Pack | 3D Urban | Unity Asset Store \r\nAnimals\r\nShark
-    - Fish Poly Pack\r\nFish - Simplistic Low Poly Nature | 3D Environments | Unity
-    Asset Store \r\nBirds - Simplistic Low Poly Nature | 3D Environments | Unity
-    Asset Store \r\n\r\n\r\nMusic\r\nGame Soundtrack - \u201CTake it all in\u201D,
-    Zaplat Royalty Free Music\r\n\r\nSound Effects\r\nStomach Noises\r\nOcean/Birds
-    background Noise\r\nNoise for High Waves\r\nSoundtrack\r\nSplash Sound\r\nImpact
-    Sound\r\nShark Sound\r\nRaft Impact Sound\r\nSpear Degradation Sound \r\nWhale\r\nShark
-    Impact with Boat \r\n\r\nFonts\r\nShipwreck Font - Shipwreck Font \r\nTextures\r\nBark
-    Brown 02 Texture \u2022 Poly Haven \r\n\nSpecial thanks to:\n\n\tThose who supported
-    us\n\t\n\tOur kind and generous play-testers\n\n\tOur lecturers who helped make
-    this possible\n\n\t\n\n\t..and You\n"
+    Leonel Bonnici, David Brincat and Kristiine Perrino\r\n\n\n3D Models\r\n\r\nParticle
+    Effects\r\nSplash and Blood: 48 Particle Effect Pack | Spells | Unity Asset Store
+    \r\nLandmarks\r\nBoat Wreck: Boats - PolyPack | 3D Sea | Unity Asset Store \r\nTrees:
+    Low Poly Tree Pack - 3D \r\nPort: Old Sea Port - 3D Environments, Viking Village
+    URP | Tutorial Projects | Unity Asset Store \r\nCave: Old Sea Port - 3D Environments
+    \r\nHallucinations\r\nColumns - Classic Columns | 3D Historic | Unity Asset Store
+    \r\nBridge - Modular Fantasy Bridges - 3D \r\nBuildings - City Voxel Pack | 3D
+    Urban | Unity Asset Store \r\nAnimals\r\nShark - Fish Poly Pack\r\nFish - Simplistic
+    Low Poly Nature | 3D Environments | Unity Asset Store \r\nBirds - Simplistic
+    Low Poly Nature | 3D Environments | Unity Asset Store \r\n\r\n\r\nMusic\r\nGame
+    Soundtrack - \u201CTake it all in\u201D, Zaplat Royalty Free Music\r\n\r\nSound
+    Effects\r\nStomach Noises\r\nOcean/Birds background Noise\r\nNoise for High Waves\r\nSoundtrack\r\nSplash
+    Sound\r\nImpact Sound\r\nShark Sound\r\nRaft Impact Sound\r\nSpear Degradation
+    Sound \r\nWhale\r\nShark Impact with Boat \r\n\r\nFonts\r\nShipwreck Font - Shipwreck
+    Font \r\nTextures\r\nBark Brown 02 Texture \u2022 Poly Haven \r\n\nSpecial thanks
+    to:\n\n\tThose who supported us\n\t\n\tOur kind and generous play-testers\n\n\tOur
+    lecturers who helped make this possible\n\n\t\n\n\t..and You\n"
 --- !u!222 &1463629500
 CanvasRenderer:
   m_ObjectHideFlags: 0
