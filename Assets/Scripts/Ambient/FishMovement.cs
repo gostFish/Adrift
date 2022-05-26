@@ -16,7 +16,7 @@ public class FishMovement : MonoBehaviour
     private Vector3 newFishPos, newfishDir;
 
     private float fleeTimer;
-    private bool sharkIsNear, react, escaping, moving;
+    private bool react, escaping, moving;
 
     public Vector3 newPos, raftPos;
 
@@ -36,27 +36,23 @@ public class FishMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NewPosition();
+        
         shark = GameObject.FindGameObjectWithTag("Shark");
         player = GameObject.FindGameObjectWithTag("Player");
         raft = GameObject.FindGameObjectWithTag("Raft");
 
         react = false;
 
-        
-        
+        NewPosition();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Ensure shark is close
-        sharkIsNear = shark.GetComponent<Shark>().isNear;
-
+        
         //Player is stabbing (might not need to react)
         if (player.GetComponent<SpearManager>().stabbing) 
-        {
-            
+        {            
             if (!react) //Is not already reacting (so test react)
             {                            
                 StartCoroutine(checkReact());
@@ -65,8 +61,7 @@ public class FishMovement : MonoBehaviour
 
         //Player is hitting something (for 0.1 seconds)
         if (player.GetComponent<SpearManager>().strikeContact) 
-        {
-            
+        {            
             if (!escaping) //Escape if not escaping already
             {
                 randomRot = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
@@ -78,17 +73,9 @@ public class FishMovement : MonoBehaviour
         
         if (Vector3.Distance(transform.position, newPos) >= 0.1f)
         {
-            if (sharkIsNear)
-            {
-                NewPositionShark();
-            }
-            else if (!moving) //Set new Destination
-            {                     
-                
-                    //NewPosition();
-                    //Debug.Log("start Moving to " + newPos);
-                    moving = true;
-                                     
+            if (!moving) //Set new Destination
+            {     
+                 moving = true;                                     
             }
         }   
         else
@@ -101,8 +88,7 @@ public class FishMovement : MonoBehaviour
         {
             NewPosition();
             timer = 0;
-        }
-        
+        }        
     }
 
     
@@ -115,7 +101,6 @@ public class FishMovement : MonoBehaviour
 
         if (moving)
         {
-
             MoveNewPos();
         }
 
@@ -129,10 +114,14 @@ public class FishMovement : MonoBehaviour
     //Applying normal move motion
     private void MoveNewPos()
     {
-        transform.position += transform.forward * Time.deltaTime * fishSpeed; //Move forward
 
-        //Rotate fish to needed position
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newPos - transform.position), Time.deltaTime * 2f);
+        
+        
+            //Move forward (as fish do when they move)
+            transform.position += transform.forward * Time.deltaTime * fishSpeed; 
+            //Rotate fish to needed position
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newPos - transform.position), Time.deltaTime * 2f);
+                
     }
 
     //Applying Escape motion
@@ -170,7 +159,15 @@ public class FishMovement : MonoBehaviour
         endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
 
         //Assigns new position
-        newPos = new Vector3(endPosX, 0.4f , endPosZ);
+        if (!shark.GetComponent<Shark>().isNear)
+        {
+            newPos = new Vector3(endPosX, 0.4f, endPosZ); //Swim at normal depth
+        }
+        else
+        {
+            newPos = new Vector3(endPosX, -25f, endPosZ); //Swim deeper to avoid shark
+        }
+            
     }
 
     void NewPositionShark()

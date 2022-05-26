@@ -29,6 +29,7 @@ public class DayCycle : MonoBehaviour
     //Game objects
     private Camera mainCam;
     private GameObject raft;
+    private GameObject player;
 
     private GameObject sceneManager;
     public GameObject hungerUi;
@@ -68,6 +69,7 @@ public class DayCycle : MonoBehaviour
         fadeOut = false;
 
         raft = GameObject.FindGameObjectWithTag("Raft");
+        player = GameObject.FindGameObjectWithTag("Player");
         sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
         mainCam = Camera.main;
 
@@ -161,6 +163,7 @@ public class DayCycle : MonoBehaviour
             journal.GetComponent<Journal>().UpdatePage();
             ui.GetComponent<PauseMenu>().OpenJournal(true);
 
+            player.GetComponent<SpearManager>().enabled = false;
         }
         water.GetComponent<MeshRenderer>().material = dayWater;
         dayNum = dayNum + 1;
@@ -190,9 +193,8 @@ public class DayCycle : MonoBehaviour
 
         mainCam.clearFlags = CameraClearFlags.Skybox;
         mainCam.GetComponent<AmbientAudio>().PlaySeaguls();
-
-        raft.GetComponentInChildren<SpearManager>().enabled = true;
-        raft.GetComponentInChildren<SpearManager>().RefreshUI();
+        
+        player.GetComponent<SpearManager>().RefreshUI();
         ui.GetComponent<PauseMenu>().isNight = false;
     }
 
@@ -203,6 +205,7 @@ public class DayCycle : MonoBehaviour
         isDay = 0;
         PlayerPrefs.SetInt("IsDay", isDay);
         water.GetComponent<MeshRenderer>().material = nightWater;
+        player.GetComponent<SpearManager>().enabled = false;
 
         //Enable/Disable UI
         hungerUi.GetComponent<Hunger>().hungerRate = 0.01f; //hunger decrease 10x slower

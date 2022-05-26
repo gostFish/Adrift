@@ -22,6 +22,8 @@ public class Journal : MonoBehaviour
     public GameObject openJournal;
     public GameObject closeJournal;
 
+    private GameObject player;
+
     //Other vars
     public int currentPage;
     public int lastRevieled;
@@ -38,7 +40,7 @@ public class Journal : MonoBehaviour
         {
             lastRevieled = PlayerPrefs.GetInt("lastRevieled");
         }*/
-
+        player = GameObject.FindGameObjectWithTag("Player");
         previousPageButton.SetActive(false);
         nextPageButton.SetActive(false);
         closeJournal.SetActive(false);
@@ -145,6 +147,11 @@ public class Journal : MonoBehaviour
     {
         Time.timeScale = 1f; //Unpause if paused
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // player.GetComponent<PlayerManager>().enabled = false;
+        player.GetComponent<SpearManager>().enabled = false;
         //Reset UI
         nextPageButton.SetActive(false);
         openJournal.SetActive(false);
@@ -203,6 +210,12 @@ public class Journal : MonoBehaviour
 
         nextPageButton.SetActive(false);
         previousPageButton.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        player.GetComponent<PlayerManager>().enabled = true;
+        player.GetComponent<SpearManager>().enabled = true;
 
         currentPage = 0;
         ShowPage();

@@ -97,7 +97,7 @@ public class Hunger : MonoBehaviour
                 case float hunger when hunger <= 0:
                     DeathScreen();
                     break;
-                case float hunger when hunger <= 25:
+               /* case float hunger when hunger <= 25:
                     hungerUI.texture = hunger5;
                     break;
                 case float hunger when hunger <= 50:
@@ -112,6 +112,7 @@ public class Hunger : MonoBehaviour
                 case float hunger when hunger > 99:
                     hungerUI.texture = hunger1;
                     break;
+               */
             }
         }        
     }
