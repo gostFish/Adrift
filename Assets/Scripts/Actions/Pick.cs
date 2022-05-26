@@ -42,7 +42,7 @@ public class Pick : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        logs = GameObject.FindGameObjectsWithTag("Log");
+        //logs = GameObject.FindGameObjectsWithTag("Log");
         logCount = logs.Length;
 
         backCounter = 0;
@@ -120,10 +120,10 @@ public class Pick : MonoBehaviour
     {
         //Register that player has a log and decrease log quantity
         if (PlayerPrefs.GetInt("HasSpear") == 0)
-        {
+        {            
+            ReduceLogs();
             gameObject.GetComponent<SpearManager>().RefreshSpear();
             PlayerPrefs.SetInt("HasSpear", 1);
-            ReduceLogs();
         }
         
         //Kill player and remove raft
@@ -139,17 +139,17 @@ public class Pick : MonoBehaviour
 
     public void ReduceLogs()
     {
-        logCount--;
+        logCount = logCount -1;
         if (takeFront)
         {
             logs[frontCounter].SetActive(false);
-            frontCounter--;
+            frontCounter = frontCounter - 1;
             takeFront = false;
         }
         else
         {
             logs[backCounter].SetActive(false);
-            backCounter++;
+            backCounter = backCounter + 1;
             takeFront = true;
         }
     }

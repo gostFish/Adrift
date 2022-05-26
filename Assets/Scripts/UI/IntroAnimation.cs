@@ -27,6 +27,7 @@ public class IntroAnimation : MonoBehaviour
         time = 2;
         //fadeTime = 0;
         audioSource = mainCamera.GetComponent<AudioSource>();
+        Time.timeScale = 1f;
     }
 
     private void Update()

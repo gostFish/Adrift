@@ -192,7 +192,7 @@ MonoBehaviour:
   timer: 0
   timeSpeed: 0
   timeToMove: 2
-  fishSpeed: 2.5
+  fishSpeed: 1.5
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 90083374015584184}

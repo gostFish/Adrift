@@ -129,15 +129,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 400032, guid: 9c690660684b5494c88ac61e360783d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -205,8 +205,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1.0691261}
-  m_Center: {x: 0, y: 0, z: -0.034563065}
+  m_Size: {x: 1, y: 1, z: 1.1090245}
+  m_Center: {x: 0, y: 0, z: -0.054512292}
 --- !u!114 &4473566215524478022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   timer: 2
   timeSpeed: 2
   timeToMove: 2
-  fishSpeed: 2.5
+  fishSpeed: 1.5
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 7918743994726546452}

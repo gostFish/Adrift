@@ -752,7 +752,7 @@ MonoBehaviour:
   timer: 0
   timeSpeed: 0
   timeToMove: 2
-  fishSpeed: 2.5
+  fishSpeed: 1.5
   newPos: {x: 0, y: 0, z: 0}
   raftPos: {x: 0, y: 0, z: 0}
   fish: {fileID: 2834500098717692104}
@@ -768,8 +768,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.4103669, y: 1, z: 2.1401167}
-  m_Center: {x: -0.00038295984, y: 0, z: -0.17910242}
+  m_Size: {x: 1.6001258, y: 1, z: 2.37027}
+  m_Center: {x: -0.012931948, y: 0, z: -0.18736601}
 --- !u!114 &-3983202714760178759
 MonoBehaviour:
   m_ObjectHideFlags: 0

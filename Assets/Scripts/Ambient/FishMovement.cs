@@ -142,12 +142,12 @@ public class FishMovement : MonoBehaviour
                 
         //Make new axis with Formula
         xPos = initialPos.x + (Mathf.Pow(fleeTimer, 3) - (fleeTimer)) * Mathf.Sin(randomRot);
-        yPos = Mathf.Lerp(initialPos.y, initialPos.y - 5, fleeTimer * 0.1f);
+        yPos = Mathf.Lerp(initialPos.y, initialPos.y, fleeTimer * 0.1f);
         zPos = initialPos.z + (fleeTimer) * Mathf.Cos(randomRot);
 
         //Same formula with offset to get direction
         xLook = initialPos.x + (Mathf.Pow(fleeTimer + 0.1f, 3) - (fleeTimer + 0.1f)) * Mathf.Sin(randomRot);
-        yLook = Mathf.Lerp(initialPos.y, initialPos.y - 5, (fleeTimer * 0.1f));
+        yLook = Mathf.Lerp(initialPos.y, initialPos.y, (fleeTimer * 0.1f));
         zLook = initialPos.z + (fleeTimer + 0.1f) * Mathf.Cos(randomRot);
 
         newFishPos = new Vector3(xPos, yPos, zPos);
