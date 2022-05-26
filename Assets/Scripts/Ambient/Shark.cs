@@ -231,7 +231,17 @@ public class Shark : MonoBehaviour
                     Camera.main.transform.position = Camera.main.transform.position + Random.insideUnitSphere * cameraShakeLvl;
                     if (!audioSource.isPlaying)
                     {
-                        audioSource.PlayOneShot(sharkUnderRaft);
+                        if (Random.Range(0, 100) <= 15)
+                        {
+                            player.GetComponent<Pick>().ReduceLogs();
+                            player.GetComponent<SpearManager>().RefreshUI();
+                            audioSource.PlayOneShot(sharkTakesPlank);
+                        }
+                        else
+                        {
+                            audioSource.PlayOneShot(sharkUnderRaft);
+                        }
+                        
                     }
                 }
                 else
@@ -239,7 +249,11 @@ public class Shark : MonoBehaviour
                     Camera.main.transform.localPosition = new Vector3(0,0,0);
                 }
 
-            }else if(time > (passivePeriod + circlePeriod + approachPeriod + approachPeriod)) //Reset to passive (lost a raft piece)
+                //5% chance to remove plank when passing under raft
+                
+
+            }
+            else if(time > (passivePeriod + circlePeriod + approachPeriod + approachPeriod)) //Reset to passive (lost a raft piece)
             {
                 player.GetComponent<Pick>().ReduceLogs();
                 player.GetComponent<SpearManager>().RefreshUI();

@@ -100,7 +100,9 @@ public class SpearManager : MonoBehaviour
 
     private AudioSource audioSource;
     public AudioClip spearDegredation;
+    public AudioClip spearBreak;
     public AudioClip splashSound;
+    public AudioClip eatSound;
 
 
     void Start()
@@ -136,7 +138,7 @@ public class SpearManager : MonoBehaviour
         StartCoroutine(CheckPlanksDelay());
 
         stabAnimTime = 3;
-        nothingHit = true;
+        nothingHit = false;
         GetSpear();
         GetFish();
         //Remember when last playing
@@ -428,19 +430,16 @@ public class SpearManager : MonoBehaviour
 
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
-                //StartCoroutine(BreakDelay());
-               // if (spearHealth > 0)
-               // {
-                    StartCoroutine(showFish());
-                    //targetFish.SetActive(true);
-               // }
+                
+                StartCoroutine(showFish());
+                StartCoroutine(EatSound()); 
                 nothingHit = false;
             }
             else if (hit.transform.tag == "Shark" && nothingHit)
             {
                 //Something happens with the shark
 
-                 
+                nothingHit = false;
                 currentHits += 1;
                 if( currentHits >= minHits)
                 {
@@ -458,7 +457,7 @@ public class SpearManager : MonoBehaviour
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
                 //StartCoroutine(BreakDelay());
-                nothingHit = false;
+                
             }
 
             PlayerPrefs.SetInt("SpearHealth", spearHealth);            
@@ -603,5 +602,12 @@ public class SpearManager : MonoBehaviour
         {
             spear[i].SetActive(false);
         }
+        audioSource.PlayOneShot(spearBreak);
+    }
+
+    IEnumerator EatSound()
+    {
+        yield return new WaitForSeconds(0.9f);
+            audioSource.PlayOneShot(eatSound);
     }
 }

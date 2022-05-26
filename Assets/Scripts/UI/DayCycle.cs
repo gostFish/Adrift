@@ -206,6 +206,7 @@ public class DayCycle : MonoBehaviour
         PlayerPrefs.SetInt("IsDay", isDay);
         water.GetComponent<MeshRenderer>().material = nightWater;
         player.GetComponent<SpearManager>().enabled = false;
+        Cursor.visible = false;
 
         //Enable/Disable UI
         hungerUi.GetComponent<Hunger>().hungerRate = 0.01f; //hunger decrease 10x slower
