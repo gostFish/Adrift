@@ -111,6 +111,7 @@ public class PauseMenu : MonoBehaviour
 
             menuOpen = false;
             Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = true;
             AudioListener.pause = false;
 
             player.GetComponent<PlayerManager>().enabled = true;

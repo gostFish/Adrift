@@ -54,6 +54,8 @@ public class SpearManager : MonoBehaviour
     public int minHits;
     private int currentHits;
 
+    private bool nothingHit;
+
     //Game Objects
 
     private GameObject player;
@@ -133,6 +135,7 @@ public class SpearManager : MonoBehaviour
         StartCoroutine(CheckPlanksDelay());
 
         stabAnimTime = 3;
+        nothingHit = true;
         GetSpear();
         GetFish();
         //Remember when last playing
@@ -281,12 +284,13 @@ public class SpearManager : MonoBehaviour
     void Update()
     {
 
-        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f) //Time for strike to count
+        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f && nothingHit) //Time for strike to count
         {
             Strike();
         }
         else
         {
+            nothingHit = true;
             strikeContact = false;
         }
 
@@ -424,8 +428,10 @@ public class SpearManager : MonoBehaviour
                 //StartCoroutine(BreakDelay());
                 if (spearHealth > 0)
                 {
-                    targetFish.SetActive(true);
+                    StartCoroutine(showFish());
+                    //targetFish.SetActive(true);
                 }
+                nothingHit = false;
             }
             else if (hit.transform.tag == "Shark")
             {
@@ -449,6 +455,7 @@ public class SpearManager : MonoBehaviour
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
                 //StartCoroutine(BreakDelay());
+                nothingHit = false;
             }
 
             PlayerPrefs.SetInt("SpearHealth", spearHealth);            
@@ -485,6 +492,13 @@ public class SpearManager : MonoBehaviour
             }            
         }        
 
+    }
+
+    IEnumerator showFish()
+    {
+        targetFish.SetActive(true);
+        yield return new WaitForSeconds(1.1f);
+        targetFish.SetActive(false);
     }
 
     //Effects (with delays)
@@ -528,10 +542,18 @@ public class SpearManager : MonoBehaviour
     public void RefreshUI()
     {
         planksRemaning = player.GetComponent<Pick>().LogsLeft();
-        for (int i = 0; i < spearPrefab.Length;i++)
+        if (spearHealth == 0)
         {
-            spear[i].SetActive(false);
+            StartCoroutine(delayBreak());
         }
+        else
+        {
+            for (int i = 0; i < spearPrefab.Length; i++)
+            {
+                spear[i].SetActive(false);
+            }
+        }
+        
         switch (spearHealth)
         {
             case 0:
@@ -570,6 +592,15 @@ public class SpearManager : MonoBehaviour
                 spear[0].SetActive(true);
                 activeSpear = 0;                
                 break;
+        }
+    }
+
+    IEnumerator delayBreak()
+    {
+        yield return new WaitForSeconds(0.8f);
+        for (int i = 0; i < spearPrefab.Length; i++)
+        {
+            spear[i].SetActive(false);
         }
     }
 }
