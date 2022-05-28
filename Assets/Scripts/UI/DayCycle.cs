@@ -121,20 +121,18 @@ public class DayCycle : MonoBehaviour
             currentTick += 1;
             time = 0;
 
-            if(dayNum >= 5)
-            {
-                SceneManager.LoadScene("Credits");
-            }
+            
             if(isDay == 1 && dayTicks < currentTick)
             {
                 PlayerPrefs.SetInt("DayNum", dayNum+1);
                 currentTick = 0;
+                
                 NextPeriod();                
             }
             else if(isDay == 0 && nightTicks < currentTick)
-            {
+            {                
                 currentTick = 0;
-                NextPeriod();
+                NextPeriod();                
             }            
         }
 
@@ -204,6 +202,8 @@ public class DayCycle : MonoBehaviour
 
     public void MakeNight()
     {
+        
+
         //Set stats and player prefs
         journal.SetActive(false);
         isDay = 0;
@@ -261,7 +261,17 @@ public class DayCycle : MonoBehaviour
         yield return new WaitForSeconds(2);
         fadeOut = false;
         currentPos++;
-        raft.transform.position = pos[currentPos];
+
+        if (dayNum >= 5)
+        {
+            SceneManager.LoadScene("Credits");
+        }
+        else
+        {
+            raft.transform.position = pos[currentPos];
+        }        
+
+
         if (isDay == 1)
         {
             MakeNight();
