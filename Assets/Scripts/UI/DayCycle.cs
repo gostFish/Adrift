@@ -32,6 +32,8 @@ public class DayCycle : MonoBehaviour
     private GameObject player;
 
     private GameObject sceneManager;
+    private GameObject instanceManager;
+
     public GameObject hungerUi;
     public GameObject spearUI;
     public GameObject crosshairUI;
@@ -71,6 +73,7 @@ public class DayCycle : MonoBehaviour
         raft = GameObject.FindGameObjectWithTag("Raft");
         player = GameObject.FindGameObjectWithTag("Player");
         sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
+        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
         mainCam = Camera.main;
 
         dof = effects.GetSetting<DepthOfField>();
@@ -168,6 +171,7 @@ public class DayCycle : MonoBehaviour
         water.GetComponent<MeshRenderer>().material = dayWater;
         dayNum = dayNum + 1;
         isDay = 1;
+        SendFishToRaft(); //Fish teleported back to raft
 
         PlayerPrefs.SetInt("DayNum", dayNum); //Is new day, so also increase day timer
         PlayerPrefs.SetInt("IsDay", isDay);
@@ -233,6 +237,20 @@ public class DayCycle : MonoBehaviour
         raft.GetComponentInChildren<SpearManager>().HideSpears();
         raft.GetComponentInChildren<SpearManager>().enabled = false;
         ui.GetComponent<PauseMenu>().isNight = true;
+    }
+
+    private void SendFishToRaft()
+    {
+        Vector3 raftPos = raft.transform.position;
+        raftPos.y = 0.4f;
+        for (int i = 0; i < instanceManager.transform.childCount; i++)
+        {
+            if (instanceManager.transform.GetChild(i).tag == "Fish")
+            {
+
+                instanceManager.transform.GetChild(i).transform.position = raftPos;
+            }
+        }
     }
 
     IEnumerator FadeOut()
