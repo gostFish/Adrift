@@ -30,7 +30,7 @@ public class SpearManager : MonoBehaviour
 
     public float despawnDist;
 
-    public int stabRange;
+    public float stabRange;
     public int maxSpearHits;
     private int activeSpear;
 
@@ -287,11 +287,11 @@ public class SpearManager : MonoBehaviour
     void Update()
     {
 
-        if (stabAnimTime > 1.1 && stabAnimTime < 1.2f && nothingHit) //Time for strike to count
+        if (stabAnimTime > 1.1f && stabAnimTime < 1.2f && nothingHit) //Time for strike to count
         {
             Strike();
         }
-        else
+        else if(stabAnimTime < 1.1f || stabAnimTime > 1.2f)
         {
             nothingHit = true;
             strikeContact = false;
@@ -438,8 +438,7 @@ public class SpearManager : MonoBehaviour
             else if (hit.transform.tag == "Shark" && nothingHit)
             {
                 //Something happens with the shark
-
-                nothingHit = false;
+                                
                 currentHits += 1;
                 if( currentHits >= minHits)
                 {
@@ -457,7 +456,8 @@ public class SpearManager : MonoBehaviour
                 audioSource.PlayOneShot(spearDegredation);
                 RefreshUI();
                 //StartCoroutine(BreakDelay());
-                
+                nothingHit = false;
+
             }
 
             PlayerPrefs.SetInt("SpearHealth", spearHealth);            
@@ -476,7 +476,7 @@ public class SpearManager : MonoBehaviour
             strikeContact = true;
             hitPos = hit.point;
         }
-        else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask)&& nothingHit)
+        else if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out hit, stabRange, waterMask) && nothingHit)
         {
             if (!strikeContact)
             {

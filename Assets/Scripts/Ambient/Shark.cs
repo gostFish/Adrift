@@ -43,6 +43,8 @@ public class Shark : MonoBehaviour
     private float dynamicSpeed;
     private float dynamicDepth;
 
+    private float randomAngle;
+
     //Shark states    
 
     private bool aggressive; //In attack mode
@@ -146,8 +148,18 @@ public class Shark : MonoBehaviour
             dynamicDepth = Mathf.Lerp(circleDepth, fleeDepth, time / fleeTime);
             dynamicRadius = Mathf.Lerp(circleRadius, fleeRadius, time / fleeTime);
 
-            movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 0f);
-            lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed, 1.5f);
+            if(time < 1.5)
+            {
+                movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/0.2f, 0f);
+                lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/0.2f, 0.4f);
+            }
+            else
+            {
+                movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/1.2f, 0f);
+                lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/1.2f, 0.75f);
+            }
+            
+            
 
             gameObject.transform.position = movePos;
             transform.LookAt(lookPos);
@@ -194,10 +206,23 @@ public class Shark : MonoBehaviour
                 else
                 {
                     dynamicSpeed = Mathf.Lerp(passiveSpeed, passiveSpeed + 0.03f, (time - (passivePeriod + circlePeriod)) / approachPeriod);
-                }                
+                }
 
-                movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
-                lookPos = Circling(circleDepth, dynamicRadius-0.001f, dynamicSpeed, 0.1f);
+                if (time < passivePeriod + circlePeriod + (approachPeriod * 0.5))
+                {
+                    movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
+                    lookPos = Circling(circleDepth, dynamicRadius - 0.001f, dynamicSpeed, 0.01f);
+                }else if (time < passivePeriod + circlePeriod + (approachPeriod * 0.7))
+                {
+                    movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
+                    lookPos = Circling(circleDepth, dynamicRadius - 0.001f, dynamicSpeed, 0.05f);
+                }
+                else if (time < passivePeriod + circlePeriod + (approachPeriod*0.9f))
+                {
+                    movePos = Circling(circleDepth, dynamicRadius, dynamicSpeed, 0f);
+                    lookPos = Circling(circleDepth, dynamicRadius - 0.001f, dynamicSpeed, 0.1f);
+                }
+                
 
                 gameObject.transform.position = movePos;
                 transform.LookAt(lookPos);
@@ -295,16 +320,18 @@ public class Shark : MonoBehaviour
     {
         Vector3 circlePos = new Vector3();
         circlePos.y = height;
-        if (stabbedPos.eulerAngles.x > 0)
-        {
+         if (stabbedPos.eulerAngles.x > 0)
+         {
             circlePos.x = gameObject.transform.position.x + (3 * ((time + offset) * speed));
-        }
-        else
-        {
+         }
+         else
+         {
             circlePos.x = gameObject.transform.position.x + (-3 * ((time + offset) * speed));
-        }
+         }
+         
+         circlePos.z = gameObject.transform.position.z + (((Mathf.Pow(time,2f) + offset) * speed));
         
-        circlePos.z = gameObject.transform.position.z + (((Mathf.Pow(time,2f) + offset) * speed));
+        
 
         return circlePos;
     }
@@ -313,6 +340,7 @@ public class Shark : MonoBehaviour
     {
         audioSource.PlayOneShot(sharkHit);
         time = 0;
+        randomAngle = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
         flee = true;
         aggressive = false;
         stabbedPos = gameObject.transform.rotation;

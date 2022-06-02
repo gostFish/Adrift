@@ -10,13 +10,18 @@ public class TitleFade : MonoBehaviour
     public Text title; 
     private Color textCol;
 
+    private GameObject pauseManager;
     private GameObject player;
+
+    private bool musicStart;
 
     void Start()
     {
         time = 0;
         textCol = title.color;
         player = GameObject.FindGameObjectWithTag("Player");
+        pauseManager = GameObject.FindGameObjectWithTag("PauseManager");
+        musicStart = false;
     }
 
     // Update is called once per frame
@@ -28,10 +33,17 @@ public class TitleFade : MonoBehaviour
         if(time < 4.5f)
         {
             fadeUI.alpha = 1;
+            pauseManager.GetComponent<PauseMenu>().canPause = false;
         }
         else
         {
             fadeUI.alpha = Mathf.Lerp(1, 0, (time - 4.5f)/3);
+            pauseManager.GetComponent<PauseMenu>().canPause = true;
+            if (!musicStart)
+            {
+                musicStart = true;
+                Camera.main.GetComponent< AmbientAudio > ().PlaySeaguls();
+            }
         }
 
         //Text fade in after 0.3 seconds

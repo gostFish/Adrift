@@ -23,6 +23,8 @@ public class Credits : MonoBehaviour
         time = 0;
         skip1.SetActive(true);
         skip2.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     private void FixedUpdate()
     {

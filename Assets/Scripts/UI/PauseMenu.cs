@@ -23,18 +23,21 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject closeJournal;
 
+    public bool canPause;
+
     
     void Start()
     {        
         player = GameObject.FindGameObjectWithTag("Player");
         menuOpen = false;
+        canPause = true;
 
     }
 
     void Update()
     {
         //Journal opening interractions
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && canPause)
         {
             if (menuOpen && settingsOpen)
             {
