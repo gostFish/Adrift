@@ -152,11 +152,28 @@ public class FishMovement : MonoBehaviour
     {        
         //Determin vars for pos (also used to lerp and turn to it)
         newPosAngle = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
-        newPosRadius = Random.Range(0.8f, 4f);
+        newPosRadius = Random.Range(0.8f, 5.5f);
 
         //Chooses random position around the raft for fish based on the raft position. 
-        endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius); 
-        endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
+        if (Random.value > 0.5)
+        {
+            endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius);
+        }
+        else
+        {
+            endPosX = raft.transform.position.x - (2 * (Mathf.Sin(newPosAngle) * newPosRadius));
+        }
+
+        if (Random.value > 0.5)
+        {
+            endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
+        }
+        else
+        {
+            endPosZ = raft.transform.position.z - (2 * (Mathf.Cos(newPosAngle) * newPosRadius));
+        }
+        //endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius); 
+        //endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
 
         //Assigns new position
         if (!shark.GetComponent<Shark>().isNear)

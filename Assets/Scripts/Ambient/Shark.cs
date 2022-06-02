@@ -148,10 +148,14 @@ public class Shark : MonoBehaviour
             dynamicDepth = Mathf.Lerp(circleDepth, fleeDepth, time / fleeTime);
             dynamicRadius = Mathf.Lerp(circleRadius, fleeRadius, time / fleeTime);
 
-            if(time < 1.5)
+            if(time < 1.5f)
             {
                 movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/0.2f, 0f);
                 lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed/0.2f, 0.4f);
+            }else if(time < 2.5f)
+            {
+                movePos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed / 0.5f, 0f);
+                lookPos = Fleeing(dynamicDepth, dynamicRadius, fleeSpeed / 0.5f, 0.75f);
             }
             else
             {

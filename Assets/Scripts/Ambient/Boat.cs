@@ -18,7 +18,7 @@ public class Boat : MonoBehaviour
     private Quaternion rot;
 
 
-    void Update()
+    void FixedUpdate()
     {
         //Ensure in line with the waves (Position)
         float x = Waves.instance.GetWaveHeight(transform.position.x);

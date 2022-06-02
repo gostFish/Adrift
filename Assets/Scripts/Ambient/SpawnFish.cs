@@ -23,10 +23,10 @@ public class SpawnFish : MonoBehaviour
 
     private void Start()
     {
-        minFish = 0; //Potentially no fish
+       /* minFish = 0; //Potentially no fish
         maxFish = 7; 
         spawntime = 1f;
-        spawnProbability = 30f;
+        spawnProbability = 0.3f;*/
 
         instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
 
@@ -38,7 +38,7 @@ public class SpawnFish : MonoBehaviour
         time += Time.deltaTime;
         if (time > spawntime)
         {
-            if (Random.Range(0f, 100f) < spawnProbability)
+            if (Random.value < (spawnProbability))
             {
                 if (currentFish < maxFish) //Spawn all the fish
                 {
