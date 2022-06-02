@@ -195,7 +195,9 @@ public class DayCycle : MonoBehaviour
 
         mainCam.clearFlags = CameraClearFlags.Skybox;
         mainCam.GetComponent<AmbientAudio>().PlaySeaguls();
-        
+
+        player.GetComponent<PlayerManager>().canWalk = true;
+
         player.GetComponent<SpearManager>().RefreshUI();
         ui.GetComponent<PauseMenu>().isNight = false;
     }
@@ -234,6 +236,10 @@ public class DayCycle : MonoBehaviour
         mainCam.clearFlags = CameraClearFlags.SolidColor;
         mainCam.GetComponent<AmbientAudio>().PlayWhales();
 
+        player.GetComponent<PlayerManager>().canWalk = false;
+        player.GetComponent<Pick>().enabled = false;
+        player.transform.localPosition = new Vector3(0,1,0);
+        
         raft.GetComponentInChildren<SpearManager>().HideSpears();
         raft.GetComponentInChildren<SpearManager>().enabled = false;
         ui.GetComponent<PauseMenu>().isNight = true;

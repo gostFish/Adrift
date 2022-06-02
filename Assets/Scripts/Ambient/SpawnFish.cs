@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnFish : MonoBehaviour
 {
 
-    private GameObject instanceManager;
+    public GameObject instanceManager;
     private GameObject fishPrefab;
     public GameObject fishPrefab1, fishPrefab2, fishPrefab3, fishPrefab4, fishPrefab5, fishPrefab6, fishPrefab7;
     private List<GameObject> fishList;
@@ -28,7 +28,7 @@ public class SpawnFish : MonoBehaviour
         spawntime = 1f;
         spawnProbability = 0.3f;*/
 
-        instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
+        //instanceManager = GameObject.FindGameObjectWithTag("InstanceManager");
 
         fishList = new List<GameObject>();
     }

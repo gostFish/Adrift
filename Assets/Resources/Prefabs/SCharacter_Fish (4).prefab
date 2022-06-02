@@ -573,6 +573,7 @@ GameObject:
   - component: {fileID: -7940998812137862009}
   - component: {fileID: -7089963678781167836}
   - component: {fileID: -1465335814059004137}
+  - component: {fileID: -5329511042921243856}
   m_Layer: 9
   m_Name: SCharacter_Fish (4)
   m_TagString: Fish
@@ -662,6 +663,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   hungerFill: 6
+--- !u!54 &-5329511042921243856
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3507956365245249392}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &3507956365245249394
 GameObject:
   m_ObjectHideFlags: 0

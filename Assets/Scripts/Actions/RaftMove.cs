@@ -63,7 +63,7 @@ public class RaftMove : MonoBehaviour
                 reached = markerList[0].GetComponent<MoveMarker>().priority;
                 if (markerList[0].GetComponent<MoveMarker>().gameEnder) //Second to last marker is the ender
                 {
-                    Debug.Log("Distance to the ender = " + Vector3.Distance(transform.position, nextPos) + " and arrival Dist = " + arrivalDist);
+                   // Debug.Log("Distance to the ender = " + Vector3.Distance(transform.position, nextPos) + " and arrival Dist = " + arrivalDist);
                     SceneManager.LoadScene("Credits");
                 }
             }

@@ -40,6 +40,8 @@ public class PlayerManager : MonoBehaviour
 
     public bool lookingAtLog;
     public bool canPickLog;
+
+    public bool canWalk;
     
 
     void Start()
@@ -54,7 +56,8 @@ public class PlayerManager : MonoBehaviour
 
         raftMask = LayerMask.GetMask("Raft");
         raft = GameObject.FindGameObjectWithTag("Raft");
-        
+
+        canWalk = true;
 
         //Load saved variables (From settings\Saved variables)
         if (PlayerPrefs.HasKey("MoveSpeed"))
@@ -85,51 +88,55 @@ public class PlayerManager : MonoBehaviour
 
         //Physics checkers during interraction (split second changes)
         //Using raycasts to ensure player dowsnt walk off the raft (hence why fixed updates)
-        if (moveUp)
+        if (canWalk)
         {
-            from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
 
-            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
-            && hit.transform.tag == "Raft")
+            if (moveUp)
             {
-                gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+                from = (forwardStop.transform.position) + new Vector3(0, 1, 0);
+                to = ((forwardStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+                if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+                && hit.transform.tag == "Raft")
+                {
+                    gameObject.transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed);
+                }
             }
-        }
 
-        if (moveBack)
-        {
-            from = (backStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((backStop.transform.position) + new Vector3(0, -1, 0)) - from;
-
-            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
-            && hit.transform.tag == "Raft")
+            if (moveBack)
             {
-                gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
+                from = (backStop.transform.position) + new Vector3(0, 1, 0);
+                to = ((backStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+                if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+                && hit.transform.tag == "Raft")
+                {
+                    gameObject.transform.Translate(Vector3.back * Time.deltaTime * moveSpeed);
+                }
             }
-        }
 
-        if (moveLeft)
-        {
-            from = (leftStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((leftStop.transform.position) + new Vector3(0, -1, 0)) - from;
-
-            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
-            && hit.transform.tag == "Raft")
+            if (moveLeft)
             {
-                gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+                from = (leftStop.transform.position) + new Vector3(0, 1, 0);
+                to = ((leftStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+                if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+                && hit.transform.tag == "Raft")
+                {
+                    gameObject.transform.Translate(Vector3.left * Time.deltaTime * moveSpeed);
+                }
             }
-        }
 
-        if (moveRight)
-        {
-            from = (rightStop.transform.position) + new Vector3(0, 1, 0);
-            to = ((rightStop.transform.position) + new Vector3(0, -1, 0)) - from;
-
-            if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
-            && hit.transform.tag == "Raft")
+            if (moveRight)
             {
-                gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
+                from = (rightStop.transform.position) + new Vector3(0, 1, 0);
+                to = ((rightStop.transform.position) + new Vector3(0, -1, 0)) - from;
+
+                if (Physics.Raycast(from, to, out hit, Vector3.Distance(from, to), raftMask)
+                && hit.transform.tag == "Raft")
+                {
+                    gameObject.transform.Translate(Vector3.right * Time.deltaTime * moveSpeed);
+                }
             }
         }
     }

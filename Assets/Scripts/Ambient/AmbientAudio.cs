@@ -49,7 +49,7 @@ public class AmbientAudio : MonoBehaviour
         audioSource.Play();
 
         audioSource.volume = PlayerPrefs.GetFloat("volume");
-        Debug.Log("Volume is" + audioSource.volume);
+        //Debug.Log("Volume is" + audioSource.volume);
         //audioSource.clip = seaguls;
         //audioSource.volume = 0;
         //audioSource.Play();

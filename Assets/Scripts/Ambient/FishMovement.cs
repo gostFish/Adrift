@@ -115,12 +115,10 @@ public class FishMovement : MonoBehaviour
     private void MoveNewPos()
     {
 
-        
-        
-            //Move forward (as fish do when they move)
-            transform.position += transform.forward * Time.deltaTime * fishSpeed; 
-            //Rotate fish to needed position
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newPos - transform.position), Time.deltaTime * 2f);
+        //Move forward (as fish do when they move)
+        transform.position += transform.forward * Time.deltaTime * fishSpeed; 
+        //Rotate fish to needed position
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newPos - transform.position), Time.deltaTime * 2f);
                 
     }
 
@@ -152,28 +150,12 @@ public class FishMovement : MonoBehaviour
     {        
         //Determin vars for pos (also used to lerp and turn to it)
         newPosAngle = Random.Range(-180 * Mathf.Deg2Rad, 180 * Mathf.Deg2Rad);
-        newPosRadius = Random.Range(0.8f, 5.5f);
+        newPosRadius = Random.Range(1.2f, 5.5f);
 
         //Chooses random position around the raft for fish based on the raft position. 
-        if (Random.value > 0.5)
-        {
-            endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius);
-        }
-        else
-        {
-            endPosX = raft.transform.position.x - (2 * (Mathf.Sin(newPosAngle) * newPosRadius));
-        }
-
-        if (Random.value > 0.5)
-        {
-            endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
-        }
-        else
-        {
-            endPosZ = raft.transform.position.z - (2 * (Mathf.Cos(newPosAngle) * newPosRadius));
-        }
-        //endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius); 
-        //endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
+       
+        endPosX = raft.transform.position.x + (Mathf.Sin(newPosAngle) * newPosRadius); 
+        endPosZ = raft.transform.position.z + (Mathf.Cos(newPosAngle) * newPosRadius);
 
         //Assigns new position
         if (!shark.GetComponent<Shark>().isNear)
@@ -186,22 +168,6 @@ public class FishMovement : MonoBehaviour
         }
             
     }
-
-    void NewPositionShark()
-    {
-        endPosX = Random.Range(raftPos.x - 20, raftPos.x - 10);
-        endPosZ = Random.Range(raftPos.z - 20, raftPos.z - 10);
-
-        //Assigns new position
-        newPos = new Vector3(endPosX, transform.position.y, endPosZ);
-    }
-
-    void LookMovingDirection(Vector3 lookTo)
-    {
-        Quaternion lookRotation = Quaternion.LookRotation((lookTo - transform.position).normalized);
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 2f);
-    }
-
     
     IEnumerator checkReact() //check if the fish should react
     {        
