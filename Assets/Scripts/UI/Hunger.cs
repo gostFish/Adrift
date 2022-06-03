@@ -94,7 +94,7 @@ public class Hunger : MonoBehaviour
             //Update Hunger UI
             switch (hunger)
             {
-                case float hunger when hunger <= 0:
+                case float hunger when hunger <= 1f:
                     DeathScreen();
                     break;
                /* case float hunger when hunger <= 25:

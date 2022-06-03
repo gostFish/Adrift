@@ -158,7 +158,7 @@ public class PauseMenu : MonoBehaviour
     {
         settingsMenuUI.SetActive(false);
         pauseMenuUI.SetActive(true);
-        journalUI.SetActive(true);
+        journalUI.SetActive(false);
 
         settingsOpen = false;
     }

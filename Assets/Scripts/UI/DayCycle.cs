@@ -242,6 +242,7 @@ public class DayCycle : MonoBehaviour
         mainCam.clearFlags = CameraClearFlags.SolidColor;
         mainCam.GetComponent<AmbientAudio>().PlayWhales();
 
+        player.GetComponent<PlayerManager>().enabled = true;
         player.GetComponent<PlayerManager>().canWalk = false;
         player.GetComponent<Pick>().enabled = false;
         player.transform.localPosition = new Vector3(0,1,0);
