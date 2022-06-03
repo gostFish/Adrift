@@ -13,12 +13,20 @@ public class CarryMusic : MonoBehaviour
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        GameObject[] musicObj = GameObject.FindGameObjectsWithTag("MainMenuMusic");
-        for (int i = 1; i < musicObj.Length; i++)
-        {
-            Destroy(musicObj[i]);
-        }
+              
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    private void Start()
+    {
+        GameObject[] musicObj = GameObject.FindGameObjectsWithTag("MainMenuMusic");
+        if (musicObj.Length > 1)
+        {
+            for (int i = 1; i < musicObj.Length; i++)
+            {
+                Destroy(musicObj[i]);
+            }
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -60,7 +60,7 @@ public class TitleFade : MonoBehaviour
             }
 
             //Prevent player movement for fade time
-            if (time < 5f)
+            if (time < 4f)
             {
                 player.GetComponent<PlayerManager>().enabled = false;
             }
