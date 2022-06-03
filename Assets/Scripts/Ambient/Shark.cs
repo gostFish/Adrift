@@ -236,7 +236,6 @@ public class Shark : MonoBehaviour
                 //Will circle the boat closer, sometimes rise and cross under the boat
                 if (!crossing)
                 {
-
                     //Agressive circling
                     if (delayed)
                     {
@@ -245,8 +244,8 @@ public class Shark : MonoBehaviour
                     }
                     else
                     {
-                        movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1f);
-                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, 1.01f);
+                        movePos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, -1.4f);
+                        lookPos = Crossing(circleDepth, aggressiveRadius, aggressiveSpeed, -1.39f);
                     }
                     
 

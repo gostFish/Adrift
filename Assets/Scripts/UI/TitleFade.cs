@@ -14,6 +14,7 @@ public class TitleFade : MonoBehaviour
     private GameObject player;
 
     private bool musicStart;
+    private bool skipped;
 
     void Start()
     {
@@ -22,6 +23,7 @@ public class TitleFade : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         pauseManager = GameObject.FindGameObjectWithTag("PauseManager");
         musicStart = false;
+        skipped = false;
     }
 
     // Update is called once per frame
@@ -30,44 +32,54 @@ public class TitleFade : MonoBehaviour
         time = time + Time.deltaTime;
 
         //Screen black for 4.5 seconds
-        if(time < 4.5f)
+        if (!skipped)
         {
-            fadeUI.alpha = 1;
-            pauseManager.GetComponent<PauseMenu>().canPause = false;
-        }
-        else
-        {
-            fadeUI.alpha = Mathf.Lerp(1, 0, (time - 4.5f)/3);
-            pauseManager.GetComponent<PauseMenu>().canPause = true;
-            if (!musicStart)
+            if (time < 4.5f)
             {
-                musicStart = true;
-                Camera.main.GetComponent< AmbientAudio > ().PlaySeaguls();
+                fadeUI.alpha = 1;
+                pauseManager.GetComponent<PauseMenu>().canPause = false;
+            }
+            else
+            {
+                fadeUI.alpha = Mathf.Lerp(1, 0, (time - 4.5f) / 3);
+                pauseManager.GetComponent<PauseMenu>().canPause = true;
+                if (!musicStart)
+                {
+                    musicStart = true;
+                    Camera.main.GetComponent<AmbientAudio>().PlaySeaguls();
+                }
+            }
+
+            //Text fade in after 0.3 seconds
+            if (time > 0.3f) //Lerp out
+            {
+                textCol = title.color;
+                textCol.a = Mathf.Lerp(0, 1, (time - 0.3f) / 5);
+
+                title.color = textCol;
+            }
+
+            //Prevent player movement for fade time
+            if (time < 5f)
+            {
+                player.GetComponent<PlayerManager>().enabled = false;
+            }
+            else
+            {
+                player.GetComponent<PlayerManager>().enabled = true;
+            }
+
+            if(time > 8)
+            {
+                this.enabled = false; //Avoid extra code running
             }
         }
-
-        //Text fade in after 0.3 seconds
-        if(time > 0.3f) //Lerp out
-        {            
-            textCol = title.color;
-            textCol.a = Mathf.Lerp(0, 1, (time-0.3f)/5);
-
-            title.color = textCol;            
-        }
-
-        //Prevent player movement for fade time
-        if(time < 5f)
-        {
-            player.GetComponent<PlayerManager>().enabled = false;
-        }
-        else
-        {
-            player.GetComponent<PlayerManager>().enabled = true;            
-        }
-
-        if(time > 10)
-        {
-            this.enabled = false; //Avoid extra code running
-        }
-    }   
+    }
+    
+    public void QuickFinish()
+    {
+        skipped = true;        
+        fadeUI.alpha = 0;
+        this.enabled = false;
+    }
 }

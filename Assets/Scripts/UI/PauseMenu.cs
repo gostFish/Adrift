@@ -23,12 +23,14 @@ public class PauseMenu : MonoBehaviour
 
     public GameObject closeJournal;
 
+    private GameObject sceneManager;
     public bool canPause;
 
     
     void Start()
     {        
         player = GameObject.FindGameObjectWithTag("Player");
+        sceneManager = GameObject.FindGameObjectWithTag("SceneManager");
         menuOpen = false;
         canPause = true;
 
@@ -49,11 +51,16 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
+                if (sceneManager.GetComponent<TitleFade>() != null)
+                {
+                    sceneManager.GetComponent<TitleFade>().QuickFinish();
+                }
                 Pause();
+                
                 Time.timeScale = 0f;
             }
         }
-        if (Input.GetKeyDown("j") &&!menuOpen && !settingsOpen && !isNight)
+        if (Input.GetKeyDown("j") &&!menuOpen && !settingsOpen && !isNight && canPause)
         {            
             if (journalOpen)
             {
@@ -61,6 +68,10 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
+                if(sceneManager.GetComponent<TitleFade>() != null)
+                {
+                    sceneManager.GetComponent<TitleFade>().QuickFinish();
+                }
                 OpenJournal(true);
             }
         }
@@ -87,12 +98,12 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenJournal(bool moveMouse)
     {
-        if (moveMouse)
-        {
+        //if (moveMouse)
+        //{
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             player.GetComponent<PlayerManager>().enabled = false;
-        }        
+        //}        
 
         journalUI.SetActive(true);
         journalUI.GetComponent<Journal>().openJournal.SetActive(false);

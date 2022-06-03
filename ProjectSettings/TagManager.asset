@@ -15,6 +15,7 @@ TagManager:
   - Hallucination
   - SceneManager
   - PauseManager
+  - MainMenuMusic
   layers:
   - Default
   - TransparentFX

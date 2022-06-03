@@ -48,6 +48,8 @@ public class DayCycle : MonoBehaviour
 
     public CanvasGroup fadeUI;
 
+    public GameObject fishInstances;
+
     public Vector3[] pos;
     private int currentPos;
     
@@ -187,6 +189,8 @@ public class DayCycle : MonoBehaviour
         //Activate Day things
         sceneManager.GetComponent<SpawnBirds>().enabled = true;
         sceneManager.GetComponent<SpawnFish>().enabled = true;
+        fishInstances.SetActive(true);
+
         nightShark1.SetActive(false);
         nightShark2.SetActive(false);
         dayShark.SetActive(true);
@@ -229,6 +233,8 @@ public class DayCycle : MonoBehaviour
         //Activate night things
         sceneManager.GetComponent<SpawnBirds>().enabled = false;
         sceneManager.GetComponent<SpawnFish>().enabled = false;
+        fishInstances.SetActive(false);        
+        
         nightShark1.SetActive(true);
         nightShark2.SetActive(true);
         dayShark.SetActive(false);

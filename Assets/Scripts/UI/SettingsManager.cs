@@ -22,6 +22,12 @@ public class SettingsManager : MonoBehaviour
             sound.GetComponent<Slider>().value = PlayerPrefs.GetFloat("volume");
             UpdateSound();
         }
+        else
+        {
+            PlayerPrefs.SetFloat("volume",0.5f);
+            UpdateSound();
+        }
+
         if (PlayerPrefs.HasKey("MoveSpeed"))
         {
             moveSpeed.GetComponent<Slider>().value = PlayerPrefs.GetFloat("MoveSpeed");

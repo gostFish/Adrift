@@ -22,6 +22,10 @@ public class Journal : MonoBehaviour
     public GameObject openJournal;
     public GameObject closeJournal;
 
+    public GameObject toStory;
+    public GameObject toTut;
+    public GameObject toNew;
+
     private GameObject player;
 
     //Other vars
@@ -289,19 +293,65 @@ public class Journal : MonoBehaviour
         animatingBackward = true;
     }
 
+    public void ToLore()
+    {
+        if(currentPage > 2)
+        {
+            time = 0;
+            animatingBackward = true;
+            currentPage = 2;
+            nextPageButton.SetActive(true);
+            //ShowPage();
+        }
+        
+    }
+
+    public void ToTut()
+    {
+        if (currentPage > 10)
+        {
+            time = 0;
+            animatingBackward = true;
+            currentPage = 10;
+            
+           // ShowPage();
+        }else if (currentPage < 10)
+        {
+            time = 0;
+            animatingForward = true;
+            currentPage = 10;
+            ShowPage();
+        }
+        nextPageButton.SetActive(true);
+        previousPageButton.SetActive(true);
+
+    }
+
+    public void ToNew()
+    {
+        if(currentPage != lastRevieled)
+        {
+            time = 0;
+            animatingForward = true;
+            currentPage = lastRevieled;
+            //ShowPage();
+        }
+
+        nextPageButton.SetActive(false);
+        previousPageButton.SetActive(true);
+    }
+
     public void ShowPage() //Scroll through page
     {
         
-            for (int i = 0; i < pages.Count; i++)
-            {
-                pages[i].SetActive(false);
-            }
-            if (currentPage > 0 && (currentPage - 1) < pages.Count)
-            {
-                pages[currentPage - 1].SetActive(true);
-            }
-        
-
+        for (int i = 0; i < pages.Count; i++)
+        {
+            pages[i].SetActive(false);
+        }
+        if (currentPage > 0 && (currentPage - 1) < pages.Count)
+        {
+            pages[currentPage - 1].SetActive(true);
+        }
         
     }
 
