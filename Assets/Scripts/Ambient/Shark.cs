@@ -193,7 +193,8 @@ public class Shark : MonoBehaviour
         {
             aggressive = true;
             if (time < (passivePeriod + circlePeriod) || night) //Stalking
-            {               
+            {
+                isNear = false;
                 movePos = Circling(circleDepth, circleRadius, passiveSpeed, 0f);
                 lookPos = Circling(circleDepth, circleRadius, passiveSpeed, 0.5f);
 
@@ -201,7 +202,8 @@ public class Shark : MonoBehaviour
                 transform.LookAt(lookPos);
             }
             else if(time >= (passivePeriod + circlePeriod) && time < (passivePeriod + circlePeriod + approachPeriod)) //Gradually approach raft
-            {                
+            {
+                isNear = true;
                 dynamicRadius = Mathf.Lerp(circleRadius, 0,  (time- (passivePeriod + circlePeriod))/approachPeriod);
                 if (night)
                 {
@@ -233,6 +235,7 @@ public class Shark : MonoBehaviour
             }
             else if (time >= (passivePeriod + circlePeriod + approachPeriod) && time < (passivePeriod + circlePeriod + approachPeriod + aggressivePeriod)) //Actively terrorising raft
             {
+                isNear = true;
                 //Will circle the boat closer, sometimes rise and cross under the boat
                 if (!crossing)
                 {
@@ -283,12 +286,13 @@ public class Shark : MonoBehaviour
             }
             else if(time > (passivePeriod + circlePeriod + approachPeriod + approachPeriod)) //Reset to passive (lost a raft piece)
             {
+                isNear = false;
                 player.GetComponent<Pick>().ReduceLogs();
                 player.GetComponent<SpearManager>().RefreshUI();
                 audioSource.PlayOneShot(sharkTakesPlank);
                 time = 0;
             }
-            isNear = true;
+            
         }
         else //Avoiding the raft
         {

@@ -1340,12 +1340,19 @@ MonoBehaviour:
     Low Poly Nature | 3D Environments | Unity Asset Store \r\nBirds - Simplistic
     Low Poly Nature | 3D Environments | Unity Asset Store \r\n\r\n\r\nMusic\r\nGame
     Soundtrack - \u201CTake it all in\u201D, Zaplat Royalty Free Music\r\n\r\nSound
-    Effects\r\nStomach Noises\r\nOcean/Birds background Noise\r\nNoise for High Waves\r\nSoundtrack\r\nSplash
-    Sound\r\nImpact Sound\r\nShark Sound\r\nRaft Impact Sound\r\nSpear Degradation
-    Sound \r\nWhale\r\nShark Impact with Boat \r\n\r\nFonts\r\nShipwreck Font - Shipwreck
-    Font \r\nTextures\r\nBark Brown 02 Texture \u2022 Poly Haven \r\n\nSpecial thanks
-    to:\n\n\tThose who supported us\n\t\n\tOur kind and generous play-testers\n\n\tOur
-    lecturers who helped make this possible\n\n\t\n\n\t..and You\n"
+    Effects\r\nStomach Noises| Human Gurgle 02 | Videvo\r\nOcean/Birds background
+    Noise | Bird Seagull | Videvo\r\nNoise for High Waves| Ship Storm | Videvo\r\nSoundtrack|
+    Take It All In | Zapsplat\r\nSplash Sound| Water Splash 18 | Videvo\r\nImpact
+    Sound| Ship Storm | Videvo\r\nShark Sound| Fist Punch Hit Slappy PE678903 | Videvo\r\nRaft
+    Impact Sound| Wood Crashes Distant FS022705 | Videvo\r\nSpear Degradation Sound
+    | Wood Impact Short Big PE1057005 | Videvo\r\nWhale| Humpback whale song, noise
+    isolated | Zapsplat\r\nShark Impact with Boat | Rowing Boat Hit Rocky Shore |
+    SoundEffectsPlus\r\nSpear Breaking| Breaking Door with Wood Splintering | freeSFX\r\nFish
+    being Eaten Noise| \u201CEating crunchy food with mouth open\u201D | MixKit\r\n\r\nFonts\r\nShipwreck
+    Font - Shipwreck Font | Fist Punch Hit Slappy PE678903 | Videvo\r\n\nTextures\r\nBark
+    Brown 02 Texture \u2022 Poly Haven \n\n\n\n\n\n\n\nSpecial thanks to:\n\nAll
+    those who supported us\n\nOur Lecturers who made this experience possible\n\nOur
+    playtesters\n\n\n\n...And you\n"
 --- !u!222 &1463629500
 CanvasRenderer:
   m_ObjectHideFlags: 0

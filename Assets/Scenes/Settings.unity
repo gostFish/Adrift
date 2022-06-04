@@ -1596,7 +1596,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Mouse Sensitivity
+  m_Text: Look Speed
 --- !u!222 &1289748403
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -177,7 +177,7 @@ public class DayCycle : MonoBehaviour
         PlayerPrefs.SetInt("IsDay", isDay);
 
         //Enable/Disable UI
-        hungerUi.GetComponent<Hunger>().hungerRate = 0.05f;
+        hungerUi.GetComponent<Hunger>().hungerRate = 0.07f;
         hungerUi.GetComponent<RawImage>().enabled = true;
         spearUI.SetActive(true);
         crosshairUI.SetActive(true);
