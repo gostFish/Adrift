@@ -16,12 +16,13 @@ public class TitleFade : MonoBehaviour
     private bool musicStart;
     private bool skipped;
 
-    void Start()
+    void Awake()
     {
         time = 0;
         textCol = title.color;
         player = GameObject.FindGameObjectWithTag("Player");
         pauseManager = GameObject.FindGameObjectWithTag("PauseManager");
+        pauseManager.GetComponent<PauseMenu>().Resume();
         musicStart = false;
         skipped = false;
     }
@@ -70,7 +71,7 @@ public class TitleFade : MonoBehaviour
             }
 
             if(time > 8)
-            {
+            {                
                 this.enabled = false; //Avoid extra code running
             }
         }
