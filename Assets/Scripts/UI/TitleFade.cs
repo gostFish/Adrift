@@ -21,8 +21,7 @@ public class TitleFade : MonoBehaviour
         time = 0;
         textCol = title.color;
         player = GameObject.FindGameObjectWithTag("Player");
-        pauseManager = GameObject.FindGameObjectWithTag("PauseManager");
-        pauseManager.GetComponent<PauseMenu>().Resume();
+        pauseManager = GameObject.FindGameObjectWithTag("PauseManager");        
         musicStart = false;
         skipped = false;
     }
@@ -71,7 +70,8 @@ public class TitleFade : MonoBehaviour
             }
 
             if(time > 8)
-            {                
+            {
+                pauseManager.GetComponent<PauseMenu>().Resume();
                 this.enabled = false; //Avoid extra code running
             }
         }
