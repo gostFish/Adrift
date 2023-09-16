@@ -1,6 +1,6 @@
 # Adrift
 
-This Repo is a clone of the Original collaborative work between Myself, Leonel Bonnici, Matthew Schembri, Michele Perrino, Kristiine Parna and David Brincat
+This Repo is a clone of the Original collaborative work between Malcolm Grech, Leonel Bonnici, Matthew Schembri, Michele Perrino, Kristiine Parna and David Brincat
 
 The Game is a finished product as a Narrative-based Game.
 
